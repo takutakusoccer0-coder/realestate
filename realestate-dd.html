@@ -564,6 +564,53 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="field field-full"><label>メモ（仲介業者名・問合せ日時など）</label><textarea id="propMemo" placeholder="例：〇〇不動産 担当：田中様 2025/06/01 問合せ"></textarea></div>
       </div>
 
+      <hr class="divider">
+      <div class="subsection-title" style="margin-top:0">物件詳細情報</div>
+      <div class="field-grid">
+        <div class="field">
+          <label>階数</label>
+          <input type="text" id="propFloors" placeholder="例：地上3階建て">
+        </div>
+        <div class="field">
+          <label>土地権利 <span style="font-size:9px;color:var(--danger);margin-left:4px">所有権以外NG</span></label>
+          <select id="propLandRight" onchange="checkLandRight()">
+            <option value="">選択</option>
+            <option value="所有権">所有権 ✅</option>
+            <option value="借地権（地上権）">借地権（地上権）⚠</option>
+            <option value="借地権（賃借権）">借地権（賃借権）⚠</option>
+            <option value="定期借地権">定期借地権 ⚠</option>
+          </select>
+          <div id="landRightWarning" style="display:none;font-size:10px;color:var(--danger);margin-top:4px;font-weight:600">⚠ 所有権以外は融資が極めて困難・出口が限定されます</div>
+        </div>
+        <div class="field">
+          <label>駐車場</label>
+          <select id="propParkingYN" onchange="updateParkingFields()">
+            <option value="">選択</option>
+            <option value="あり">あり</option>
+            <option value="なし">なし</option>
+          </select>
+        </div>
+        <div class="field" id="parkingDetailField" style="display:none">
+          <label>駐車場 台数・月額（円）</label>
+          <div style="display:flex;gap:8px">
+            <input type="number" id="propParkingCount" placeholder="台数" style="width:80px">
+            <input type="number" id="propParkingFee" placeholder="月額（円）" style="flex:1" oninput="recalcAll()">
+          </div>
+        </div>
+        <div class="field">
+          <label>施工会社</label>
+          <input type="text" id="propBuilder" placeholder="例：〇〇建設株式会社">
+        </div>
+        <div class="field">
+          <label>マイソク作成会社（仲介業者）</label>
+          <input type="text" id="propAgency" placeholder="例：〇〇不動産株式会社">
+        </div>
+        <div class="field">
+          <label>宅建免許番号</label>
+          <input type="text" id="propAgencyLicense" placeholder="例：国土交通大臣（3）第〇〇〇〇号">
+        </div>
+      </div>
+
       <!-- 土地積算 derived -->
       <div class="land-derived-row" id="landDerivedRow">
         <div class="land-derived-item"><span class="derived-label">土地価格（路線価×面積）</span><span class="derived-val" id="drvLandCalc">—</span></div>
@@ -2438,6 +2485,16 @@ function updateHearingBadge(){
 }
 
 // ══ BCR/FAR CHECK ══
+function checkLandRight(){
+  const v=document.getElementById('propLandRight')?.value||'';
+  const warn=document.getElementById('landRightWarning');
+  if(warn)warn.style.display=(v&&v!=='所有権')?'block':'none';
+}
+function updateParkingFields(){
+  const v=document.getElementById('propParkingYN')?.value;
+  const f=document.getElementById('parkingDetailField');
+  if(f)f.style.display=(v==='あり')?'block':'none';
+}
 function checkBCRFAR(){
   const landArea=parseFloat(document.getElementById('propLandArea')?.value)||0;
   const floorArea=parseFloat(document.getElementById('propFloorArea')?.value)||0;
