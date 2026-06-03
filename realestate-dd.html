@@ -416,7 +416,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">ログイン</button>
     <div class="login-error" id="loginError"></div>
-    <div class="login-date-hint" id="loginDateHint"></div>
   </div>
 </div>
 
@@ -1915,7 +1914,7 @@ async function fetchMatrixRent(matNum){
 {"r0c0":駅徒歩10分以内_築5年以下,"r0c1":駅徒歩10分以内_築6-15年,"r0c2":駅徒歩10分以内_築16-30年,"r0c3":駅徒歩10分以内_築30年以上,
 "r1c0":駅徒歩11-25分_築5年以下,"r1c1":駅徒歩11-25分_築6-15年,"r1c2":駅徒歩11-25分_築16-30年,"r1c3":駅徒歩11-25分_築30年以上,
 "r2c0":駅徒歩26分以上_築5年以下,"r2c1":駅徒歩26分以上_築6-15年,"r2c2":駅徒歩26分以上_築16-30年,"r2c3":駅徒歩26分以上_築30年以上}`;
-    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.Ab8RN6IhQbGZ6VFFxdYMlkhwyt8WjPXYGyQMG15e6sa6GEa23A`,{
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_GEMINI_API_KEY`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         contents:[{parts:[{text:prompt}]}],
@@ -2220,7 +2219,7 @@ async function handlePdfFile(file){
     const base64=await fileToBase64(file);
     const prompt=`以下の物件概要書PDFから情報を抽出してください。必ずJSON形式のみで回答（前置き・説明文は不要）。抽出できない項目はnull。
 {"propName":"物件名","propAddr":"所在地","propPrice":物件価格万円数値,"propYield":表面利回り%数値,"propBuildYear":建築年西暦数値,"propStructure":"木造/軽量鉄骨S（3mm以下）/軽量鉄骨S（3〜4mm）/重量鉄骨S/RC/SRC のどれか","propUnits":総戸数数値,"propFloorArea":延床面積㎡数値,"propLandArea":土地面積㎡数値,"propBuildingPrice":建物価格万円数値,"propBCR":建蔽率%数値,"propFAR":容積率%数値,"propLandPrice":土地価格万円数値,"room1_layout":"タイプA間取り","room1_area":専有面積㎡数値,"room1_units":戸数数値,"room1_rent":家賃円月数値,"room2_layout":null,"room2_area":null,"room2_units":null,"room2_rent":null,"room3_layout":null,"room3_area":null,"room3_units":null,"room3_rent":null,"areaStation":"最寄り駅・徒歩分数","propMemo":"その他特記事項"}`;
-    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.Ab8RN6IhQbGZ6VFFxdYMlkhwyt8WjPXYGyQMG15e6sa6GEa23A`,{
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_GEMINI_API_KEY`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({contents:[{parts:[
         {inline_data:{mime_type:'application/pdf',data:base64}},
@@ -2253,7 +2252,7 @@ async function runAreaResearch(){
   try{
     const prompt=`「${munic}」について不動産投資の観点から以下をリサーチしてください。必ずJSON形式のみで回答（前置き・Markdownは不要）。
 {"areaPop":直近国勢調査の人口万人小数第1位数値,"areaPopChange":前回比増減率%数値例-2.3,"areaTrend":"増加傾向 or 横ばい or 微減 or 減少傾向","areaPopYear":"参照した国勢調査年例2020年","areaEmployer":"主要産業・雇用源の詳細（主な工場・大企業・大学・官公庁など。箇条書き300字以内）","areaPersona":"この地域の主な入居者層ペルソナ（年代・職業・家族構成・生活スタイル・賃料感度などを具体的に300字以内）","areaMemo":"賃貸需要・空室状況・エリア特性の投資家向け簡潔コメント200字以内"}`;
-    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.Ab8RN6IhQbGZ6VFFxdYMlkhwyt8WjPXYGyQMG15e6sa6GEa23A`,{
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_GEMINI_API_KEY`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         contents:[{parts:[{text:prompt}]}],
@@ -2732,7 +2731,7 @@ function doLogin(){
   } else {
     // show date hint (format only, no password)
     const h=document.getElementById('loginDateHint');
-    if(h){const d=new Date();h.textContent='ヒント形式：YYYYMMDD＋キーワード（例：'+d.getFullYear()+'MMDD＋キーワード）';}
+    if(h)h.textContent='';
     setTimeout(()=>{document.getElementById('loginInput')?.focus()},100);
   }
 })();
