@@ -378,12 +378,33 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .onedrive-text a{color:var(--blue);text-decoration:none;font-weight:600}
 .onedrive-text a:hover{text-decoration:underline}
 
-@media(max-width:600px){
-  .sidebar{display:none}
-  .repair-grid,.room-type-grid{grid-template-columns:1fr 1fr}
+/* Mobile sidebar */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;backdrop-filter:blur(2px)}
+.sidebar-overlay.show{display:block}
+.hamburger{display:none;position:fixed;top:12px;left:12px;z-index:1001;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:18px;line-height:1;color:var(--text)}
+.hamburger:hover{background:rgba(212,168,67,0.15);border-color:var(--gold)}
+.sidebar-close{display:none;position:absolute;top:12px;right:12px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px}
+
+@media(max-width:768px){
+  .hamburger{display:block}
+  .sidebar{position:fixed;left:-280px;top:0;height:100vh;z-index:999;transition:left 0.25s ease;box-shadow:none}
+  .sidebar.open{left:0;box-shadow:4px 0 24px rgba(0,0,0,0.5)}
+  .sidebar-close{display:block}
+  .main{padding:16px 12px;margin-left:0!important}
+  .page-header{padding:16px 12px 0;margin-left:0!important}
+  .app{flex-direction:column}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
   .sim-grid{grid-template-columns:1fr}
   .strategy-grid{grid-template-columns:1fr}
   .field-grid-4{grid-template-columns:1fr 1fr}
+  .bank-summary-grid{grid-template-columns:1fr 1fr}
+  .repair-grand-summary{grid-template-columns:1fr 1fr}
+  .sens-controls{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:480px){
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .field-grid{grid-template-columns:1fr}
+  .bank-check-grid{grid-template-columns:1fr}
 }
 </style>
 <style>
@@ -421,8 +442,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
 <div class="app" id="appContent" style="display:none">
 
+<!-- Hamburger button (mobile only) -->
+<button class="hamburger" onclick="toggleSidebar()" aria-label="メニューを開く">☰</button>
+<!-- Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" id="mainSidebar">
+  <button class="sidebar-close" onclick="closeSidebar()">✕</button>
   <div class="sidebar-header">
     <div class="sidebar-logo" style="display:flex;align-items:center;gap:6px">
       <span>🏢</span><span>お豆腐不動産株式会社</span>
@@ -2482,6 +2509,22 @@ function updateHearingBadge(){
   else if(filled>0){b.textContent=filled+'/3社';b.className='section-badge badge-warn'}
   else{b.textContent='未確認';b.className='section-badge badge-todo'}
 }
+
+// ══ MOBILE SIDEBAR ══
+function toggleSidebar(){
+  const sb=document.getElementById('mainSidebar');
+  const ov=document.getElementById('sidebarOverlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('mainSidebar')?.classList.remove('open');
+  document.getElementById('sidebarOverlay')?.classList.remove('show');
+}
+// Close sidebar on nav item click (mobile)
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('nav-item')&&window.innerWidth<=768)closeSidebar();
+});
 
 // ══ BCR/FAR CHECK ══
 function checkLandRight(){
