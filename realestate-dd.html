@@ -1,0 +1,2684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>不動産投資 DD チェックシート</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#181c26;--surface2:#1e2333;--border:#2a3047;
+  --gold:#d4a843;--gold2:#f0c96a;--rust:#c45c3a;--green:#3db87a;--blue:#4a8fd4;
+  --text:#e8e2d4;--muted:#7a8099;--danger:#e05555;--warn:#d4943a;
+  --radius:8px;--font-serif:'Noto Serif JP',serif;--font-sans:'Noto Sans JP',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;min-height:100vh;line-height:1.6}
+.app{display:flex;min-height:100vh}
+.sidebar{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{flex:1;overflow-y:auto;padding:32px 36px 80px}
+.sidebar-header{padding:24px 20px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo{font-family:var(--font-serif);font-size:13px;font-weight:700;color:var(--gold);letter-spacing:0.08em}
+.sidebar-sub{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:0.05em}
+.property-list{padding:12px 0}
+.property-item{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;border-left:3px solid transparent;transition:all 0.2s;font-size:12px;color:var(--muted)}
+.property-item:hover{background:var(--surface2);color:var(--text)}
+.property-item.active{border-left-color:var(--gold);background:var(--surface2);color:var(--gold)}
+.property-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
+.property-item.active .property-dot{background:var(--gold)}
+.btn-new-property{margin:8px 16px;padding:10px;border:1px dashed var(--border);border-radius:var(--radius);background:none;color:var(--muted);font-size:12px;cursor:pointer;width:calc(100% - 32px);transition:all 0.2s;font-family:var(--font-sans)}
+.btn-new-property:hover{border-color:var(--gold);color:var(--gold)}
+.sidebar-nav{padding:8px 0;border-top:1px solid var(--border);margin-top:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;font-size:12px;color:var(--muted);transition:all 0.2s}
+.nav-item:hover{color:var(--text);background:var(--surface2)}
+.progress-bar-wrap{padding:16px 20px;border-top:1px solid var(--border)}
+.progress-label{font-size:10px;color:var(--muted);letter-spacing:0.1em;margin-bottom:6px;text-transform:uppercase}
+.progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width 0.4s ease}
+.progress-pct{font-size:11px;color:var(--gold);margin-top:4px}
+.page-header{margin-bottom:32px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-title{font-family:var(--font-serif);font-size:22px;font-weight:700;color:var(--text)}
+.page-title span{color:var(--gold)}
+.page-actions{display:flex;gap:10px}
+.btn{padding:8px 18px;border-radius:var(--radius);font-size:12px;font-family:var(--font-sans);cursor:pointer;border:none;font-weight:500;transition:all 0.2s;letter-spacing:0.04em}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-primary{background:var(--gold);color:#0f1117;font-weight:700}
+.btn-primary:hover{background:var(--gold2)}
+.section{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:20px;overflow:hidden}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:border-color 0.2s}
+.section-header:hover{background:var(--surface2)}
+.section-header.open{border-bottom-color:var(--border)}
+.section-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.section-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.section-title{font-family:var(--font-serif);font-size:14px;font-weight:600}
+.section-badge{font-size:10px;padding:2px 8px;border-radius:20px;letter-spacing:0.08em;white-space:nowrap}
+.badge-ok{background:rgba(61,184,122,0.15);color:var(--green)}
+.badge-warn{background:rgba(212,148,58,0.15);color:var(--warn)}
+.badge-ng{background:rgba(224,85,85,0.15);color:var(--danger)}
+.badge-todo{background:rgba(122,128,153,0.15);color:var(--muted)}
+.section-chevron{color:var(--muted);font-size:12px;transition:transform 0.25s;flex-shrink:0}
+.section-chevron.open{transform:rotate(180deg)}
+.section-body{padding:20px 22px;display:none}
+.section-body.open{display:block}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field-grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field-full{grid-column:1/-1}
+label{font-size:11px;color:var(--muted);letter-spacing:0.06em;font-weight:500;text-transform:uppercase}
+input[type=text],input[type=number],textarea,select{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-sans);font-size:13px;padding:9px 12px;width:100%;transition:border-color 0.2s;outline:none}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--gold)}
+input[readonly]{background:rgba(0,0,0,0.25);color:var(--gold);cursor:default}
+textarea{resize:vertical;min-height:72px;line-height:1.6}
+select option{background:var(--surface)}
+.check-list{display:flex;flex-direction:column;gap:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);transition:all 0.2s}
+.check-item.checked{border-color:rgba(61,184,122,0.4);background:rgba(61,184,122,0.05)}
+.check-item.danger{border-color:rgba(224,85,85,0.3);background:rgba(224,85,85,0.04)}
+.check-item.warn{border-color:rgba(212,148,58,0.3);background:rgba(212,148,58,0.04)}
+.check-cb{width:16px;height:16px;flex-shrink:0;accent-color:var(--green);cursor:pointer;margin-top:1px}
+.check-label{font-size:12px;flex:1;line-height:1.5}
+.tag{font-size:9px;letter-spacing:0.12em;padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle}
+.tag-forbid{background:rgba(224,85,85,0.2);color:var(--danger)}
+.tag-caution{background:rgba(212,148,58,0.2);color:var(--warn)}
+.note-input{margin-top:6px;width:100%;font-size:11px!important;padding:5px 8px!important}
+.strategy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.strategy-btn{padding:16px;border-radius:10px;border:2px solid var(--border);background:var(--surface2);cursor:pointer;transition:all 0.25s;text-align:left;color:var(--text)}
+.strategy-btn:hover{border-color:var(--gold);background:rgba(212,168,67,0.06)}
+.strategy-btn.active{border-color:var(--gold);background:rgba(212,168,67,0.1)}
+.strategy-icon{font-size:22px;margin-bottom:8px}
+.strategy-name{font-family:var(--font-serif);font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;letter-spacing:0.04em}
+.strategy-desc{font-size:10px;color:var(--muted);line-height:1.6}
+.strategy-ideal{margin-top:12px;padding:12px;border-radius:6px;background:var(--surface);border:1px solid var(--border);display:none}
+.strategy-ideal.show{display:block}
+.ideal-title{font-size:10px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.ideal-row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:1px solid var(--border)}
+.ideal-row:last-child{border-bottom:none}
+.ideal-key{color:var(--muted)}
+.ideal-val{color:var(--text);font-weight:500}
+.bank-table{width:100%;border-collapse:collapse;font-size:12px}
+.bank-table th{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);color:var(--muted);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500}
+.bank-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
+.bank-table tr:last-child td{border-bottom:none}
+.bank-table tr:hover td{background:var(--surface2)}
+.score-pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700}
+.score-a{background:rgba(61,184,122,0.2);color:var(--green)}
+.score-b{background:rgba(212,168,67,0.2);color:var(--gold)}
+.score-c{background:rgba(212,148,58,0.2);color:var(--warn)}
+.score-d{background:rgba(224,85,85,0.2);color:var(--danger)}
+.repair-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.repair-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px}
+.repair-card-title{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:0.06em;text-transform:uppercase}
+.repair-card.filled{border-color:rgba(61,184,122,0.35)}
+.repair-warning{padding:10px 14px;background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.25);border-radius:6px;color:var(--danger);font-size:12px;margin-top:12px;display:none}
+.repair-warning.show{display:block}
+.sim-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start}
+.sim-inputs{display:flex;flex-direction:column;gap:10px}
+.sim-input-row{display:flex;flex-direction:column;gap:4px}
+.sim-label{font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.sim-val{font-size:13px;color:var(--text)}
+.slider-wrap{display:flex;align-items:center;gap:10px}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:3px;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer}
+.sim-result-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.result-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.result-card-label{font-size:10px;color:var(--muted);letter-spacing:0.06em;margin-bottom:4px}
+.result-card-val{font-size:18px;font-weight:700}
+.val-green{color:var(--green)}
+.val-red{color:var(--danger)}
+.val-gold{color:var(--gold)}
+.result-card-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.chart-wrap{position:relative;height:260px}
+.sim-notice{font-size:10px;color:var(--muted);margin-top:8px;padding:8px 12px;background:var(--surface2);border-radius:6px;border-left:2px solid var(--border)}
+.exit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+.subsection-title{font-size:11px;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;font-weight:700;margin-bottom:10px;margin-top:16px}
+.subsection-title:first-child{margin-top:0}
+.inline-badge{font-size:9px;padding:2px 7px;border-radius:3px;vertical-align:middle;margin-left:6px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;z-index:9999}
+.toast.show{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* PDF upload */
+.pdf-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;margin-bottom:16px}
+.pdf-upload-zone:hover,.pdf-upload-zone.drag{border-color:var(--gold);background:rgba(212,168,67,0.05)}
+.pdf-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.pdf-upload-icon{font-size:28px;margin-bottom:8px}
+.pdf-upload-label{font-size:13px;color:var(--muted)}
+.pdf-upload-label span{color:var(--gold);font-weight:600}
+.pdf-upload-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.pdf-filename{font-size:11px;color:var(--green);margin-top:8px;display:none}
+
+/* AI loading */
+.ai-loading{display:none;align-items:center;gap:10px;padding:12px 16px;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.25);border-radius:8px;margin-bottom:14px}
+.ai-loading.show{display:flex}
+.ai-spin{width:16px;height:16px;border:2px solid rgba(212,168,67,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-loading-text{font-size:12px;color:var(--gold)}
+
+/* Derived row */
+.derived-row{display:flex;gap:10px;padding:10px 14px;background:rgba(61,184,122,0.06);border:1px solid rgba(61,184,122,0.2);border-radius:6px;font-size:12px;flex-wrap:wrap;margin-top:8px}
+.derived-item{display:flex;flex-direction:column;gap:2px;min-width:110px}
+.derived-label{font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.derived-val{font-size:13px;font-weight:700;color:var(--green)}
+
+/* Land derived */
+.land-derived-row{display:flex;gap:10px;padding:10px 14px;background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.2);border-radius:6px;font-size:12px;flex-wrap:wrap;margin-top:8px}
+.land-derived-item{display:flex;flex-direction:column;gap:2px;min-width:130px}
+
+/* Room type cards */
+.room-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.room-type-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.room-type-title{font-size:10px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.room-type-fields{display:flex;flex-direction:column;gap:6px}
+
+/* Rent matrix */
+.rent-matrix-wrap{margin-top:10px;overflow-x:auto}
+.rent-matrix{width:100%;border-collapse:collapse;font-size:11px}
+.rent-matrix th{background:var(--surface2);border:1px solid var(--border);padding:6px 10px;color:var(--muted);font-size:10px;letter-spacing:0.08em;text-align:center;white-space:nowrap}
+.rent-matrix td{border:1px solid var(--border);padding:7px 10px;text-align:center;font-size:11px;color:var(--text)}
+.rent-matrix td.row-header{background:var(--surface2);color:var(--muted);font-size:10px;text-align:left;white-space:nowrap}
+.rent-matrix input[type=number]{background:transparent;border:none;color:var(--gold);font-size:11px;padding:2px 4px;width:80px;text-align:center}
+.rent-matrix input[type=number]:focus{background:rgba(212,168,67,0.08);border-radius:3px;outline:none}
+.matrix-label{font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:0.08em}
+
+/* Building valuation panel */
+.valuation-panel{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.val-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px}
+.val-card-title{font-size:10px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.val-formula{font-size:10px;color:var(--muted);margin-bottom:8px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:4px;font-family:monospace;line-height:1.7}
+.val-result{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px}
+.val-result:last-child{border-bottom:none;padding-top:8px;margin-top:4px}
+.val-key{color:var(--muted)}
+.val-num{font-weight:700;color:var(--green)}
+.val-num.warn{color:var(--warn)}
+.val-num.danger{color:var(--danger)}
+.val-verdict{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:6px;margin-top:10px;font-size:12px;font-weight:600}
+.verdict-safe{background:rgba(61,184,122,0.1);border:1px solid rgba(61,184,122,0.3);color:var(--green)}
+.verdict-warn{background:rgba(212,148,58,0.1);border:1px solid rgba(212,148,58,0.3);color:var(--warn)}
+.verdict-danger{background:rgba(224,85,85,0.1);border:1px solid rgba(224,85,85,0.3);color:var(--danger)}
+.val-inputs-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+
+/* Strategy defense panel */
+.defense-panel{background:var(--surface2);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:16px;margin-top:12px}
+.defense-title{font-size:10px;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;font-weight:700;margin-bottom:12px}
+.defense-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.defense-item{display:flex;flex-direction:column;gap:3px}
+.defense-label{font-size:10px;color:var(--muted);letter-spacing:0.06em}
+.defense-val{font-size:15px;font-weight:700;color:var(--gold)}
+.defense-sub{font-size:10px;color:var(--muted)}
+.ng-list{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.ng-item{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border-radius:5px;font-size:12px;line-height:1.5}
+.ng-item.hard{background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.25);color:var(--danger)}
+.ng-item-icon{flex-shrink:0;font-size:13px}
+
+/* Hearing tabs */
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto}
+.tab-btn{padding:9px 18px;font-size:12px;font-family:var(--font-sans);background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all 0.2s;font-weight:500}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.hearing-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hearing-section-title{font-size:10px;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;font-weight:700;margin:14px 0 8px;grid-column:1/-1}
+.notion-ref{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(122,128,153,0.1);border:1px solid rgba(122,128,153,0.25);border-radius:5px;color:var(--muted);font-size:11px;text-decoration:none;margin-bottom:14px}
+.notion-ref:hover{border-color:var(--gold);color:var(--gold)}
+
+
+/* Manual override highlight */
+.manual-override{border-color:rgba(212,168,67,0.7)!important;background:rgba(212,168,67,0.06)!important;color:var(--gold2)!important}
+.auto-reset-btn{display:none;font-size:9px;padding:2px 8px;background:rgba(122,128,153,0.15);border:1px solid var(--border);border-radius:3px;color:var(--muted);cursor:pointer;margin-top:3px;font-family:var(--font-sans);transition:all 0.2s}
+.auto-reset-btn.show{display:inline-block}
+.auto-reset-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Matrix AI loading */
+.matrix-ai-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.btn-matrix-ai{padding:5px 12px;background:rgba(212,168,67,0.12);border:1px solid rgba(212,168,67,0.3);border-radius:5px;color:var(--gold);font-size:10px;cursor:pointer;font-family:var(--font-sans);transition:all 0.2s;font-weight:600;white-space:nowrap}
+.btn-matrix-ai:hover{background:rgba(212,168,67,0.22)}
+.btn-matrix-ai:disabled{opacity:0.5;cursor:not-allowed}
+.matrix-mini-spin{display:none;width:12px;height:12px;border:2px solid rgba(212,168,67,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+.matrix-mini-spin.show{display:inline-block}
+.mx-manual{color:var(--gold2)!important}
+
+/* KPI cards row */
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}
+.kpi-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;position:relative}
+.kpi-label{font-size:9px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;display:flex;align-items:center;gap:4px}
+.kpi-val{font-size:16px;font-weight:700}
+.kpi-sub{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* Buy judgment banner */
+.buy-banner{display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:10px;margin-bottom:14px;font-weight:700}
+.buy-banner-icon{font-size:28px;flex-shrink:0}
+.buy-banner-main{font-size:15px}
+.buy-banner-sub{font-size:11px;font-weight:400;color:rgba(255,255,255,0.7);margin-top:2px}
+.buy-go{background:linear-gradient(135deg,rgba(61,184,122,0.2),rgba(61,184,122,0.1));border:1px solid rgba(61,184,122,0.5);color:var(--green)}
+.buy-caution{background:linear-gradient(135deg,rgba(212,148,58,0.2),rgba(212,148,58,0.1));border:1px solid rgba(212,148,58,0.5);color:var(--warn)}
+.buy-no{background:linear-gradient(135deg,rgba(224,85,85,0.2),rgba(224,85,85,0.1));border:1px solid rgba(224,85,85,0.5);color:var(--danger)}
+
+/* Inline property name edit */
+.prop-name-edit{background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--muted);font-size:12px;width:140px;padding:2px 4px;font-family:var(--font-sans);outline:none;cursor:text}
+.prop-name-edit:focus{border-bottom-color:var(--gold);color:var(--text)}
+.prop-item-save-badge{font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(212,148,58,0.2);color:var(--warn);margin-left:4px;letter-spacing:0.06em}
+
+/* BCR/FAR warning */
+.bcr-warning{display:none;align-items:center;gap:8px;padding:10px 14px;background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.3);border-radius:6px;color:var(--danger);font-size:12px;margin-top:8px;font-weight:600}
+.bcr-warning.show{display:flex}
+
+/* Room type horizontal scroll */
+.room-type-grid{display:flex;gap:10px;margin-top:8px;overflow-x:auto;padding-bottom:8px}
+.room-type-grid::-webkit-scrollbar{height:4px}
+.room-type-grid::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.room-type-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;min-width:280px;flex-shrink:0}
+
+/* Tooltip (body-level popup) */
+.tip-btn{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(122,128,153,0.25);color:var(--muted);font-size:9px;font-weight:700;cursor:pointer;border:none;flex-shrink:0;line-height:1;font-family:var(--font-sans);transition:background 0.2s;vertical-align:middle;margin-left:3px}
+.tip-btn:hover{background:rgba(212,168,67,0.3);color:var(--gold)}
+
+/* Repair detail table */
+.repair-tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.repair-tab-btn{padding:8px 18px;font-size:12px;font-family:var(--font-sans);background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;transition:all 0.2s;font-weight:500;white-space:nowrap}
+.repair-tab-btn:hover{color:var(--text)}
+.repair-tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.repair-tab-panel{display:none}
+.repair-tab-panel.active{display:block}
+.repair-company-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;padding:12px 14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)}
+.repair-company-row.filled{border-color:rgba(61,184,122,0.3)}
+.repair-detail-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}
+.repair-detail-table th{background:var(--surface2);border:1px solid var(--border);padding:7px 10px;color:var(--muted);font-size:10px;letter-spacing:0.06em;text-align:left;white-space:nowrap}
+.repair-detail-table td{border:1px solid var(--border);padding:5px 8px;vertical-align:middle}
+.repair-detail-table td.cat-cell{background:rgba(212,168,67,0.06);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;width:80px}
+.repair-detail-table td.item-cell{color:var(--muted);font-size:11px;white-space:nowrap;width:140px}
+.repair-detail-table input[type=number]{background:transparent;border:none;color:var(--gold2);font-size:12px;padding:3px 6px;width:90px;text-align:right;outline:none}
+.repair-detail-table input[type=number]:focus{background:rgba(212,168,67,0.08);border-radius:3px}
+.repair-detail-table input[type=text]{background:transparent;border:none;color:var(--text);font-size:11px;padding:3px 6px;width:100%;outline:none}
+.repair-detail-table input[type=text]:focus{background:rgba(255,255,255,0.03);border-radius:3px}
+.repair-total-row{background:rgba(61,184,122,0.06)!important}
+.repair-total-row td{font-weight:700;color:var(--green)!important;border-color:rgba(61,184,122,0.3)!important}
+.repair-subtotal{font-size:11px;font-weight:600;color:var(--gold);text-align:right;padding:3px 6px}
+.repair-grand-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;padding:14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)}
+.rgs-item{display:flex;flex-direction:column;gap:3px}
+.rgs-label{font-size:10px;color:var(--muted)}
+.rgs-val{font-size:16px;font-weight:700;color:var(--green)}
+
+/* Inspection toggle detail */
+.insp-toggle-btn{display:inline-flex;align-items:center;gap:3px;font-size:9px;color:var(--muted);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:3px;margin-left:6px;font-family:var(--font-sans);transition:all 0.15s;letter-spacing:0.04em;vertical-align:middle}
+.insp-toggle-btn:hover{background:rgba(212,168,67,0.1);color:var(--gold)}
+.insp-toggle-btn.open{color:var(--gold)}
+.insp-detail{display:none;margin-top:8px;padding:10px 12px;background:rgba(0,0,0,0.2);border-radius:6px;border-left:2px solid rgba(212,168,67,0.3)}
+.insp-detail.open{display:block}
+.insp-risk{font-size:10px;color:var(--danger);font-weight:600;margin-bottom:4px}
+.insp-how{font-size:10px;color:var(--muted);line-height:1.7;margin-bottom:6px}
+.insp-sub-checks{display:flex;flex-direction:column;gap:4px}
+.insp-sub-item{display:flex;align-items:flex-start;gap:6px;font-size:10px;color:var(--muted);padding:4px 6px;border-radius:4px;transition:background 0.15s}
+.insp-sub-item:hover{background:rgba(255,255,255,0.04)}
+.insp-sub-item:has(input[type=checkbox]:checked){color:var(--green);background:rgba(61,184,122,0.06)}
+.sub-memo-wrap{margin-top:4px}
+.sub-memo-input{background:rgba(255,255,255,0.04)!important;border:1px dashed rgba(122,128,153,0.3)!important;border-radius:4px!important;font-size:10px!important;padding:4px 8px!important;color:var(--muted)!important;width:100%!important;transition:all 0.2s!important}
+.sub-memo-input:focus{border-color:rgba(212,168,67,0.5)!important;background:rgba(212,168,67,0.04)!important;color:var(--text)!important;outline:none!important}
+.sub-memo-input.has-content{border-color:rgba(212,168,67,0.4)!important;color:var(--gold2)!important;background:rgba(212,168,67,0.05)!important}
+
+/* Sensitivity table */
+.sens-wrap{overflow-x:auto;margin-top:12px}
+.sens-table{border-collapse:collapse;font-size:11px;width:100%;min-width:500px}
+.sens-table th{background:var(--surface2);border:1px solid var(--border);padding:7px 10px;color:var(--muted);font-size:10px;letter-spacing:0.06em;text-align:center;white-space:nowrap}
+.sens-table td{border:1px solid var(--border);padding:6px 10px;text-align:center;font-size:11px;transition:background 0.15s}
+.sens-table td.row-head{background:var(--surface2);color:var(--muted);font-size:10px;font-weight:600;text-align:left;white-space:nowrap}
+.sens-green{background:rgba(61,184,122,0.15);color:var(--green);font-weight:700}
+.sens-warn{background:rgba(212,148,58,0.12);color:var(--warn)}
+.sens-red{background:rgba(224,85,85,0.12);color:var(--danger)}
+.sens-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px;padding:10px 14px;background:var(--surface2);border-radius:6px}
+.sens-ctrl-label{font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase}
+.sens-ctrl-val{font-size:13px;font-weight:700;color:var(--gold);min-width:80px}
+
+/* Bank summary (read-only) */
+.bank-summary{background:var(--surface2);border:1px solid rgba(74,143,212,0.25);border-radius:8px;padding:16px;margin-bottom:16px}
+.bank-summary-title{font-size:11px;color:var(--blue);letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.bank-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bs-item{display:flex;flex-direction:column;gap:2px}
+.bs-label{font-size:10px;color:var(--muted)}
+.bs-val{font-size:13px;font-weight:600;color:var(--text)}
+.bank-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.bank-check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:11px;cursor:pointer;transition:all 0.15s}
+.bank-check-item:hover{border-color:var(--border)}
+.bank-check-item.have{border-color:rgba(61,184,122,0.4);background:rgba(61,184,122,0.05)}
+.bank-check-item input[type=checkbox]{accent-color:var(--green);width:14px;height:14px;flex-shrink:0}
+.bank-check-status{font-size:9px;padding:1px 6px;border-radius:3px;margin-left:auto;white-space:nowrap}
+.have .bank-check-status{background:rgba(61,184,122,0.15);color:var(--green)}
+.nothave .bank-check-status{background:rgba(224,85,85,0.12);color:var(--danger)}
+
+/* Print styles for bank PDF */
+@media print{
+  .sidebar,.page-header,.page-actions,.section:not(#sec-finance),.sim-grid,.nav-item{display:none!important}
+  .main{padding:0!important}
+  #sec-finance .section-body{display:block!important}
+  body{background:#fff;color:#000}
+  .bank-summary,.sens-table,.bank-check-item{border-color:#ccc!important;color:#000!important;background:#fff!important}
+  .bs-val,.sens-green,.sens-warn,.sens-red{color:#000!important;background:none!important}
+  .app{display:block}
+}
+
+/* Map / link buttons */
+.map-link-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.3);border-radius:6px;color:var(--blue);font-size:11px;text-decoration:none;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.map-link-btn:hover{background:rgba(74,143,212,0.22);border-color:var(--blue)}
+.area-search-row{display:flex;align-items:flex-end;gap:10px}
+.area-search-row .field{flex:1}
+.btn-research{padding:9px 16px;background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.4);border-radius:6px;color:var(--gold);font-size:12px;cursor:pointer;white-space:nowrap;font-family:var(--font-sans);transition:all 0.2s;font-weight:600}
+.btn-research:hover{background:rgba(212,168,67,0.25)}
+.btn-research:disabled{opacity:0.5;cursor:not-allowed}
+.link-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+/* OneDrive banner */
+.onedrive-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(74,143,212,0.08);border:1px solid rgba(74,143,212,0.25);border-radius:8px;margin-bottom:16px}
+.onedrive-icon{font-size:20px}
+.onedrive-text{font-size:12px;color:var(--muted);flex:1}
+.onedrive-text a{color:var(--blue);text-decoration:none;font-weight:600}
+.onedrive-text a:hover{text-decoration:underline}
+
+@media(max-width:600px){
+  .sidebar{display:none}
+  .repair-grid,.room-type-grid{grid-template-columns:1fr 1fr}
+  .sim-grid{grid-template-columns:1fr}
+  .strategy-grid{grid-template-columns:1fr}
+  .field-grid-4{grid-template-columns:1fr 1fr}
+}
+</style>
+<style>
+/* ─── Login screen ─── */
+#loginScreen{position:fixed;inset:0;background:#0a0d14;display:flex;align-items:center;justify-content:center;z-index:99999999;flex-direction:column;gap:0}
+#loginScreen.hidden{display:none}
+.login-box{background:#181c26;border:1px solid #2a3047;border-radius:16px;padding:40px 48px;width:360px;text-align:center}
+.login-logo{font-family:'Noto Serif JP',serif;font-size:14px;font-weight:700;color:#d4a843;letter-spacing:0.08em;margin-bottom:4px}
+.login-sub{font-size:11px;color:#7a8099;margin-bottom:32px}
+.login-title{font-size:18px;font-weight:700;color:#e8e2d4;font-family:'Noto Serif JP',serif;margin-bottom:8px}
+.login-hint{font-size:11px;color:#7a8099;margin-bottom:24px;line-height:1.6}
+.login-input{width:100%;background:#1e2333;border:1px solid #2a3047;border-radius:8px;color:#e8e2d4;font-size:16px;padding:12px 16px;text-align:center;letter-spacing:0.1em;outline:none;font-family:'Noto Sans JP',sans-serif;transition:border-color 0.2s}
+.login-input:focus{border-color:#d4a843}
+.login-btn{margin-top:16px;width:100%;padding:12px;background:#d4a843;color:#0f1117;font-weight:700;font-size:14px;border:none;border-radius:8px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:background 0.2s;letter-spacing:0.06em}
+.login-btn:hover{background:#f0c96a}
+.login-error{margin-top:12px;font-size:12px;color:#e05555;min-height:18px}
+.login-date-hint{margin-top:20px;font-size:10px;color:#3a4060;letter-spacing:0.04em}
+</style>
+</head>
+<body>
+
+<!-- ─── Login Screen ─── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">🏢 お豆腐不動産株式会社</div>
+    <div class="login-sub">不動産投資 DD チェックシート</div>
+    <div class="login-title">🔐 アクセス認証</div>
+    <div class="login-hint">パスワードを入力してください</div>
+    <input type="password" class="login-input" id="loginInput" placeholder="••••••••••••"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">ログイン</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-date-hint" id="loginDateHint"></div>
+  </div>
+</div>
+
+<div class="app" id="appContent" style="display:none">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo" style="display:flex;align-items:center;gap:6px">
+      <span>🏢</span><span>お豆腐不動産株式会社</span>
+    </div>
+    <div class="sidebar-sub">不動産投資 DD チェックシート</div>
+    <a href="https://app.notion.com/p/yamori/6d2410f7f5d64996bf48c9389094d253" target="_blank"
+      style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:9px;color:rgba(122,128,153,0.7);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s"
+      onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(122,128,153,0.7)'">
+      🦎 参考：ヤモリ不動産 ↗
+    </a>
+  </div>
+  <div class="property-list" id="propertyList"></div>
+  <button class="btn-new-property" onclick="newProperty()">＋ 新規物件を追加</button>
+  <div class="sidebar-nav">
+    <div class="nav-item" onclick="navTo('#sec-area')">📍 エリア評価</div>
+    <div class="nav-item" onclick="navTo('#sec-strategy')">🎯 投資戦略</div>
+    <div class="nav-item" onclick="navTo('#sec-rental')">🏘 賃貸需要調査</div>
+    <div class="nav-item" onclick="navTo('#sec-sim')">📊 CFシミュレーション</div>
+    <div class="nav-item" onclick="navTo('#sec-tenant')">🤝 客付・出口戦略</div>
+    <div class="nav-item" onclick="navTo('#sec-finance')">🏦 融資相談</div>
+    <div class="nav-item" onclick="navTo('#sec-inspection')">🔍 物件調査</div>
+    <div class="nav-item" onclick="navTo('#sec-repair')">🔧 修繕見積</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">完了度</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-pct" id="progressPct">0%</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="mainContent">
+  <div class="page-header">
+    <div>
+      <div class="page-title">物件評価シート <span id="propNameDisplay">—</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px" id="propDateDisplay"></div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-ghost" onclick="exportCSV()">CSV 出力</button>
+      <button class="btn btn-ghost" onclick="printView()">印刷用プレビュー</button>
+      <button class="btn btn-primary" onclick="saveData()">💾 保存</button>
+    </div>
+  </div>
+
+  <!-- ══ 物件基本情報 ══ -->
+  <div class="section">
+    <div class="section-header open" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(212,168,67,0.15)">🏠</div>
+        <div class="section-title">物件基本情報</div>
+        <span class="section-badge badge-todo" id="badge-propinfo">未入力</span>
+      </div>
+      <div class="section-chevron open">▼</div>
+    </div>
+    <div class="section-body open">
+      <!-- PDF Upload -->
+      <div class="pdf-upload-zone" id="pdfZone"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handlePdfDrop(event)">
+        <input type="file" accept="application/pdf" id="pdfInput" onchange="handlePdfFile(this.files[0])">
+        <div class="pdf-upload-icon">📄</div>
+        <div class="pdf-upload-label"><span>物件概要書 PDF をアップロード</span>して自動入力</div>
+        <div class="pdf-upload-sub">クリックまたはドラッグ＆ドロップ — Claude AI が項目を読み取ります</div>
+        <div class="pdf-filename" id="pdfFilename"></div>
+      </div>
+      <div class="ai-loading" id="pdfLoading">
+        <div class="ai-spin"></div>
+        <span class="ai-loading-text">Claude が物件概要書を読み取り中...</span>
+      </div>
+
+      <!-- 基本 -->
+      <div class="field-grid">
+        <div class="field"><label>物件名</label><input type="text" id="propName" placeholder="例：ラ・ブラン外町2棟" oninput="updatePropName()"></div>
+        <div class="field">
+          <label>所在地</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="text" id="propAddr" placeholder="例：大阪府東大阪市〇〇町1-2" style="flex:1" oninput="updateRakumachiLink()">
+            <a id="rakumachiLink" class="map-link-btn" href="https://www.rakumachi.jp/property/land_price/map?category=crix_rent&zoom=13#ckmap_anchor_element" target="_blank">🗺 楽街マップ</a>
+          </div>
+        </div>
+        <div class="field"><label>物件価格（万円）</label><input type="number" id="propPrice" placeholder="2480" oninput="recalcAll()"></div>
+        <div class="field"><label>表面利回り（%）</label><input type="number" id="propYield" placeholder="8.5" step="0.1" oninput="recalcAll()"></div>
+        <div class="field"><label>建築年（西暦）</label><input type="number" id="propBuildYear" placeholder="2006" oninput="recalcAge()"></div>
+        <div class="field"><label>築年数（自動）</label><input type="number" id="propAge" readonly placeholder="—"></div>
+        <div class="field">
+          <label>構造</label>
+          <select id="propStructure" onchange="recalcDepreciation()">
+            <option value="">選択</option>
+            <option value="木造">木造</option>
+            <option value="軽量鉄骨S（3mm以下）">軽量鉄骨S（3mm以下）</option>
+            <option value="軽量鉄骨S（3〜4mm）">軽量鉄骨S（3〜4mm）</option>
+            <option value="重量鉄骨S">重量鉄骨S</option>
+            <option value="RC">RC（鉄筋コンクリート）</option>
+            <option value="SRC">SRC（鉄骨鉄筋コンクリート）</option>
+          </select>
+        </div>
+        <div class="field"><label>総戸数</label><input type="number" id="propUnits" placeholder="8" oninput="recalcAll()"></div>
+      </div>
+
+      <hr class="divider">
+      <div class="subsection-title" style="margin-top:0">土地・建物情報</div>
+      <div class="field-grid">
+        <div class="field"><label>土地面積（㎡）</label><input type="number" id="propLandArea" placeholder="200" oninput="recalcLand()"></div>
+        <div class="field"><label>建物床面積（㎡）</label><input type="number" id="propFloorArea" placeholder="280" oninput="recalcAll()"></div>
+        <div class="field"><label>建蔽率（%）</label><input type="number" id="propBCR" placeholder="60" oninput="checkBCRFAR()"></div>
+        <div class="field"><label>容積率（%）</label><input type="number" id="propFAR" placeholder="200" oninput="checkBCRFAR()"></div>
+        <div class="field">
+          <label>相続税路線価（千円/㎡）</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="number" id="areaRosen" placeholder="例：85" style="flex:1" oninput="recalcLand()">
+            <a href="https://www.chikamap.jp/chikamap/Portal?mid=216" target="_blank" class="map-link-btn">🗾 地価マップ</a>
+          </div>
+        </div>
+        <div class="field">
+          <label>実勢価格（万円・自動算出）</label>
+          <input type="number" id="propJisseki" readonly placeholder="土地価格×1.15で自動計算" style="background:rgba(0,0,0,0.2);color:var(--gold)">
+          <div style="font-size:9px;color:var(--muted);margin-top:3px">土地価格×1.1〜1.2倍の中間値（×1.15）＝今売れる目安価格</div>
+        </div>
+      </div>
+      <div class="bcr-warning" id="bcrWarning">
+        <span>⚠</span><span id="bcrWarningText">建蔽率・容積率超過の可能性があります。役所確認が必要です。</span>
+      </div>
+      <div class="field-grid" style="margin-top:10px">
+        <div class="field">
+          <label>土地価格（万円）</label>
+          <input type="number" id="propLandPrice" placeholder="未記載なら自動算出" oninput="recalcLand()">
+        </div>
+        <div class="field"><label>建物価格（万円・書類記載値）</label><input type="number" id="propBuildingPrice" placeholder="528" oninput="recalcDepreciation();recalcValuation();syncSim()"></div>
+        <div class="field"><label>土地積算割合（%）</label><input type="number" id="propLandRatio" readonly placeholder="自動計算"></div>
+        <div class="field">
+          <label>土地価格トレンド</label>
+          <select id="propLandTrend">
+            <option value="">選択</option>
+            <option>上昇傾向</option><option>横ばい</option><option>微下落</option><option>下落傾向</option>
+          </select>
+        </div>
+        <div class="field field-full"><label>メモ（仲介業者名・問合せ日時など）</label><textarea id="propMemo" placeholder="例：〇〇不動産 担当：田中様 2025/06/01 問合せ"></textarea></div>
+      </div>
+
+      <!-- 土地積算 derived -->
+      <div class="land-derived-row" id="landDerivedRow">
+        <div class="land-derived-item"><span class="derived-label">土地価格（路線価×面積）</span><span class="derived-val" id="drvLandCalc">—</span></div>
+        <div class="land-derived-item"><span class="derived-label">実勢価格（土地価格×1.15）</span><span class="derived-val" id="drvJisseki">—</span></div>
+        <div class="land-derived-item"><span class="derived-label">土地積算割合（土地÷建物+土地）</span><span class="derived-val" id="drvLandRatio">—</span></div>
+        <div class="land-derived-item"><span class="derived-label">土地÷物件価格</span><span class="derived-val" id="drvLandVsPrice">—</span></div>
+      </div>
+
+      <!-- 収益還元法 建物価格評価 -->
+      <div class="subsection-title" style="margin-top:16px">収益還元法ベース 建物価格評価</div>
+      <div class="val-inputs-row">
+        <div class="field"><label>Cap Rate（%）— 直接還元利回り <button class="tip-btn" onclick="showTip('valCapRate',this);event.stopPropagation()">?</button></label><input type="number" id="valCapRate" placeholder="例：7.5（近畿圏木造：8〜10%）" step="0.1" oninput="recalcValuation()"></div>
+        <div class="field"><label>空室・経費控除率（%）</label><input type="number" id="valExpenseRate" placeholder="例：25（空室+管理+修繕）" oninput="recalcValuation()"></div>
+        <div class="field"><label>35年後 年間地価変動率（%）</label><input type="number" id="valLandGrowth" placeholder="例：-0.5" step="0.1" oninput="recalcValuation()"></div>
+      </div>
+      <div class="valuation-panel" id="valuationPanel">
+        <div class="val-card">
+          <div class="val-card-title">A）直接還元法（NOI ÷ Cap Rate）</div>
+          <div class="val-formula">NOI = 満室年収 × (1 − 経費率)<br>収益価値 = NOI ÷ Cap Rate<br>建物価格(収益) = 収益価値 − 土地価格</div>
+          <div class="val-result"><span class="val-key">NOI（年）</span><span class="val-num" id="va-noi">—</span></div>
+          <div class="val-result"><span class="val-key">物件収益価格</span><span class="val-num" id="va-propval">—</span></div>
+          <div class="val-result"><span class="val-key">建物価格（収益）</span><span class="val-num" id="va-bldval">—</span></div>
+          <div class="val-result"><span class="val-key" style="font-weight:700">書類価格との乖離</span><span class="val-num" id="va-diff">—</span></div>
+        </div>
+        <div class="val-card">
+          <div class="val-card-title">B）積算按分（収益価格から土地を逆算）</div>
+          <div class="val-formula">積算土地価格 = 路線価 × 面積 × 80%<br>建物価格(積算) = 物件価格 − 積算土地価格<br>比較：収益法 vs 積算法</div>
+          <div class="val-result"><span class="val-key">積算土地価格</span><span class="val-num" id="vb-land">—</span></div>
+          <div class="val-result"><span class="val-key">建物価格（積算按分）</span><span class="val-num" id="vb-bld">—</span></div>
+          <div class="val-result"><span class="val-key">収益法との差</span><span class="val-num" id="vb-diff">—</span></div>
+          <div class="val-result"><span class="val-key" style="font-weight:700">採用建物価格（保守的）</span><span class="val-num" id="vb-adopt">—</span></div>
+        </div>
+      </div>
+      <div id="valuationVerdict" class="val-verdict verdict-warn" style="display:none"></div>
+
+      <!-- Building derived -->
+      <div class="derived-row" id="derivedRow">
+        <div class="derived-item"><span class="derived-label">想定満室年収</span><span class="derived-val" id="drvFullRent">—</span></div>
+        <div class="derived-item"><span class="derived-label">法定耐用年数</span><span class="derived-val" id="drvLegalLife">—</span></div>
+        <div class="derived-item"><span class="derived-label">残存耐用年数</span><span class="derived-val" id="drvRemainLife">—</span></div>
+        <div class="derived-item"><span class="derived-label">年間減価償却</span><span class="derived-val" id="drvDepr">—</span></div>
+      </div>
+
+      <!-- Room types -->
+      <div class="subsection-title">間取り・部屋タイプ（最大3種類）</div>
+      <div class="room-type-grid" id="roomTypeGrid">
+        <!-- A -->
+        <div class="room-type-card">
+          <div class="room-type-title">タイプ A</div>
+          <div class="room-type-fields">
+            <div class="field"><label>間取り</label><input type="text" id="room1_layout" placeholder="例：1K" oninput="recalcAll()"></div>
+            <div class="field"><label>専有面積（㎡）</label><input type="number" id="room1_area" placeholder="25"></div>
+            <div class="field"><label>戸数</label><input type="number" id="room1_units" placeholder="6" oninput="recalcAll()"></div>
+            <div class="field"><label>現況家賃（円/月）</label><input type="number" id="room1_rent" placeholder="45000" oninput="recalcAll()"></div>
+          </div>
+          <div class="subsection-title" style="margin-top:12px;font-size:9px">賃料相場マトリクス（タイプA）</div>
+          <div class="matrix-ai-row">
+            <button class="btn-matrix-ai" id="btnMatrix1" onclick="fetchMatrixRent(1)">🤖 AI相場取得</button>
+            <div class="matrix-mini-spin" id="matrixSpin1"></div>
+            <span style="font-size:9px;color:var(--muted)">金色＝手動修正</span>
+          </div>
+          <div class="rent-matrix-wrap"><table class="rent-matrix" id="matrix1"></table></div>
+        </div>
+        <!-- B -->
+        <div class="room-type-card">
+          <div class="room-type-title">タイプ B</div>
+          <div class="room-type-fields">
+            <div class="field"><label>間取り</label><input type="text" id="room2_layout" placeholder="例：1LDK"></div>
+            <div class="field"><label>専有面積（㎡）</label><input type="number" id="room2_area" placeholder="40"></div>
+            <div class="field"><label>戸数</label><input type="number" id="room2_units" placeholder="2" oninput="recalcAll()"></div>
+            <div class="field"><label>現況家賃（円/月）</label><input type="number" id="room2_rent" placeholder="65000" oninput="recalcAll()"></div>
+          </div>
+          <div class="subsection-title" style="margin-top:12px;font-size:9px">賃料相場マトリクス（タイプB）</div>
+          <div class="matrix-ai-row">
+            <button class="btn-matrix-ai" id="btnMatrix2" onclick="fetchMatrixRent(2)">🤖 AI相場取得</button>
+            <div class="matrix-mini-spin" id="matrixSpin2"></div>
+          </div>
+          <div class="rent-matrix-wrap"><table class="rent-matrix" id="matrix2"></table></div>
+        </div>
+        <!-- C -->
+        <div class="room-type-card">
+          <div class="room-type-title">タイプ C</div>
+          <div class="room-type-fields">
+            <div class="field"><label>間取り</label><input type="text" id="room3_layout" placeholder="例：2DK"></div>
+            <div class="field"><label>専有面積（㎡）</label><input type="number" id="room3_area" placeholder="50"></div>
+            <div class="field"><label>戸数</label><input type="number" id="room3_units" placeholder="0" oninput="recalcAll()"></div>
+            <div class="field"><label>現況家賃（円/月）</label><input type="number" id="room3_rent" placeholder="80000" oninput="recalcAll()"></div>
+          </div>
+          <div class="subsection-title" style="margin-top:12px;font-size:9px">賃料相場マトリクス（タイプC）</div>
+          <div class="matrix-ai-row">
+            <button class="btn-matrix-ai" id="btnMatrix3" onclick="fetchMatrixRent(3)">🤖 AI相場取得</button>
+            <div class="matrix-mini-spin" id="matrixSpin3"></div>
+          </div>
+          <div class="rent-matrix-wrap"><table class="rent-matrix" id="matrix3"></table></div>
+        </div>
+      </div>
+      <div class="link-row" style="margin-top:12px">
+        <a href="https://toushi.homes.co.jp/owner/" target="_blank" class="map-link-btn">🏠 ライフル賃貸経営（賃貸需給ギャップ）</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ エリア評価 ══ -->
+  <div class="section" id="sec-area">
+    <div class="section-header open" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(74,143,212,0.15)">📍</div>
+        <div class="section-title">エリア評価</div>
+        <span class="section-badge badge-todo" id="badge-area">未入力</span>
+      </div>
+      <div class="section-chevron open">▼</div>
+    </div>
+    <div class="section-body open">
+      <div class="area-search-row" style="margin-bottom:14px">
+        <div class="field">
+          <label>市区町村（入力後 AI 調査）</label>
+          <input type="text" id="areaMunic" placeholder="例：大阪府東大阪市">
+        </div>
+        <button class="btn-research" id="btnResearch" onclick="runAreaResearch()">🤖 AI エリア調査</button>
+      </div>
+      <div class="ai-loading" id="areaLoading">
+        <div class="ai-spin"></div>
+        <span class="ai-loading-text" id="areaLoadingText">リサーチ中...</span>
+      </div>
+
+      <div class="field-grid">
+        <div class="field"><label>人口（万人・国勢調査）</label>
+          <input type="number" id="areaPop" placeholder="AI調査で自動入力" step="0.1" oninput="markManual('areaPop')">
+          <button class="auto-reset-btn" id="reset-areaPop" onclick="resetManual('areaPop')">↺ 自動に戻す</button>
+        </div>
+        <div class="field"><label>人口増減トレンド</label>
+          <select id="areaTrend" onchange="markManual('areaTrend')">
+            <option value="">AI調査で自動入力</option><option>増加傾向</option><option>横ばい</option><option>微減</option><option>減少傾向</option>
+          </select>
+          <button class="auto-reset-btn" id="reset-areaTrend" onclick="resetManual('areaTrend')">↺ 自動に戻す</button>
+        </div>
+        <div class="field"><label>直近国勢調査比（%）</label>
+          <input type="number" id="areaPopChange" placeholder="例：-2.3" step="0.1" oninput="markManual('areaPopChange')">
+          <button class="auto-reset-btn" id="reset-areaPopChange" onclick="resetManual('areaPopChange')">↺ 自動に戻す</button>
+        </div>
+        <div class="field"><label>最寄り駅・徒歩分数</label><input type="text" id="areaStation" placeholder="例：布施駅 徒歩8分"></div>
+        <div class="field">
+          <label>駅乗降者数（人/日）</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="number" id="areaRiders" placeholder="手動入力" style="flex:1">
+            <a href="https://www.rakumachi.jp/property/land_price/map?lat=35.01218070&lng=135.73344470&category=passenger&uiaid=property_detail_ckmap#ckmap_anchor_element" target="_blank" class="map-link-btn">🚉 乗降者数マップ</a>
+          </div>
+        </div>
+        <div class="field"><label>京都からのアクセス</label><input type="text" id="areaAccess" placeholder="例：新快速+近鉄 約40分"></div>
+        <div class="field"><label>エリア総合スコア（A/B/C）</label>
+          <select id="areaScore">
+            <option value="">選択</option>
+            <option value="A">A — 優先投資エリア</option>
+            <option value="B">B — 検討可</option>
+            <option value="C">C — 要慎重</option>
+          </select>
+        </div>
+        <div class="field field-full"><label>主要産業・雇用源（AI調査で自動入力）</label>
+          <textarea id="areaEmployer" placeholder="AI調査ボタンで自動取得します" style="min-height:90px"></textarea>
+        </div>
+        <div class="field field-full">
+          <label>居住ペルソナ（AI調査で自動入力）</label>
+          <textarea id="areaPersona" placeholder="AI調査ボタンで自動取得します — 主な入居者層・年代・職業・生活スタイルなど" style="min-height:90px"></textarea>
+        </div>
+        <div class="field field-full"><label>エリア考察・メモ</label>
+          <textarea id="areaMemo" placeholder="空室リスク・競合物件の状況・将来開発計画など"></textarea>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <div class="subsection-title">金融機関 エリア評価</div>
+      <table class="bank-table">
+        <thead><tr><th>金融機関</th><th>エリア適合</th><th>築年・構造目安</th><th>LTV目安</th><th>期間目安</th><th>担当メモ</th></tr></thead>
+        <tbody>
+          <tr><td>オリックス銀行</td><td><span class="score-pill score-b" id="bank-orix-area">—</span></td><td>RC・S系 中古OK</td><td>80%</td><td>30年</td><td><input type="text" class="bank-note" placeholder="メモ"></td></tr>
+          <tr><td>滋賀銀行</td><td><span class="score-pill score-b" id="bank-shiga-area">—</span></td><td>木造可（築25年以内）</td><td>70%</td><td>20年</td><td><input type="text" class="bank-note" placeholder="メモ"></td></tr>
+          <tr><td>auじぶん銀行</td><td><span class="score-pill score-b" id="bank-au-area">—</span></td><td>RC築35年以内</td><td>80%</td><td>35年</td><td><input type="text" class="bank-note" placeholder="メモ"></td></tr>
+          <tr><td>京都中央信用金庫</td><td><span class="score-pill score-b" id="bank-kccu-area">—</span></td><td>エリア限定・木造可</td><td>70%</td><td>25年</td><td><input type="text" class="bank-note" placeholder="メモ"></td></tr>
+          <tr><td>関西みらい銀行</td><td><span class="score-pill score-b" id="bank-kansai-area">—</span></td><td>RC・S中心</td><td>75%</td><td>30年</td><td><input type="text" class="bank-note" placeholder="メモ"></td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px">※ 初期データ受領後、物件情報と自動マッチングして色分けします</div>
+    </div>
+  </div>
+
+  <!-- ══ 投資戦略 ══ -->
+  <div class="section" id="sec-strategy">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(212,168,67,0.15)">🎯</div>
+        <div class="section-title">投資戦略選択</div>
+        <span class="section-badge badge-todo" id="badge-strategy">未選択</span>
+      </div>
+      <div class="section-chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="strategy-grid">
+        <div class="strategy-btn" id="strat-1" onclick="selectStrategy(1)">
+          <div class="strategy-icon">📈</div>
+          <div class="strategy-name">① 築浅 7% キャピタル戦略</div>
+          <div class="strategy-desc">築10年以内・高利回り・売却益で回収。銀行評価高く融資付きやすい。CFはトントン〜薄プラスでOK。</div>
+        </div>
+        <div class="strategy-btn" id="strat-2" onclick="selectStrategy(2)">
+          <div class="strategy-icon">⚖️</div>
+          <div class="strategy-name">② 築15-25年 地銀狙い<br>インカム＆キャピタル戦略</div>
+          <div class="strategy-desc">地銀が評価しやすい築年帯。CF＋売却益のバランス型。年120万CF×保有期間で回収する設計。</div>
+        </div>
+        <div class="strategy-btn" id="strat-3" onclick="selectStrategy(3)">
+          <div class="strategy-icon">🏗️</div>
+          <div class="strategy-name">③ 築古インカム＆土地値保有戦略</div>
+          <div class="strategy-desc">土地値で損切りラインを確保。建物ゼロ想定で保有しつづけてもプラスになる設計。高CFで初期回収。</div>
+        </div>
+      </div>
+
+      <!-- Strategy 1 ideal -->
+      <div id="ideal-1" class="strategy-ideal">
+        <div class="ideal-title">① 築浅キャピタル — 理想物件条件</div>
+        <div class="ideal-row"><span class="ideal-key">築年数</span><span class="ideal-val">築10年以内</span></div>
+        <div class="ideal-row"><span class="ideal-key">構造</span><span class="ideal-val">RC・重量鉄骨優先</span></div>
+        <div class="ideal-row"><span class="ideal-key">表面利回り</span><span class="ideal-val">7.0%以上</span></div>
+        <div class="ideal-row"><span class="ideal-key">CF目標</span><span class="ideal-val">月±0〜5万円（売却益で逆転する設計）</span></div>
+        <div class="ideal-row"><span class="ideal-key">出口想定</span><span class="ideal-val">5〜8年・現利回り以上で売却</span></div>
+        <div class="ideal-row"><span class="ideal-key">融資</span><span class="ideal-val">オリックス・auじぶん向き</span></div>
+        <!-- Defense panel populated by JS -->
+        <div class="defense-panel" id="defense-1">
+          <div class="defense-title">📐 負けないラインの計算（この物件）</div>
+          <div class="defense-grid" id="defense-1-grid"><div style="color:var(--muted);font-size:11px;grid-column:1/-1">物件価格・満室年収・土地価格を入力すると自動計算されます</div></div>
+        </div>
+        <div class="subsection-title" style="margin-top:14px;color:var(--danger)">💀 本当に死ぬNG（これがあったら即撤退）</div>
+        <div class="ng-list">
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>収益還元価格が物件価格を20%以上下回る（割高をつかまされる）</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>出口時点で同等利回りの新築・築浅が供給過多で売却先が存在しない</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>融資が通らず自己資金で全額購入するしかない（レバレッジゼロ）</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>土地値が物件価格の30%以下（担保価値なし・デフォルト時に終わる）</div>
+        </div>
+      </div>
+
+      <!-- Strategy 2 ideal -->
+      <div id="ideal-2" class="strategy-ideal">
+        <div class="ideal-title">② 地銀インカム＆キャピタル — 理想物件条件</div>
+        <div class="ideal-row"><span class="ideal-key">築年数</span><span class="ideal-val">築15〜25年</span></div>
+        <div class="ideal-row"><span class="ideal-key">構造</span><span class="ideal-val">軽量鉄骨・木造（2×4）・RC</span></div>
+        <div class="ideal-row"><span class="ideal-key">表面利回り</span><span class="ideal-val">8.0%以上</span></div>
+        <div class="ideal-row"><span class="ideal-key">CF目標</span><span class="ideal-val">税引後 月10万円以上（年120万円）</span></div>
+        <div class="ideal-row"><span class="ideal-key">融資</span><span class="ideal-val">滋賀銀行・関西みらい・京都中央信金</span></div>
+        <div class="defense-panel" id="defense-2">
+          <div class="defense-title">📐 負けないラインの計算（この物件）</div>
+          <div class="defense-grid" id="defense-2-grid"><div style="color:var(--muted);font-size:11px;grid-column:1/-1">物件価格・満室年収・土地価格を入力すると自動計算されます</div></div>
+        </div>
+        <div class="subsection-title" style="margin-top:14px;color:var(--danger)">💀 本当に死ぬNG（これがあったら即撤退）</div>
+        <div class="ng-list">
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>土地積算＋収益価格の両方で物件価格を下回る（どこから見ても割高）</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>税引後CFがマイナスで、かつ保有期間中に黒字転換の見込みがない</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>地銀審査で「エリア対象外」確定（融資の目途がまったく立たない）</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>入居率が過去2年60%以下で改善理由が説明できない</div>
+        </div>
+      </div>
+
+      <!-- Strategy 3 ideal -->
+      <div id="ideal-3" class="strategy-ideal">
+        <div class="ideal-title">③ 築古インカム＆土地値 — 理想物件条件</div>
+        <div class="ideal-row"><span class="ideal-key">築年数</span><span class="ideal-val">築30年以上（建物評価ゼロ前提）</span></div>
+        <div class="ideal-row"><span class="ideal-key">表面利回り</span><span class="ideal-val">10%以上</span></div>
+        <div class="ideal-row"><span class="ideal-key">土地値条件</span><span class="ideal-val">物件価格 ≦ 路線価積算の90%</span></div>
+        <div class="ideal-row"><span class="ideal-key">出口想定</span><span class="ideal-val">長期保有 or 更地売却</span></div>
+        <div class="ideal-row"><span class="ideal-key">融資</span><span class="ideal-val">信金系・ノンバンク・自己資金比率高め</span></div>
+        <div class="defense-panel" id="defense-3">
+          <div class="defense-title">🏗 土地値 35年後シナリオ予測（この物件）</div>
+          <div class="defense-grid" id="defense-3-grid"><div style="color:var(--muted);font-size:11px;grid-column:1/-1">土地価格・年間変動率を入力すると35年後の土地値予測が表示されます</div></div>
+        </div>
+        <div class="subsection-title" style="margin-top:14px;color:var(--danger)">💀 本当に死ぬNG（これがあったら即撤退）</div>
+        <div class="ng-list">
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>物件価格が路線価積算を上回っている（土地値割れ — 最後の拠り所がない）</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>接道不備・再建築不可 かつ 買い手が存在しない立地（永久に売れない）</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>35年後の土地値予測が取得原価を大幅に下回り、インカムでも回収不可</div>
+          <div class="ng-item hard"><span class="ng-item-icon">💀</span>給排水の全面更新が必要で修繕費が初期CFを5年以上食い潰す</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <div class="field field-full"><label>この物件をこの戦略で選んだ理由・判断根拠</label>
+        <textarea id="strategyReason" placeholder="戦略との整合性・数値的根拠・リスク許容理由を記載"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 賃貸需要調査 ══ -->
+  <div class="section" id="sec-rental">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(212,148,58,0.15)">🏘</div>
+        <div class="section-title">賃貸需要調査</div>
+        <span class="section-badge badge-todo" id="badge-rental">未確認</span>
+      </div>
+      <div class="section-chevron">▼</div>
+    </div>
+    <div class="section-body">
+
+      <!-- 共通データ -->
+      <div class="field-grid">
+        <div class="field"><label>現入居率（%）</label><input type="number" id="rentalOccupancy" placeholder="87.5"></div>
+        <div class="field"><label>満室想定家賃（万円/月）</label><input type="number" id="rentalFull" placeholder="25" oninput="syncSim()"></div>
+        <div class="field"><label>現行平均賃料（円/㎡）</label><input type="number" id="rentalPerSqm" placeholder="1800"></div>
+        <div class="field"><label>近隣相場（円/㎡）</label><input type="number" id="rentalMarket" placeholder="1950"></div>
+        <div class="field"><label>管理会社</label><input type="text" id="rentalMgmt" placeholder="例：〇〇不動産管理"></div>
+        <div class="field"><label>管理費率（%）</label><input type="number" id="rentalMgmtFee" placeholder="5" oninput="syncSim()"></div>
+        <div class="field field-full"><label>売却理由（ヒアリング内容）</label><textarea id="rentalSellReason" placeholder="業者から聞いた売却理由をそのまま記録"></textarea></div>
+      </div>
+
+      <!-- 仲介ヒアリング タブ -->
+      <hr class="divider">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+        <div class="subsection-title" style="margin:0">仲介業者ヒアリング</div>
+        <a href="https://app.notion.com/p/yamori/57189ed423c04c299be9813b61c1d312" target="_blank" class="notion-ref">📋 ヒアリングのやり方（Notion）</a>
+      </div>
+      <div class="tab-bar" id="hearingTabBar">
+        <button class="tab-btn active" onclick="switchHearingTab(1)">店舗①<span class="inline-badge" style="background:rgba(224,85,85,0.2);color:var(--danger)">必須</span></button>
+        <button class="tab-btn" onclick="switchHearingTab(2)">店舗②<span class="inline-badge" style="background:rgba(224,85,85,0.2);color:var(--danger)">必須</span></button>
+        <button class="tab-btn" onclick="switchHearingTab(3)">店舗③<span class="inline-badge" style="background:rgba(224,85,85,0.2);color:var(--danger)">必須</span></button>
+        <button class="tab-btn" onclick="switchHearingTab(4)">店舗④<span class="inline-badge" style="background:rgba(122,128,153,0.15);color:var(--muted)">任意</span></button>
+      </div>
+      <div id="hearingPanels"></div>
+
+      <!-- 共通チェック -->
+      <hr class="divider">
+      <div class="subsection-title">必須確認項目（共通）</div>
+      <div class="check-list" id="rentalChecks"></div>
+      <hr class="divider">
+      <div class="subsection-title">禁忌事項 <span class="inline-badge" style="background:rgba(224,85,85,0.2);color:var(--danger)">該当＝原則NG</span></div>
+      <div class="check-list" id="rentalForbid"></div>
+      <hr class="divider">
+      <div class="subsection-title">要考慮事項 <span class="inline-badge" style="background:rgba(212,148,58,0.2);color:var(--warn)">該当時は備考必須</span></div>
+      <div class="check-list" id="rentalCaution"></div>
+    </div>
+  </div>
+
+  <!-- ══ CF シミュレーション ══ -->
+  <div class="section" id="sec-sim">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(212,168,67,0.15)">📊</div>
+        <div class="section-title">CF シミュレーション</div>
+        <span class="section-badge badge-todo" id="badge-sim">要入力</span>
+      </div>
+      <div class="section-chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div id="buyBanner" class="buy-banner buy-caution" style="display:none">
+        <div class="buy-banner-icon" id="buyIcon">—</div>
+        <div><div class="buy-banner-main" id="buyMain">—</div><div class="buy-banner-sub" id="buySub">—</div></div>
+      </div>
+      <div class="kpi-row" id="kpiRow"></div>
+      <div class="sim-grid">
+        <div class="sim-inputs" id="simInputs"></div>
+        <div>
+          <div class="sim-result-cards" id="simResultCards"></div>
+          <div class="chart-wrap"><canvas id="cfChart"></canvas></div>
+          <div class="sim-notice">※ 楽待シミュレーターベースの計算式。減価償却・不動産取得税・修繕は個別入力値を使用。所得税は簡易計算。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 客付・出口戦略 ══ -->
+  <div class="section" id="sec-tenant">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(74,143,212,0.15)">🤝</div>
+        <div class="section-title">客付け戦略 ＆ 出口戦略</div>
+        <span class="section-badge badge-todo" id="badge-tenant">未記載</span>
+      </div>
+      <div class="section-chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="subsection-title" style="margin-top:0">客付け戦略</div>
+      <div class="field-grid">
+        <div class="field"><label>ターゲット入居者層</label><input type="text" id="tenantTarget" placeholder="例：工場勤務の単身者・20〜40代"></div>
+        <div class="field"><label>訴求ポイント</label><input type="text" id="tenantAppeal" placeholder="例：駅徒歩8分・リノベ済・ペット可"></div>
+        <div class="field"><label>管理委託先（予定）</label><input type="text" id="tenantMgmt" placeholder="例：地元密着の〇〇管理"></div>
+        <div class="field"><label>賃料設定方針</label>
+          <select id="tenantRentPolicy">
+            <option value="">選択</option>
+            <option>相場より5%低め（稼働率重視）</option>
+            <option>相場並み</option>
+            <option>リノベ後に相場+10%</option>
+            <option>サブリース検討</option>
+          </select>
+        </div>
+        <div class="field field-full"><label>空室対策の具体策</label>
+          <textarea id="tenantVacancy" placeholder="例：フリーレント1ヶ月・AD2ヶ月・礼金ゼロ・DIYリノベ"></textarea>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="subsection-title">出口戦略</div>
+      <div class="exit-grid">
+        <div class="field"><label>想定保有期間</label><input type="text" id="exitPeriod" placeholder="例：8〜10年"></div>
+        <div class="field"><label>売却想定時期</label><input type="text" id="exitTiming" placeholder="例：2033〜2035年頃"></div>
+        <div class="field"><label>売却時 想定家賃（万円/月）</label><input type="number" id="exitRent" placeholder="例：20（家賃下落後）" step="0.1" oninput="recalcExitPrice()"></div>
+        <div class="field"><label>売却時 想定利回り（%）</label><input type="number" id="exitYield" placeholder="例：9.5" step="0.1" oninput="recalcExitPrice()"></div>
+        <div class="field"><label>バイヤーターゲット</label>
+          <select id="exitBuyer">
+            <option value="">選択</option>
+            <option>次の個人投資家（CF目的）</option>
+            <option>地元業者（土地目的）</option>
+            <option>更地売却</option>
+            <option>法人・ファンド</option>
+          </select>
+        </div>
+        <div class="field"><label>最悪シナリオ（損切りライン）</label><input type="text" id="exitWorst" placeholder="例：土地値相当（〇〇万円）以上なら売却可"></div>
+      </div>
+      <!-- 売却ターゲット価格 自動算出 -->
+      <div class="land-derived-row" style="margin-top:10px">
+        <div class="land-derived-item">
+          <span class="derived-label">逆算ターゲット価格（自動）</span>
+          <span class="derived-val" id="drvExitTargetPrice">—</span>
+        </div>
+        <div class="land-derived-item">
+          <span class="derived-label">算出根拠</span>
+          <span style="font-size:10px;color:var(--muted)" id="drvExitFormula">想定家賃×12÷想定利回り</span>
+        </div>
+      </div>
+      <div class="field-grid" style="margin-top:12px">
+        <div class="field"><label>売却想定価格（万円）— 手動入力</label><input type="number" id="exitPrice" placeholder="自動算出値を参考に入力" oninput="syncSim()"></div>
+        <div class="field"><label>自動算出との差（参考）</label><input type="number" id="exitPriceDiff" readonly placeholder="—" style="background:rgba(0,0,0,0.2);color:var(--gold)"></div>
+        <div class="field field-full"><label>出口戦略の根拠・詳細</label>
+          <textarea id="exitReason" placeholder="なぜその価格で売れると考えるか。土地値計算・相場推移・出口バイヤーのロジックを記載"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 融資相談 ══ -->
+  <div class="section" id="sec-finance">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(61,184,122,0.15)">🏦</div>
+        <div class="section-title">融資相談</div>
+        <span class="section-badge badge-todo" id="badge-finance">未確認</span>
+      </div>
+      <div class="section-chevron">▼</div>
+    </div>
+    <div class="section-body">
+
+      <!-- 銀行上申サマリー (read-only, auto-collected) -->
+      <div class="bank-summary" id="bankSummary">
+        <div class="bank-summary-title">
+          📋 銀行上申用サマリー
+          <span style="font-size:9px;color:var(--muted);font-weight:400">— 他セクションから自動集約（編集不可）</span>
+          <button class="btn btn-ghost" style="margin-left:auto;font-size:10px;padding:4px 12px" onclick="printBankPDF()">🖨 PDF出力</button>
+        </div>
+        <div class="bank-summary-grid" id="bankSummaryGrid">
+          <div class="bs-item"><span class="bs-label">物件名</span><span class="bs-val" id="bs-name">—</span></div>
+          <div class="bs-item"><span class="bs-label">所在地</span><span class="bs-val" id="bs-addr">—</span></div>
+          <div class="bs-item"><span class="bs-label">物件価格</span><span class="bs-val" id="bs-price">—</span></div>
+          <div class="bs-item"><span class="bs-label">構造・築年</span><span class="bs-val" id="bs-structure">—</span></div>
+          <div class="bs-item"><span class="bs-label">表面利回り</span><span class="bs-val" id="bs-yield">—</span></div>
+          <div class="bs-item"><span class="bs-label">想定満室年収</span><span class="bs-val" id="bs-rent">—</span></div>
+          <div class="bs-item"><span class="bs-label">土地面積・建物面積</span><span class="bs-val" id="bs-area">—</span></div>
+          <div class="bs-item"><span class="bs-label">路線価積算（土地）</span><span class="bs-val" id="bs-land">—</span></div>
+          <div class="bs-item"><span class="bs-label">収益還元価格（NOI法）</span><span class="bs-val" id="bs-income">—</span></div>
+          <div class="bs-item"><span class="bs-label">エリア人口・トレンド</span><span class="bs-val" id="bs-area-pop">—</span></div>
+          <div class="bs-item"><span class="bs-label">入居率（現況）</span><span class="bs-val" id="bs-occupancy">—</span></div>
+          <div class="bs-item"><span class="bs-label">投資戦略</span><span class="bs-val" id="bs-strategy">—</span></div>
+          <div class="bs-item"><span class="bs-label">保有期間・売却想定</span><span class="bs-val" id="bs-exit">—</span></div>
+          <div class="bs-item"><span class="bs-label">CCR</span><span class="bs-val" id="bs-ccr">—</span></div>
+          <div class="bs-item"><span class="bs-label">年間CF（初年度）</span><span class="bs-val" id="bs-cf">—</span></div>
+        </div>
+      </div>
+
+      <!-- OneDrive -->
+      <div class="onedrive-banner">
+        <div class="onedrive-icon">☁️</div>
+        <div class="onedrive-text">
+          書類管理：<a href="https://1drv.ms/f/c/FD495221CE64EAB9/Apn8pNU44QFDoMiayFmOzfk?e=0Wq7TB" target="_blank">OneDrive 不動産書類フォルダを開く</a>
+          — 収集した書類はここに格納してください
+        </div>
+      </div>
+
+      <!-- 持込書類チェック -->
+      <div class="subsection-title" style="margin-top:0">銀行持込書類チェック（有無の確認）</div>
+      <div class="bank-check-grid" id="bankDocChecks"></div>
+
+      <hr class="divider">
+
+      <!-- 融資条件別感度表 -->
+      <div class="subsection-title">融資条件別 年間CF感度表</div>
+      <div class="sens-controls">
+        <div>
+          <div class="sens-ctrl-label">物件価格（万円）</div>
+          <div class="sens-ctrl-val" id="sensPrice">—</div>
+        </div>
+        <div style="flex:1">
+          <div class="sens-ctrl-label">自己資金（万円）<span style="margin-left:6px;font-size:11px;color:var(--text)" id="sensDownVal">500</span></div>
+          <input type="range" id="sensDown" min="0" max="5000" step="50" value="500"
+            oninput="document.getElementById('sensDownVal').textContent=this.value;renderSensTable()" style="width:100%;max-width:300px">
+        </div>
+        <div>
+          <div class="sens-ctrl-label">満室年収（万円）</div>
+          <div class="sens-ctrl-val" id="sensRent">—</div>
+        </div>
+      </div>
+      <div class="sens-wrap"><table class="sens-table" id="sensTable"></table></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px">
+        ■ 緑：年間CF 120万円以上（目標達成）　■ 橙：0〜120万円　■ 赤：マイナス<br>
+        ※ 管理費5%・修繕費5%・固定資産税25万円・所得税30%・入居率90%で計算
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 物件調査 ══ -->
+  <div class="section" id="sec-inspection">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(61,184,122,0.15)">🔍</div>
+        <div class="section-title">物件調査チェック</div>
+        <span class="section-badge badge-todo" id="badge-inspection">未実施</span>
+      </div>
+      <div class="section-chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="subsection-title" style="margin-top:0">登記・法務確認</div>
+      <div class="check-list" id="inspLegal"></div>
+      <hr class="divider">
+      <div class="subsection-title">建物・設備確認</div>
+      <div class="check-list" id="inspBuilding"></div>
+      <hr class="divider">
+      <div class="subsection-title">周辺環境・需要確認</div>
+      <div class="check-list" id="inspArea"></div>
+      <hr class="divider">
+      <div class="field field-full"><label>現地調査の総合所見</label>
+        <textarea id="inspMemo" placeholder="現地を見て感じたこと・写真で確認した内容・懸念点などを自由記述"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 修繕見積 ══ -->
+  <div class="section" id="sec-repair">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title-row">
+        <div class="section-icon" style="background:rgba(196,92,58,0.15)">🔧</div>
+        <div class="section-title">修繕見積（最低3社必須）</div>
+        <span class="section-badge badge-todo" id="badge-repair">0/4社</span>
+      </div>
+      <div class="section-chevron">▼</div>
+    </div>
+    <div class="section-body">
+
+      <!-- 4社比較サマリー -->
+      <div class="repair-grand-summary" id="repairGrandSummary">
+        <div class="rgs-item"><span class="rgs-label">見積①合計</span><span class="rgs-val" id="rgs-1">—</span></div>
+        <div class="rgs-item"><span class="rgs-label">見積②合計</span><span class="rgs-val" id="rgs-2">—</span></div>
+        <div class="rgs-item"><span class="rgs-label">見積③合計</span><span class="rgs-val" id="rgs-3">—</span></div>
+        <div class="rgs-item"><span class="rgs-label">見積④合計</span><span class="rgs-val" id="rgs-4">—</span></div>
+      </div>
+      <div class="repair-warning" id="repairWarning" style="margin-top:10px">⚠ 3社以上の見積取得が必須です。</div>
+
+      <!-- タブ -->
+      <div class="repair-tab-bar" style="margin-top:16px">
+        <button class="repair-tab-btn active" onclick="switchRepairTab(1)">見積① <span id="rtab-badge-1" style="font-size:9px;color:var(--muted)">未入力</span></button>
+        <button class="repair-tab-btn" onclick="switchRepairTab(2)">見積② <span id="rtab-badge-2" style="font-size:9px;color:var(--muted)">未入力</span></button>
+        <button class="repair-tab-btn" onclick="switchRepairTab(3)">見積③ <span id="rtab-badge-3" style="font-size:9px;color:var(--muted)">未入力</span></button>
+        <button class="repair-tab-btn" onclick="switchRepairTab(4)">見積④任意 <span id="rtab-badge-4" style="font-size:9px;color:var(--muted)">未入力</span></button>
+      </div>
+      <div id="repairTabPanels"></div>
+
+      <hr class="divider">
+      <div class="field-grid">
+        <div class="field"><label>採用見積</label>
+          <select id="repairSelected"><option value="">選択</option><option value="1">見積①</option><option value="2">見積②</option><option value="3">見積③</option><option value="4">見積④</option></select>
+        </div>
+        <div class="field"><label>採用理由</label><input type="text" id="repairReason" placeholder="実績・信頼性・工期など"></div>
+        <div class="field field-full"><label>採用社への発注メモ・特記事項</label>
+          <textarea id="repairDetail" placeholder="施主支給品の到着日・工事上の注意事項・追加交渉内容など"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ DATA ══
+let currentPropId = null;
+function getProperties(){try{return JSON.parse(localStorage.getItem('dd_properties')||'[]')}catch(e){return[]}}
+function saveProperties(arr){localStorage.setItem('dd_properties',JSON.stringify(arr))}
+function getProp(id){return getProperties().find(p=>p.id===id)||null}
+
+// newProperty defined later with 10-limit check
+function loadProperty(id){
+  currentPropId=id;const prop=getProp(id);if(!prop)return;
+  fillFields(prop.data||{});
+  document.getElementById('propNameDisplay').textContent=prop.name||'—';
+  document.getElementById('propDateDisplay').textContent=prop.createdAt?'登録：'+prop.createdAt.slice(0,10):'';
+  renderSidebar();recalcAll();updateProgress();
+}
+function collectData(){
+  const f={};
+  document.querySelectorAll('input[id],textarea[id],select[id]').forEach(el=>{if(el.id)f[el.id]=el.value});
+  document.querySelectorAll('input[type=checkbox]').forEach(cb=>{f['cb_'+cb.dataset.key]=cb.checked});
+  // matrix values
+  for(let m=1;m<=3;m++){
+    const tbl=document.getElementById('matrix'+m);
+    if(!tbl)return;
+    tbl.querySelectorAll('input[data-cell]').forEach(inp=>{f['mx'+m+'_'+inp.dataset.cell]=inp.value});
+  }
+  return f;
+}
+function fillFields(d){
+  Object.entries(d).forEach(([k,v])=>{
+    if(k.startsWith('cb_')){
+      const cb=document.querySelector('input[type=checkbox][data-key="'+k.slice(3)+'"]');
+      if(cb){cb.checked=!!v;cb.closest('.check-item')?.classList.toggle('checked',!!v)}
+    } else if(k.startsWith('mx')){
+      // handled after matrix render
+    } else {
+      const el=document.getElementById(k);if(el)el.value=v;
+    }
+  });
+  // fill matrix after render
+  setTimeout(()=>{
+    Object.entries(d).forEach(([k,v])=>{
+      if(!k.startsWith('mx'))return;
+      const m=k[2];const cell=k.slice(4);
+      const inp=document.querySelector('#matrix'+m+' input[data-cell="'+cell+'"]');
+      if(inp)inp.value=v;
+    });
+    if(d.selectedStrategy)selectStrategy(parseInt(d.selectedStrategy),true);
+    recalcAll();
+  },50);
+}
+function saveData(){
+  if(!currentPropId){showToast('先に物件を選択してください');return}
+  const props=getProperties();const idx=props.findIndex(p=>p.id===currentPropId);if(idx===-1)return;
+  props[idx].data=collectData();
+  const nm=document.getElementById('propName')?.value;if(nm)props[idx].name=nm;
+  saveProperties(props);renderSidebar();updateProgress();showToast('保存しました ✓');
+}
+
+// ══ SIDEBAR ══
+// renderSidebar and newProperty defined later with enhanced versions
+function updatePropName(){const v=document.getElementById('propName')?.value;document.getElementById('propNameDisplay').textContent=v||'—'}
+function navTo(id){const el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+
+// ══ SECTIONS ══
+function toggleSection(header){
+  const isOpen=header.classList.contains('open');
+  header.classList.toggle('open',!isOpen);
+  header.querySelector('.section-chevron').classList.toggle('open',!isOpen);
+  header.nextElementSibling.classList.toggle('open',!isOpen);
+}
+
+// ══ DEPRECIATION ══
+const LEGAL_LIFE={'木造':22,'軽量鉄骨S（3mm以下）':19,'軽量鉄骨S（3〜4mm）':27,'重量鉄骨S':34,'RC':47,'SRC':47};
+function recalcAge(){
+  const yr=parseInt(document.getElementById('propBuildYear')?.value)||0;
+  if(!yr)return;
+  const age=new Date().getFullYear()-yr;
+  const el=document.getElementById('propAge');if(el)el.value=age;
+  recalcDepreciation();
+}
+function recalcDepreciation(){
+  const s=document.getElementById('propStructure')?.value;
+  const age=parseInt(document.getElementById('propAge')?.value)||0;
+  const bp=parseFloat(document.getElementById('propBuildingPrice')?.value)||0;
+  const legalLife=LEGAL_LIFE[s]||0;
+  let remain=0;
+  if(legalLife>0){remain=age>=legalLife?Math.max(2,Math.ceil(legalLife*0.2)):legalLife-age}
+  const depr=(bp>0&&remain>0)?Math.round(bp/remain*10)/10:0;
+  document.getElementById('drvLegalLife').textContent=legalLife?legalLife+'年':'—';
+  document.getElementById('drvRemainLife').textContent=remain?remain+'年':'—';
+  document.getElementById('drvDepr').textContent=depr?depr.toLocaleString()+'万円/年':'—';
+  const simBP=document.getElementById('simBuildingPct');
+  const price=parseFloat(document.getElementById('propPrice')?.value)||0;
+  if(simBP&&bp>0&&price>0){const pct=Math.round(bp/price*100);simBP.value=pct;const d=document.getElementById('simBuildingPct_disp');if(d)d.textContent=pct+' %'}
+  syncSim();
+}
+function recalcLand(){
+  const landArea=parseFloat(document.getElementById('propLandArea')?.value)||0;
+  const rosenPerSqm=(parseFloat(document.getElementById('areaRosen')?.value)||0)*1000; // 千円→円/㎡
+  const price=parseFloat(document.getElementById('propPrice')?.value)||0;
+
+  // 土地価格 = 土地面積 × 路線価（自動計算・万円）
+  const landCalc=landArea>0&&rosenPerSqm>0?Math.round(landArea*rosenPerSqm/10000):0;
+
+  // 実勢価格 = 土地価格 × 1.15（1.1〜1.2中間）万円
+  const jisseki=landCalc>0?Math.round(landCalc*1.15):0;
+  const jissekiEl=document.getElementById('propJisseki');
+  if(jissekiEl)jissekiEl.value=jisseki||'';
+  const drvJisseki=document.getElementById('drvJisseki');
+  if(drvJisseki)drvJisseki.textContent=jisseki>0?jisseki.toLocaleString()+'万円（今売れる目安）':'—';
+
+  // 表示更新
+  if(landCalc>0){
+    document.getElementById('drvLandCalc').textContent=
+      landCalc.toLocaleString()+'万円（土地面積'+landArea+'㎡ × 路線価'+document.getElementById('areaRosen').value+'千円/㎡）';
+  } else {
+    document.getElementById('drvLandCalc').textContent='土地面積・路線価を入力してください';
+  }
+
+  // 手動入力がなければ土地価格を自動セット
+  const lpEl=document.getElementById('propLandPrice');
+  let landPrice=parseFloat(lpEl?.value)||0;
+  if(!landPrice&&landCalc>0){
+    if(lpEl)lpEl.value=landCalc;
+    landPrice=landCalc;
+  }
+
+  const ratioEl=document.getElementById('propLandRatio');
+  const bp=parseFloat(document.getElementById('propBuildingPrice')?.value)||0;
+  // 土地積算割合 = 土地価格 ÷ 物件価格
+  const ratioVsPrice=price>0&&landPrice>0?Math.round(landPrice/price*100):0;
+  // 土地vs(土地+建物)
+  const total=landPrice+(bp||0);
+  const ratio=total>0?Math.round(landPrice/total*100):0;
+  if(ratioEl)ratioEl.value=ratioVsPrice||'';
+  document.getElementById('drvLandRatio').textContent=ratio?ratio+'%（土地÷(土地+建物)）':'—';
+  document.getElementById('drvLandVsPrice').textContent=ratioVsPrice?ratioVsPrice+'%（土地÷物件価格）':'—';
+}
+
+function recalcExitPrice(){
+  const exitRent=parseFloat(document.getElementById('exitRent')?.value)||0;
+  const exitYield=parseFloat(document.getElementById('exitYield')?.value)||0;
+  const target=exitRent>0&&exitYield>0?Math.round(exitRent*12/exitYield*100):0;
+  const targetEl=document.getElementById('drvExitTargetPrice');
+  const formulaEl=document.getElementById('drvExitFormula');
+  const diffEl=document.getElementById('exitPriceDiff');
+  if(targetEl)targetEl.textContent=target>0?target.toLocaleString()+'万円':'利回りと家賃を入力';
+  if(formulaEl)formulaEl.textContent=target>0?exitRent+'万円/月×12÷'+exitYield+'%='+target.toLocaleString()+'万円':'想定家賃×12÷想定利回り';
+  // sync to exitPrice if empty
+  const exitPriceEl=document.getElementById('exitPrice');
+  if(exitPriceEl&&!exitPriceEl.value&&target>0){exitPriceEl.value=target;syncSim();}
+  // calc diff
+  const manual=parseFloat(document.getElementById('exitPrice')?.value)||0;
+  if(diffEl&&manual>0&&target>0){
+    const diff=manual-target;
+    diffEl.value=diff;
+    diffEl.style.color=diff>=0?'var(--green)':'var(--danger)';
+  } else if(diffEl)diffEl.value='';
+}
+function recalcFullRent(){
+  const price=parseFloat(document.getElementById('propPrice')?.value)||0;
+  const yld=parseFloat(document.getElementById('propYield')?.value)||0;
+  const r1=(parseFloat(document.getElementById('room1_rent')?.value)||0)*(parseFloat(document.getElementById('room1_units')?.value)||0);
+  const r2=(parseFloat(document.getElementById('room2_rent')?.value)||0)*(parseFloat(document.getElementById('room2_units')?.value)||0);
+  const r3=(parseFloat(document.getElementById('room3_rent')?.value)||0)*(parseFloat(document.getElementById('room3_units')?.value)||0);
+  const roomTotal=r1+r2+r3; // 円/月
+  const roomAnnual=Math.round(roomTotal*12/10000); // 万円/年
+  const fromYield=price&&yld?Math.round(price*yld/100):0; // 万円/年
+
+  let display='—';
+  let annualForSim=0;
+  if(roomTotal>0){
+    display=(roomTotal/10000).toFixed(1)+'万円/月（'+roomAnnual.toLocaleString()+'万円/年・部屋合計）';
+    annualForSim=roomAnnual;
+  } else if(fromYield){
+    display=fromYield.toLocaleString()+'万円/年（物件価格×利回りから算出）';
+    annualForSim=fromYield;
+  }
+  document.getElementById('drvFullRent').textContent=display;
+
+  // sync to sim slider + number input
+  if(annualForSim>0){
+    const sl=document.getElementById('simAnnualRent');if(sl)sl.value=annualForSim;
+    const num=document.getElementById('simAnnualRent_num');if(num)num.value=annualForSim;
+  }
+}
+function recalcAll(){recalcAge();recalcDepreciation();recalcLand();recalcFullRent();recalcValuation();recalcExitPrice();syncSim();updateSectionBadges()}
+
+// ══ RAKUMACHI LINK ══
+function updateRakumachiLink(){
+  const addr=(document.getElementById('propAddr')?.value||'').trim();
+  const link=document.getElementById('rakumachiLink');if(!link||!addr)return;
+  fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr+' 日本')}&format=json&limit=1`)
+    .then(r=>r.json()).then(data=>{
+      if(data&&data[0]){
+        const lat=parseFloat(data[0].lat).toFixed(8);const lng=parseFloat(data[0].lon).toFixed(8);
+        link.href=`https://www.rakumachi.jp/property/land_price/map?lat=${lat}&lng=${lng}&category=crix_rent&zoom=13#ckmap_anchor_element`;
+      }
+    }).catch(()=>{});
+}
+
+// ══ STRATEGY ══
+let activeStrategy=null;
+function selectStrategy(n,silent){
+  activeStrategy=n;
+  [1,2,3].forEach(i=>{
+    document.getElementById('strat-'+i)?.classList.toggle('active',i===n);
+    document.getElementById('ideal-'+i)?.classList.toggle('show',i===n);
+  });
+  const names=['①築浅','②地銀CF','③築古土地値'];
+  const b=document.getElementById('badge-strategy');
+  b.textContent=names[n-1];b.className='section-badge badge-ok';
+  const hidden=document.getElementById('selectedStrategy');if(hidden)hidden.value=n;
+  if(!silent)updateProgress();
+}
+
+// ══ CHECK LISTS ══
+const CHECKS={
+  finance:[
+    {key:'fin01',text:'本人確認書類（運転免許証・マイナンバーカード）'},{key:'fin02',text:'源泉徴収票 or 確定申告書（直近2〜3年分）'},
+    {key:'fin03',text:'住民税決定通知書（直近）'},{key:'fin04',text:'預金残高証明書（2ヶ月前後）'},
+    {key:'fin05',text:'既保有物件の謄本・賃貸借契約書一覧'},{key:'fin06',text:'既保有ローン残高証明書（全物件分）'},
+    {key:'fin07',text:'法人設立している場合：決算書3期分'},{key:'fin08',text:'物件の登記簿謄本（法務局取得）'},
+    {key:'fin09',text:'物件の固定資産税課税明細書'},{key:'fin10',text:'レントロール（賃貸借条件一覧表）'},
+    {key:'fin11',text:'収支計画書（自作シミュレーション可）'},{key:'fin12',text:'物件概要書・パンフレット類'},
+  ],
+  rentalMust:[
+    {key:'rm01',text:'レントロールの実態（契約書と照合済み）',needNote:true},{key:'rm02',text:'直近6ヶ月の入金実績を確認済み',needNote:true},
+    {key:'rm03',text:'満室表示でないか確認（空室実態の把握）',needNote:true},{key:'rm04',text:'管理会社との契約内容を確認',needNote:true},
+    {key:'rm05',text:'近隣の空室率・相場賃料を独自調査済み',needNote:true},{key:'rm06',text:'入居者属性・退去率を聞き取り済み'},
+  ],
+  rentalForbid:[
+    {key:'rf01',text:'反社会的勢力・入居者トラブルの記録がある',type:'danger',needNote:true},
+    {key:'rf02',text:'事故物件（自殺・孤独死）の告知義務対象あり',type:'danger',needNote:true},
+    {key:'rf03',text:'接道不備・再建築不可（RC・重鉄以外）',type:'danger',needNote:true},
+    {key:'rf04',text:'土壌汚染・アスベスト含有の可能性',type:'danger',needNote:true},
+    {key:'rf05',text:'市街化調整区域（融資不可リスク）',type:'danger',needNote:true},
+    {key:'rf06',text:'違法建築・未登記建物の存在',type:'danger',needNote:true},
+  ],
+  rentalCaution:[
+    {key:'rc01',text:'空室率30%超（直近6ヶ月）',type:'warn',needNote:true},{key:'rc02',text:'賃料下落が年2%超の傾向',type:'warn',needNote:true},
+    {key:'rc03',text:'大規模修繕未実施（築20年超の場合）',type:'warn',needNote:true},{key:'rc04',text:'競合新築物件が周辺に複数建設中',type:'warn',needNote:true},
+    {key:'rc05',text:'管理会社を変更予定 or 管理不全の疑い',type:'warn',needNote:true},{key:'rc06',text:'物件価格が路線価の1.5倍超（出口リスク）',type:'warn',needNote:true},
+  ],
+  inspLegal:[
+    {key:'il01',text:'登記簿謄本（全部事項）取得・確認',
+      risk:'所有権や権利関係が不明確なまま買うと、後から第三者に権利主張される。',
+      how:'法務局またはオンライン登記情報提供サービスで取得。甲区（所有権）・乙区（担保権）を必ず確認。',
+      subs:['所有者名義が売主と一致しているか','共有持分・仮登記・信託登記の有無','登記簿上の地積・構造が現況と合っているか']},
+    {key:'il02',text:'抵当権・仮差押・仮処分の有無確認',needNote:true,
+      risk:'抵当権抹消前に決済すると金融機関から差し押さえられる可能性。仮処分があれば取引自体が無効になりうる。',
+      how:'登記簿乙区を確認。決済時に全抵当権が抹消されることを司法書士が確認する段取りを組む。',
+      subs:['借入残高と抵当権設定額が整合しているか','根抵当権の場合は確定手続きが必要','仮差押・仮処分は売主の資力問題サインと捉える']},
+    {key:'il03',text:'用途地域・建蔽率・容積率確認（役所）',
+      risk:'用途地域によって賃貸経営や建替えが制限される。容積率オーバーは違法建築となり融資不可・出口困難。',
+      how:'役所の都市計画課で用途地域図を確認。建ぺい率・容積率と現況面積を突き合わせる。',
+      subs:['第1種低層住居専用地域は3階建て不可','工業専用地域は住居用賃貸不可','容積率超過の場合は銀行融資が一般的に通らない']},
+    {key:'il04',text:'接道状況確認（私道・位置指定道路）',needNote:true,
+      risk:'建築基準法上の接道義務を満たさないと再建築不可。RC・重鉄以外では出口が極めて困難。',
+      how:'公図で道路種別を確認。私道の場合は通行・掘削権の書面を取得済みか確認。',
+      subs:['幅員4m未満はセットバック要否を確認','私道持分の有無（持分なしは要交渉）','位置指定道路は廃止リスクがあるか確認']},
+    {key:'il05',text:'建築確認済証・検査済証の有無確認',needNote:true,
+      risk:'検査済証がないと違法建築と見なされ、銀行融資が通りにくい。リノベーション時に増築確認が取れない。',
+      how:'売主に書類提出を求める。紛失の場合は役所の建築確認台帳記載事項証明で代替可能。',
+      subs:['確認済証・検査済証の両方があるか（片方だけでも要確認）','増改築がある場合はその部分の確認済証も確認','台帳記載事項証明は役所窓口で取得可能（数百円）']},
+    {key:'il06',text:'ハザードマップ確認（水害・土砂・地震）',needNote:true,
+      risk:'水害・土砂リスクが高いエリアは保険料高騰・入居者忌避・出口困難。地震リスクは建物損壊→収入途絶の直接的な脅威。',
+      how:'国土交通省ハザードマップポータルサイト・自治体HPで確認。現地で水路・傾斜地の近接も目視する。',
+      subs:['洪水浸水想定区域（浸水深0.5m超は要注意）','土砂災害警戒区域・特別警戒区域の確認','地震動・液状化リスクマップの確認']},
+    {key:'il07',text:'地籍測量図・公図の取得',
+      risk:'面積の実測が登記と大幅に異なると、再測量時に物件価値が変わる。隣地との境界未確定は境界トラブルの原因。',
+      how:'法務局で公図・地積測量図を取得。現地で境界標（ブロック・プレート）の存在を確認。',
+      subs:['境界標が全地点に存在するか','隣地との境界確認書が取得済みか','実測面積と登記面積の誤差が2%以内か']},
+  ],
+  inspBuilding:[
+    {key:'ib01',text:'屋根・外壁の劣化状況確認',needNote:true,
+      risk:'屋根防水不良→雨漏り→内装損傷・カビ→居住不能。外壁クラック→雨水浸入→構造材腐食。修繕費が数百万単位になる。',
+      how:'双眼鏡で屋根を確認。外壁はクラック（0.3mm超は要補修）・シーリング劣化・塗装剥離を目視。屋上はドレン詰まりも確認。',
+      subs:['コーキング（シーリング）の亀裂・剥離はないか','外壁タイルの浮き・欠損（打診棒で確認が理想）','屋上防水の膨れ・亀裂・ドレン周辺の状態']},
+    {key:'ib02',text:'給排水管の状態（錆・詰まり・年数）',needNote:true,
+      risk:'鉄管（VLP）は築30年超で赤水・漏水リスク。排水管詰まりは賃借人クレームの最頻出。全管交換は一棟で100〜300万円。',
+      how:'管理会社に清掃・高圧洗浄の実施履歴を確認。給水管の材質（VLP=鉄、VP=塩ビ、SUS=ステンレス）を確認。',
+      subs:['給水管の材質：塩ビ（VP）かステンレスが理想','排水管の高圧洗浄は年1回程度実施されているか','水道メーター廻りで水漏れ・錆がないか','各室蛇口から赤水・濁りが出ないか']},
+    {key:'ib03',text:'電気設備（アンペア・配線の年数）',needNote:true,
+      risk:'単相2線式30A以下は電気容量不足で入居者敬遠。アルミ配線（1970年代）は火災リスクあり。分電盤が古い場合はブレーカー落ち多発。',
+      how:'各室の分電盤でアンペア・配線年数を確認。電力会社に供給状況を問い合わせ可。',
+      subs:['単相3線式100/200V対応か（エアコン200V使用可否に直結）','一室あたり30A以上あるか（40〜60Aが現代標準）','漏電遮断器が設置されているか','配線がアルミ製でないか（ビニール被覆が黄変していたら要注意）']},
+    {key:'ib04',text:'共用部（廊下・階段・駐車場）の状態',needNote:true,
+      risk:'共用部の劣化は入居者の第一印象に直結し、空室率に影響。鉄部錆・防水不良は修繕費の前兆。',
+      how:'実際に歩いて手すり・階段床・廊下天井・照明・駐車場ライン等を目視。',
+      subs:['鉄部（手すり・外階段）の錆・腐食','廊下・階段の防水・塗装の状態','照明のLED化状況（電気代に影響）','駐車場の舗装割れ・白線消えていないか','ゴミ置き場の清潔さ（管理状況の指標）']},
+    {key:'ib05',text:'空室内部の状態（原状回復要否・残留物）',needNote:true,
+      risk:'原状回復費用が予想外に膨らむと収益計画が狂う。残留物の処分費用は数万〜数十万円になることも。',
+      how:'空室は全室内部を確認。床・壁・天井のダメージ・臭い（タバコ・ペット）・設備の動作確認。',
+      subs:['床・壁クロスの損傷範囲とグレード感','タバコ・ペット臭の有無（脱臭工事が別途必要か）','残留物の有無と撤去費用見積','水回り設備（キッチン・浴室・トイレ）の動作確認','窓・サッシ・鍵の開閉正常か']},
+    {key:'ib06',text:'耐震基準（1981年以前は旧耐震要確認）',needNote:true,
+      risk:'旧耐震基準の物件は倒壊リスクに加え、銀行融資が通りにくく出口が困難。地震保険料も高くなる。',
+      how:'建築確認日で判定（1981年6月1日以降の確認=新耐震）。木造の場合は耐震診断書の取得を交渉。',
+      subs:['建築確認日が1981年6月1日以降か（新耐震基準）','旧耐震の場合、耐震診断・耐震補強の実施有無','2000年基準（木造）：地盤・接合部・耐力壁の強化有無','RC造は第三者機関の耐震診断書があるか']},
+    {key:'ib07',text:'大規模修繕履歴の書面確認',needNote:true,
+      risk:'修繕履歴がないと「いつ何が壊れるか」の予測ができない。直近に大規模修繕済みなら買い時だが、未実施なら即座に修繕費が発生する。',
+      how:'管理会社・売主から修繕記録台帳を取得。屋根・外壁・給排水・電気の最終施工年を確認。',
+      subs:['外壁塗装・防水の最終施工年（10年周期が目安）','給排水管の交換・更生工事の有無','エレベーターがある場合の保守・改修履歴','共用部電気設備（幹線・分電盤）の更新有無']},
+  ],
+  inspArea:[
+    {key:'ia01',text:'現地周辺の空室・募集物件を歩いて確認',
+      risk:'周辺の空室が多い＝需給が緩い＝入居付けに苦労する。自分の物件の競争環境を過小評価すると計画が破綻する。',
+      how:'物件から半径500m程度を徒歩で一周。SUUMOの「現地確認」機能も活用。看板・ポスターの数を数える。',
+      subs:['築年・仕様が類似する競合物件の家賃水準','空室のまま長期間放置されている物件の数','新築・築浅物件の供給状況（竣工予定含む）','近隣管理会社に「このエリアの客付け難易度」を直接聞く']},
+    {key:'ia02',text:'駅・スーパー・病院などの生活利便性確認',
+      risk:'生活利便性が低いと入居者ターゲットが絞られ、空室リスクが上がる。特に単身者向けは駅距離と買い物利便性が決め手。',
+      how:'実際に駅から歩く（徒歩時間を自分の足で計測）。地図で半径500m圏内の施設を確認。',
+      subs:['実際に歩いた駅距離（公称時間との差）','コンビニ・スーパーの有無と距離','医療機関（クリニック・薬局）の有無','学校・保育所（ファミリー向けの場合）']},
+    {key:'ia03',text:'嫌悪施設（ゴミ処理場・風俗店等）の有無',needNote:true,
+      risk:'嫌悪施設が近いと入居者が決まりにくく、家賃相場も下押しされる。売却時にも買い手が付きにくくなる。',
+      how:'地図確認＋現地歩き。Google マップのレビューも参照。夜間帯に再訪できると理想。',
+      subs:['風俗店・パチンコ店・飲み屋街との距離','ゴミ処理場・産廃施設・工場（臭い・騒音）','高架・幹線道路（騒音・振動）','墓地・葬儀場（心理的嫌悪感）']},
+    {key:'ia04',text:'夜間の環境確認（治安・騒音）',
+      risk:'昼間は問題なくても、夜間に騒音・治安問題が発生するエリアがある。入居者からのクレーム→退去→空室のサイクルに陥る。',
+      how:'可能であれば夜間（20〜22時頃）に再訪。照明の状況・人通り・騒音源を確認。',
+      subs:['夜間の照明・街灯の整備状況','近隣の飲食店・バー等の閉店時間と騒音','線路・幹線道路の夜間騒音レベル','治安統計（警察署・自治体の犯罪マップ）']},
+    {key:'ia05',text:'近隣業者（管理会社・仲介）に聞き込み',
+      risk:'書類や売主からは出てこないエリアの「生の情報」を逃す。管理会社の評判・過去のトラブルも業者は知っている。',
+      how:'周辺の仲介業者に飛び込みで「このエリアで賃貸探している人いますか？」と聞く。管理会社には「空室期間の平均」を聞く。',
+      subs:['近隣仲介2〜3社に入居需要を直接ヒアリング','現在の管理会社への満足度（入居者からの評判）','過去に問題があった入居者・トラブルの有無','オーナーチェンジの理由を第三者目線で確認']},
+  ],
+};
+function buildCheckItem(item){
+  const div=document.createElement('div');
+  div.className='check-item'+(item.type==='danger'?' danger':item.type==='warn'?' warn':'');
+  const hasDetail=!!(item.risk||item.how||item.subs);
+  const toggleId='toggle-'+item.key;
+  // build subs html with checkboxes
+  const subsHtml = item.subs ? `
+    <div class="insp-risk" style="color:var(--gold)">📋 チェックポイント <span style="font-size:9px;color:var(--muted);font-weight:400">— 全項目クリアで大項目を自動チェック</span></div>
+    <div class="insp-sub-checks">
+      ${item.subs.map((s,i)=>`
+        <label class="insp-sub-item" style="cursor:pointer;user-select:none">
+          <input type="checkbox" class="insp-sub-cb" data-parent="${item.key}" data-idx="${i}"
+            style="width:13px;height:13px;accent-color:var(--green);flex-shrink:0;margin-top:1px;cursor:pointer"
+            onchange="onSubCheck('${item.key}')">
+          <div style="flex:1">
+            <span>${s}</span>
+            <div class="sub-memo-wrap">
+              <input type="text" class="sub-memo-input" id="submemo_${item.key}_${i}"
+                placeholder="備考（クリアしない理由・代替確認など）"
+                onclick="event.stopPropagation()"
+                oninput="onSubMemoInput(this)">
+            </div>
+          </div>
+        </label>`).join('')}
+    </div>` : '';
+
+  div.innerHTML=`<input type="checkbox" class="check-cb" data-key="${item.key}" onchange="onCheckChange(this)">
+    <div style="flex:1">
+      <div class="check-label">${item.text}
+        ${item.type==='danger'?'<span class="tag tag-forbid">禁忌</span>':''}
+        ${item.type==='warn'?'<span class="tag tag-caution">要考慮</span>':''}
+        ${hasDetail?`<button class="insp-toggle-btn" onclick="toggleInspDetail('${toggleId}',this)">▶ 詳細・確認方法</button>`:''}
+      </div>
+      ${hasDetail?`<div class="insp-detail" id="${toggleId}">
+        ${item.risk?`<div class="insp-risk">⚠ 放置すると何が起きるか</div><div class="insp-how" style="color:var(--danger);opacity:0.85">${item.risk}</div>`:''}
+        ${item.how?`<div class="insp-risk" style="color:var(--blue)">🔍 確認方法</div><div class="insp-how">${item.how}</div>`:''}
+        ${subsHtml}
+      </div>`:''}
+      ${item.needNote?`<input type="text" class="note-input" id="note_${item.key}" placeholder="備考${item.type?'（該当する場合は必須）':'（任意）'}" style="margin-top:6px">`:''}</div>`;
+  return div;
+}
+function onSubMemoInput(input){
+  input.classList.toggle('has-content', input.value.trim().length > 0);
+  if(currentPropId) saveData();
+}
+function onSubCheck(parentKey){
+  // count total subs and checked subs for this parent
+  const allSubs=[...document.querySelectorAll(`.insp-sub-cb[data-parent="${parentKey}"]`)];
+  const checkedSubs=allSubs.filter(c=>c.checked).length;
+  const parentCb=document.querySelector(`.check-cb[data-key="${parentKey}"]`);
+  if(!parentCb)return;
+  if(checkedSubs===allSubs.length&&allSubs.length>0){
+    // all subs checked → auto-check parent
+    parentCb.checked=true;
+    parentCb.closest('.check-item').classList.add('checked');
+  } else {
+    // not all subs → uncheck parent (allow manual re-check)
+    parentCb.checked=false;
+    parentCb.closest('.check-item').classList.remove('checked');
+  }
+  updateProgress();updateSectionBadges();
+}
+function toggleInspDetail(id,btn){
+  const el=document.getElementById(id);if(!el)return;
+  const open=el.classList.toggle('open');
+  btn.textContent=(open?'▼ 詳細・確認方法':'▶ 詳細・確認方法');
+  btn.classList.toggle('open',open);
+}
+function onCheckChange(cb){
+  cb.closest('.check-item').classList.toggle('checked',cb.checked);
+  updateProgress();updateSectionBadges();
+}
+function renderAllChecks(){
+  [['financeChecks','finance'],['rentalChecks','rentalMust'],['rentalForbid','rentalForbid'],['rentalCaution','rentalCaution'],
+   ['inspLegal','inspLegal'],['inspBuilding','inspBuilding'],['inspArea','inspArea']].forEach(([id,key])=>{
+    const el=document.getElementById(id);if(!el)return;el.innerHTML='';
+    (CHECKS[key]||[]).forEach(item=>el.appendChild(buildCheckItem(item)));
+  });
+}
+
+// ══ REPAIR ══
+// ══ REPAIR DETAIL ITEMS ══
+// Categories and items derived from the Excel estimate sheet,
+// at the granularity a 賃貸仲介業者 would ask about.
+const REPAIR_CATS = [
+  { cat:'内装 — 床', items:[
+    {key:'floor_cf',    label:'床CF（クッションフロア）貼り'},
+    {key:'floor_tatami',label:'畳 表替え'},
+    {key:'floor_wood',  label:'畳→CF化 / ウッドカーペット'},
+    {key:'floor_other', label:'その他床工事'},
+  ]},
+  { cat:'内装 — 壁・天井', items:[
+    {key:'wall_clth',   label:'壁クロス張替え（壁＋天井）'},
+    {key:'wall_paint',  label:'壁塗装（壁＋天井）'},
+    {key:'wall_accent', label:'アクセントクロス'},
+    {key:'wall_door',   label:'建具（ドア）クロス貼り / シート'},
+    {key:'wall_fusuma', label:'ふすま張替え'},
+  ]},
+  { cat:'水回り — 洗面・洗濯', items:[
+    {key:'wash_basin',  label:'洗面台交換'},
+    {key:'wash_pan',    label:'洗濯機パン設置'},
+    {key:'wash_stopper',label:'洗濯機用オートストッパー'},
+    {key:'wash_faucet', label:'混合水栓交換'},
+  ]},
+  { cat:'水回り — 浴室', items:[
+    {key:'bath_paint',  label:'浴室塗装'},
+    {key:'bath_sheet',  label:'浴室床シート貼り'},
+    {key:'bath_shower', label:'シャワー混合栓交換'},
+    {key:'bath_mirror', label:'鏡交換'},
+  ]},
+  { cat:'水回り — トイレ', items:[
+    {key:'toilet_wash', label:'ウォシュレット設置'},
+    {key:'toilet_clth', label:'壁クロス・床CF'},
+    {key:'toilet_acc',  label:'ペーパーホルダー・タオル掛け交換'},
+  ]},
+  { cat:'キッチン', items:[
+    {key:'kitchen_remake',label:'リメイクシート（扉・吊戸棚）'},
+    {key:'kitchen_faucet',label:'混合水栓交換'},
+    {key:'kitchen_light', label:'手元灯交換'},
+    {key:'kitchen_other', label:'その他キッチン工事'},
+  ]},
+  { cat:'設備・電気', items:[
+    {key:'eq_lighting', label:'照明交換（引掛シーリング化）'},
+    {key:'eq_aircon',   label:'エアコン設置・コンセント新設'},
+    {key:'eq_intercom', label:'TVモニターホン設置'},
+    {key:'eq_outlet',   label:'コンセント・スイッチプレート交換'},
+    {key:'eq_boiler',   label:'給湯器交換'},
+    {key:'eq_lock',     label:'シリンダー・レバーハンドル交換'},
+    {key:'eq_alarm',    label:'火災報知器設置'},
+  ]},
+  { cat:'外装・共用部', items:[
+    {key:'ext_roof',    label:'屋根・外壁補修・塗装'},
+    {key:'ext_gutters', label:'雨樋・排水修繕'},
+    {key:'ext_balcony', label:'バルコニー・廊下防水・補修'},
+    {key:'ext_corridor',label:'共用廊下・階段補修'},
+    {key:'ext_parking', label:'駐車場・外構補修'},
+    {key:'ext_antenna', label:'アンテナ工事'},
+  ]},
+  { cat:'クリーニング・その他', items:[
+    {key:'clean_house', label:'ハウスクリーニング'},
+    {key:'clean_screen',label:'網戸張替え'},
+    {key:'clean_pest',  label:'防蟻処理'},
+    {key:'other_misc',  label:'その他（自由記入）'},
+  ]},
+];
+
+function buildRepairPanel(num){
+  const req = num<=3;
+  let html = `
+    <div class="repair-company-row" id="rco-${num}">
+      <div class="field"><label>会社名${req?' <span style="color:var(--danger);font-size:9px">必須</span>':''}</label>
+        <input type="text" id="r${num}_co" placeholder="〇〇建設" oninput="updateRepairCalc(${num})"></div>
+      <div class="field"><label>工期</label>
+        <input type="text" id="r${num}_period" placeholder="例：3週間"></div>
+      <div class="field"><label>総合備考・保証</label>
+        <input type="text" id="r${num}_note" placeholder="例：保証5年・追加工事対応可"></div>
+    </div>
+    <table class="repair-detail-table">
+      <thead><tr>
+        <th style="width:80px">カテゴリ</th>
+        <th style="width:140px">項目</th>
+        <th style="width:90px;text-align:right">金額（円）</th>
+        <th>備考・仕様</th>
+      </tr></thead>
+      <tbody>`;
+
+  REPAIR_CATS.forEach(cat=>{
+    cat.items.forEach((item,idx)=>{
+      const catLabel = idx===0 ? cat.cat : '';
+      html += `<tr>
+        <td class="cat-cell">${catLabel}</td>
+        <td class="item-cell">${item.label}</td>
+        <td><input type="number" id="r${num}_${item.key}" placeholder="0" min="0" step="1000"
+          oninput="updateRepairCalc(${num})"></td>
+        <td><input type="text" id="r${num}_${item.key}_memo" placeholder="仕様・型番など"></td>
+      </tr>`;
+    });
+  });
+
+  html += `
+      <tr class="repair-total-row">
+        <td colspan="2" style="text-align:right;font-size:11px;letter-spacing:0.06em">合計（税抜）</td>
+        <td><span class="repair-subtotal" id="r${num}_total">0 円</span></td>
+        <td><span style="font-size:10px;color:var(--muted)" id="r${num}_total_man">0 万円</span></td>
+      </tr>
+    </tbody></table>`;
+  return html;
+}
+
+function renderRepairGrid(){
+  const container=document.getElementById('repairTabPanels');
+  if(!container)return;
+  container.innerHTML='';
+  for(let i=1;i<=4;i++){
+    const panel=document.createElement('div');
+    panel.className='repair-tab-panel'+(i===1?' active':'');
+    panel.id='repair-panel-'+i;
+    panel.innerHTML=buildRepairPanel(i);
+    container.appendChild(panel);
+  }
+}
+
+function updateRepairCalc(num){
+  let total=0;
+  REPAIR_CATS.forEach(cat=>{
+    cat.items.forEach(item=>{
+      total += parseFloat(document.getElementById('r'+num+'_'+item.key)?.value)||0;
+    });
+  });
+  const totalEl=document.getElementById('r'+num+'_total');
+  const manEl=document.getElementById('r'+num+'_total_man');
+  if(totalEl) totalEl.textContent=total.toLocaleString()+' 円';
+  if(manEl) manEl.textContent=(total/10000).toFixed(1)+' 万円';
+
+  // update summary card
+  const rgsEl=document.getElementById('rgs-'+num);
+  const co=document.getElementById('r'+num+'_co')?.value;
+  if(rgsEl){
+    if(total>0||co){
+      rgsEl.textContent=(total/10000).toFixed(1)+'万円';
+      rgsEl.style.color=total>0?'var(--green)':'var(--muted)';
+    } else {
+      rgsEl.textContent='—';
+      rgsEl.style.color='var(--muted)';
+    }
+  }
+  // update tab badge
+  const badge=document.getElementById('rtab-badge-'+num);
+  if(badge){
+    if(total>0&&co){badge.textContent=(total/10000).toFixed(1)+'万';badge.style.color='var(--green)';}
+    else if(co){badge.textContent='金額未入力';badge.style.color='var(--warn)';}
+    else{badge.textContent='未入力';badge.style.color='var(--muted)';}
+  }
+  // card border
+  const coEl=document.getElementById('rco-'+num);
+  if(coEl) coEl.classList.toggle('filled',!!(co&&total>0));
+  updateRepair();
+}
+
+function updateRepair(){
+  let filled=0;
+  for(let i=1;i<=4;i++){
+    const co=document.getElementById('r'+i+'_co')?.value;
+    let tot=0;
+    REPAIR_CATS.forEach(cat=>cat.items.forEach(item=>{tot+=parseFloat(document.getElementById('r'+i+'_'+item.key)?.value)||0}));
+    if(co&&tot>0)filled++;
+  }
+  const b=document.getElementById('badge-repair');
+  b.textContent=filled+'/4社';
+  b.className='section-badge '+(filled>=3?'badge-ok':filled>0?'badge-warn':'badge-todo');
+  document.getElementById('repairWarning').classList.toggle('show',filled<3);
+  syncSim();
+}
+
+function switchRepairTab(n){
+  document.querySelectorAll('.repair-tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
+  document.querySelectorAll('.repair-tab-panel').forEach((p,i)=>p.classList.toggle('active',i===n-1));
+}
+
+// ══ TIPS DATA ══
+const TIPS={
+  simPrice:{title:'物件価格',def:'取引価格（万円）。融資額・利回り・積算評価のベースになる最重要数値。',formula:'借入額 = 物件価格 − 自己資金',criteria:'利回りと土地積算の両面から「適正価格か」を必ず検証すること。'},
+  simAnnualRent:{title:'想定年間収入（満室）',def:'全室満室時の年間家賃収入合計（万円）。実際の収入は入居率を掛けた値。',formula:'実質年収 = 満室年収 × 入居率',criteria:'近隣相場からの乖離がないか確認。割安設定はCFに有利だが出口利回りに影響。'},
+  simOccupancy:{title:'入居率',def:'稼働率。空室・フリーレント期間を考慮した実効稼働率（%）。',formula:'実質年収 = 満室年収 × (入居率 / 100)',criteria:'安全保守値：85〜90%。高齢化エリア・供給過多エリアは80%以下で試算推奨。'},
+  simDownPay:{title:'自己資金（頭金）',def:'購入時に手出しする金額。物件価格から借入額を引いた差額（万円）。',formula:'借入額 = 物件価格 − 自己資金',criteria:'自己資金比率20〜30%が地銀の目安。少ないほどレバレッジ効果は高いがCFが薄くなる。'},
+  simRate:{title:'借入金利（年利）',def:'元利均等返済で計算。月次に換算して返済額を算出する（%）。',formula:'月返済 = 借入額 × (月利×(1+月利)^N) / ((1+月利)^N−1)',criteria:'地銀変動：1.5〜2.5%、固定：2〜3.5%が目安。金利1%差で月5〜8万円変わる（3000万円借入時）。'},
+  simTerm:{title:'ローン期間',def:'返済年数（年）。期間終了後はローン返済がなくなりCFが急改善する。',formula:'月次返済回数 N = 期間(年) × 12',criteria:'木造：最大20〜22年、RC：最大30〜35年が銀行目安。残存耐用年数を超えると融資困難。'},
+  simMgmtFee:{title:'管理費率',def:'管理会社に支払う委託費。実質年収（入居率考慮後）に対する割合（%）。',formula:'管理費 = 実質年収 × (管理費率 / 100)',criteria:'相場：5〜8%。自主管理なら0%だが空室対応コストを別途考慮すること。'},
+  simRepairRate:{title:'修繕費率',def:'毎年積み立てる修繕費の割合（%）。大規模修繕とは別の日常修繕費用。',formula:'修繕費 = 実質年収 × (修繕費率 / 100)',criteria:'築浅：3〜5%、築古：8〜10%が目安。大規模修繕を別途計上している場合は低めでも可。'},
+  simTax:{title:'固定資産税・都市計画税',def:'毎年発生する保有コスト（万円/年）。土地・建物の評価額から算出される。',formula:'概算 = 固定資産評価額 × 1.4%（固定）+ × 0.3%（都市計画）',criteria:'取得前は課税明細書で確認。一般的に物件価格の0.5〜1%程度が目安。'},
+  simBuildingPct:{title:'建物割合',def:'物件価格に占める建物の比率（%）。減価償却の計算に直結する。',formula:'減価償却 = (物件価格×建物割合) ÷ 残存耐用年数',criteria:'土地値が高いほど建物割合は低くなる。収益還元法で建物価格を算出して逆算するのが正確。'},
+  simIncomeTax:{title:'実効税率（所得税＋住民税）',def:'不動産所得にかかる税率（%）。給与所得との合算で累進税率が適用される。',formula:'税額 = 課税所得 × 実効税率　課税所得 = 家賃 − 経費 − 減価償却 − 利息',criteria:'年収500万前後：約20〜25%、800万前後：約30〜35%、1000万超：40%+を想定すること。'},
+  simRentDecline:{title:'家賃下落率（年）',def:'毎年の家賃下落率（%/年）。エリアの需給や建物の経年劣化を反映する。',formula:'N年目家賃 = 初年度家賃 × (1 − 下落率)^(N−1)',criteria:'都市部築浅：0.5〜1%、地方築古：1.5〜2%が目安。楽観シナリオでも0.5%は見ておくこと。'},
+  simLargeRepair:{title:'大規模修繕費',def:'屋根・外壁・給排水などの大規模修繕の費用（万円）。発生年に一括費用計上。',formula:'発生年CF = 通常CF − 大規模修繕費（税控除あり）',criteria:'一棟アパート：150〜400万円が目安（規模・状態による）。必ず現地確認・見積で確認すること。'},
+  simLargeYear:{title:'大規模修繕 発生年',def:'大規模修繕を行う予定の年（購入から何年目か）。',formula:'—',criteria:'築20年超を購入した場合は購入直後〜5年以内が多い。築10年以下なら10〜15年後が目安。'},
+  simAcqTax:{title:'不動産取得税',def:'取得時に一度だけ発生する税金（万円）。初期コストとして計上。',formula:'取得税 ≒ 固定資産評価額 × 4%（土地は1/2控除、住宅は控除あり）',criteria:'物件価格の0.5〜1.5%程度が目安。建物価格が高い物件ほど高くなる傾向。'},
+  simHoldYears:{title:'保有年数（売却想定）',def:'売却を想定する年数。グラフはこの年以降を薄色表示し、売却時CFを★でプロットする。',formula:'—',criteria:'①築浅キャピタル：5〜8年　②地銀インカム＆キャピタル：8〜12年　③築古土地値：15年〜'},
+  simExitPrice:{title:'売却想定価格',def:'保有年数後に売却する想定価格（万円）。残債・譲渡税を控除した手取りで総損益を計算。',formula:'売却手取り ≒ 売却価格 − 残債 − 譲渡益税(20%)',criteria:'出口利回り（売却時の賃料相場÷売却価格）から逆算するのが現実的。'},
+  ccr:{title:'CCR（Cash-on-Cash Return）',def:'自分が実際に出したお金（総初期投資）に対する年間CFの割合。レバレッジ効果を測る最重要指標。',formula:'CCR = 税引後年間CF ÷ 総初期投資　総初期投資 = 自己資金 + 諸経費(×8%) + 取得税',criteria:'10%以上：優良　5〜10%：普通　5%未満：要改善。低CCRでも出口益で逆転する戦略もある。'},
+  repayRatio:{title:'返済比率',def:'満室年収に対するローン年間返済額の割合（%）。金融機関が融資審査で重視する指標。',formula:'返済比率 = 年間ローン返済額 ÷ 満室年収 × 100',criteria:'45%以下：地銀審査通過ライン　50%超：審査厳しい　60%超：実質キャッシュフロー危険域'},
+  grossYield:{title:'表面利回り',def:'経費を一切考慮しない粗利回り。物件検索のスクリーニングに使うが実態とのギャップが大きい。',formula:'表面利回り = 満室年収 ÷ 物件価格 × 100',criteria:'近畿圏一棟AP目安：7〜9%（築浅）、9〜12%（築古）。表面利回りだけで判断するのは危険。'},
+  netYield:{title:'実質利回り（NOI利回り）',def:'経費を控除したNOIをベースにした利回り。物件の真の収益力を示す。',formula:'実質利回り = NOI ÷ 物件価格 × 100　NOI = 実質年収 − 管理費 − 修繕費 − 固定資産税',criteria:'6%以上：優良　4〜6%：普通　4%未満：費用構造・価格を要見直し'},
+  totalReturn:{title:'保有期間 総合損益',def:'保有期間中のCF累計と売却手取りの合計から、初期総投資を引いた実質損益（万円）。',formula:'総合損益 = CF累計 + (売却価格 − 残債 − 譲渡税) − 総初期投資',criteria:'プラスであれば投資として成立。マイナスになるシナリオは「死ぬライン」として即撤退基準にする。'},
+  cfPerYear:{title:'年あたりCF（初年度）',def:'初年度の税引後キャッシュフロー（万円）。ローン・経費・税をすべて引いた手残り。',formula:'CF = 実質家賃収入 − 経費 − ローン返済額 − 所得税',criteria:'月10万円（年120万円）以上：目標水準。マイナスは原則NG（築浅キャピタル戦略は除く）。'},
+  valCapRate:{title:'Cap Rate（直接還元利回り）',def:'物件が生み出すNOI（純収益）を物件価格で割った利回り。収益価格を算出するための還元率。「この利回りで買う人がいる」という市場の期待値。',formula:'収益価格 = NOI ÷ Cap Rate　例：NOI 200万円 ÷ Cap Rate 8% = 2,500万円',criteria:'近畿圏一棟アパート目安：木造築15〜25年：8〜10%　RC築15年以内：6〜8%　築古・地方：10〜12%以上。Cap Rateが高いほど収益価格は低く評価される（リスク大と見なされる）。自分が売る側になるときの出口利回りとしても使う。'},
+};
+
+// ══ TOOLTIP ENGINE (body-level single popup, no z-index conflict) ══
+let _tipEl=null;
+function _ensureTipEl(){
+  if(!_tipEl){
+    _tipEl=document.createElement('div');
+    Object.assign(_tipEl.style,{position:'fixed',zIndex:'2147483647',width:'290px',background:'#12172a',
+      border:'1.5px solid rgba(212,168,67,0.6)',borderRadius:'10px',padding:'14px 16px',
+      fontSize:'11px',lineHeight:'1.7',color:'#e8e2d4',
+      boxShadow:'0 16px 48px rgba(0,0,0,0.9)',display:'none',pointerEvents:'auto'});
+    document.body.appendChild(_tipEl);
+    document.addEventListener('click',e=>{
+      if(_tipEl&&!_tipEl.contains(e.target)&&!e.target.classList.contains('tip-btn'))hideTip();
+    });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip();});
+  }
+  return _tipEl;
+}
+function hideTip(){const el=_ensureTipEl();el.style.display='none';el._activeKey=null;}
+function showTip(key,btnEl){
+  const t=TIPS[key];if(!t)return;
+  const el=_ensureTipEl();
+  if(el._activeKey===key){hideTip();return;}
+  el._activeKey=key;
+  el.innerHTML=
+    '<div style="font-weight:700;color:#d4a843;font-size:12px;margin-bottom:8px;letter-spacing:0.04em">'+t.title+'</div>'+
+    '<div style="color:#c8c0b0;margin-bottom:8px">'+t.def+'</div>'+
+    (t.formula!=='—'?'<div style="background:rgba(0,0,0,0.35);border-radius:5px;padding:6px 10px;font-family:monospace;font-size:10px;color:#f0c96a;margin-bottom:8px;white-space:pre-wrap">'+t.formula+'</div>':'')+
+    '<div style="padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);color:#3db87a;font-size:10px;font-weight:600;margin-bottom:4px">📐 判断基準</div>'+
+    '<div style="color:#c8c0b0;font-size:10px">'+t.criteria+'</div>';
+  el.style.display='block';
+  // Position: measure after display
+  const rect=btnEl.getBoundingClientRect();
+  const tipH=el.offsetHeight;
+  const spaceAbove=rect.top;
+  const spaceBelow=window.innerHeight-rect.bottom;
+  const top=spaceAbove>=tipH+12?rect.top-tipH-8:rect.bottom+8;
+  const left=Math.max(8,Math.min(rect.left-145+8,window.innerWidth-298));
+  el.style.top=top+'px';el.style.left=left+'px';
+}
+function makeTip(key){
+  if(!TIPS[key])return'';
+  return '<button class="tip-btn" onclick="showTip(\''+key+'\',this);event.stopPropagation()">?</button>';
+}
+
+function renderSimInputs(){
+  const c=document.getElementById('simInputs');c.innerHTML='';
+  SIM_PARAMS.forEach(p=>{
+    const row=document.createElement('div');row.className='sim-input-row';
+    row.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px">'+
+      '<span class="sim-label">'+p.label+' '+makeTip(p.id)+'</span>'+
+      '<input type="number" id="'+p.id+'_num" value="'+p.def+'" min="'+p.min+'" max="'+p.max+'" step="'+p.step+'"'+
+      ' style="width:72px;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.3);border-radius:4px;color:var(--gold2);font-size:12px;padding:2px 6px;text-align:right"'+
+      ' oninput="onSimNumInput(\''+p.id+'\',\''+p.unit+'\')">'+
+      '<span style="font-size:10px;color:var(--muted);min-width:28px">'+p.unit+'</span></div>'+
+      '<div class="slider-wrap"><input type="range" id="'+p.id+'" min="'+p.min+'" max="'+p.max+'" step="'+p.step+'" value="'+p.def+'"'+
+      ' oninput="onSimSlide(\''+p.id+'\',\''+p.unit+'\')"></div>';
+    c.appendChild(row);
+  });
+}
+function onSimNumInput(id,unit){
+  const numEl=document.getElementById(id+'_num');
+  const slEl=document.getElementById(id);
+  if(numEl&&slEl){slEl.value=numEl.value;}
+  runSim();
+}
+
+
+// ══ MANUAL OVERRIDE TRACKING ══
+const manualFields=new Set();
+function markManual(id){
+  manualFields.add(id);
+  const el=document.getElementById(id);if(el)el.classList.add('manual-override');
+  const btn=document.getElementById('reset-'+id);if(btn)btn.classList.add('show');
+}
+function resetManual(id){
+  manualFields.delete(id);
+  const el=document.getElementById(id);if(el){el.classList.remove('manual-override');el.value='';}
+  const btn=document.getElementById('reset-'+id);if(btn)btn.classList.remove('show');
+}
+function setAutoVal(id,val){
+  if(manualFields.has(id))return; // respect manual override
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(el.tagName==='SELECT'){[...el.options].forEach(o=>{if(o.text===val||o.value===val)el.value=o.value});}
+  else el.value=val;
+}
+
+// ══ MATRIX AI FETCH ══
+const MATRIX_COLS=['築5年以下','築6-15年','築16-30年','築30年以上'];
+const MATRIX_ROWS=['駅徒歩10分以内','駅徒歩11-25分','駅徒歩26分以上'];
+
+async function fetchMatrixRent(matNum){
+  const addr=document.getElementById('propAddr')?.value||document.getElementById('areaMunic')?.value||'';
+  const layout=document.getElementById('room'+matNum+'_layout')?.value||'';
+  const area=document.getElementById('room'+matNum+'_area')?.value||'';
+  if(!addr&&!layout){showToast('所在地と間取りを入力してください');return}
+  const btn=document.getElementById('btnMatrix'+matNum);
+  const spin=document.getElementById('matrixSpin'+matNum);
+  if(btn)btn.disabled=true;if(spin)spin.classList.add('show');
+  try{
+    const prompt=`「${addr||'近畿圏'}」エリアの${layout||'1K'}（専有面積${area||'25'}㎡前後）の賃料相場を調べてください。
+必ずJSON形式のみで回答（前置き不要）。単位は円/月。
+{"r0c0":駅徒歩10分以内_築5年以下,"r0c1":駅徒歩10分以内_築6-15年,"r0c2":駅徒歩10分以内_築16-30年,"r0c3":駅徒歩10分以内_築30年以上,
+"r1c0":駅徒歩11-25分_築5年以下,"r1c1":駅徒歩11-25分_築6-15年,"r1c2":駅徒歩11-25分_築16-30年,"r1c3":駅徒歩11-25分_築30年以上,
+"r2c0":駅徒歩26分以上_築5年以下,"r2c1":駅徒歩26分以上_築6-15年,"r2c2":駅徒歩26分以上_築16-30年,"r2c3":駅徒歩26分以上_築30年以上}`;
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_GEMINI_API_KEY`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{parts:[{text:prompt}]}],
+        tools:[{google_search:{}}]
+      })});
+    const data=await resp.json();
+    if(data.error){throw new Error('Gemini APIエラー: '+data.error.message);}
+    const rawText=data.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+    console.log('[Matrix Gemini raw]', rawText);
+    const jsonMatch=rawText.match(/\{[\s\S]*\}/);
+    if(!jsonMatch)throw new Error('JSONが見つかりません');
+    const parsed=JSON.parse(jsonMatch[0]);
+    const tbl=document.getElementById('matrix'+matNum);
+    tbl.querySelectorAll('input[data-cell]').forEach(inp=>{
+      const v=parsed[inp.dataset.cell.replace('_','c').replace(/(\d)_(\d)/,'r$1c$2')];
+      // data-cell is "ri_ci" format
+      const [r,ci2]=inp.dataset.cell.split('_');
+      const key='r'+r+'c'+ci2;
+      const val=parsed[key];
+      if(val&&!inp.classList.contains('mx-manual')){inp.value=val;}
+    });
+    showToast('✓ タイプ'+['A','B','C'][matNum-1]+' 賃料相場を取得しました');
+  }catch(err){showToast('相場取得エラー: '+(err.message||'不明'));
+  }finally{if(btn)btn.disabled=false;if(spin)spin.classList.remove('show')}
+}
+
+function buildMatrix(tableId){
+  const tbl=document.getElementById(tableId);if(!tbl)return;
+  tbl.innerHTML='';
+  const thead=document.createElement('thead');
+  const hrow=document.createElement('tr');
+  hrow.innerHTML='<th></th>'+MATRIX_COLS.map(c=>`<th>${c}</th>`).join('');
+  thead.appendChild(hrow);tbl.appendChild(thead);
+  const tbody=document.createElement('tbody');
+  MATRIX_ROWS.forEach((row,ri)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="row-header">${row}</td>`+
+      MATRIX_COLS.map((_,ci)=>`<td><input type="number" data-cell="${ri}_${ci}" placeholder="—"
+        oninput="this.classList.add('mx-manual');saveData()"></td>`).join('');
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+}
+
+// ══ KPI ROW ══
+function renderKPI(firstCF,totalInitial,annualRentFull,loanAnnual,price,sellTotalReturn,holdYears){
+  const noi=annualRentFull*(1-(parseFloat(document.getElementById('simMgmtFee')?.value)||5)/100-(parseFloat(document.getElementById('simRepairRate')?.value)||5)/100)-
+    (parseFloat(document.getElementById('simTax')?.value)||0);
+  // CCR = 税引後年間CF ÷ 総初期投資（自己資金＋諸経費＋取得税）
+  const ccr=totalInitial>0?firstCF/totalInitial*100:0;
+  const repay=annualRentFull>0?loanAnnual/annualRentFull*100:0;
+  const grossYld=price>0?annualRentFull/price*100:0;
+  const netYld=price>0?noi/price*100:0;
+
+  const kpis=[
+    {key:'ccr',label:'CCR',val:ccr.toFixed(1)+'%',sub:'総投資利回り',color:ccr>=10?'val-green':ccr>=5?'val-gold':'val-red'},
+    {key:'repayRatio',label:'返済比率',val:repay.toFixed(1)+'%',sub:'45%以下が目安',color:repay<=45?'val-green':repay<=55?'val-gold':'val-red'},
+    {key:'grossYield',label:'表面利回り',val:grossYld.toFixed(1)+'%',sub:'満室÷物件価格',color:'val-gold'},
+    {key:'netYield',label:'実質利回り',val:netYld.toFixed(1)+'%',sub:'NOI÷物件価格',color:netYld>=6?'val-green':netYld>=4?'val-gold':'val-red'},
+    {key:'totalReturn',label:'総合損益',val:(sellTotalReturn>0?'+':'')+Math.round(sellTotalReturn).toLocaleString()+'万',sub:holdYears+'年後売却込み',color:sellTotalReturn>=0?'val-green':'val-red'},
+    {key:'cfPerYear',label:'年あたりCF',val:Math.round(firstCF).toLocaleString()+'万',sub:'初年度',color:firstCF>=120?'val-green':firstCF>=0?'val-gold':'val-red'},
+  ];
+  document.getElementById('kpiRow').innerHTML=kpis.map(k=>`
+    <div class="kpi-card">
+      <div class="kpi-label">${k.label}${makeTip(k.key,'right')}</div>
+      <div class="kpi-val ${k.color}">${k.val}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`).join('');
+  // buy judgment
+  const score=(ccr>=10?2:ccr>=5?1:0)+(repay<=45?2:repay<=55?1:0)+(netYld>=6?2:netYld>=4?1:0)+(sellTotalReturn>=0?2:0);
+  const banner=document.getElementById('buyBanner');
+  if(banner&&price>0){
+    banner.style.display='flex';
+    if(score>=7){banner.className='buy-banner buy-go';document.getElementById('buyIcon').textContent='✅';document.getElementById('buyMain').textContent='買い検討水準';document.getElementById('buySub').textContent=`CCR ${ccr.toFixed(1)}% / 返済比率 ${repay.toFixed(1)}% / 実質利回り ${netYld.toFixed(1)}% — 主要指標が概ね良好`;}
+    else if(score>=4){banner.className='buy-banner buy-caution';document.getElementById('buyIcon').textContent='⚠️';document.getElementById('buyMain').textContent='要交渉・条件改善で検討可';document.getElementById('buySub').textContent=`CCR ${ccr.toFixed(1)}% / 返済比率 ${repay.toFixed(1)}% / 実質利回り ${netYld.toFixed(1)}% — 指値・条件交渉を前提に`;}
+    else{banner.className='buy-banner buy-no';document.getElementById('buyIcon').textContent='❌';document.getElementById('buyMain').textContent='現状では見送り推奨';document.getElementById('buySub').textContent=`CCR ${ccr.toFixed(1)}% / 返済比率 ${repay.toFixed(1)}% / 実質利回り ${netYld.toFixed(1)}% — 数値が基準を大きく下回っています`;}
+  }
+}
+
+// ══ SIM ══
+let cfChart=null;
+const SIM_PARAMS=[
+  {id:'simPrice',label:'物件価格',unit:'万円',def:2480,min:100,max:10000,step:10},
+  {id:'simAnnualRent',label:'想定年間収入',unit:'万円',def:300,min:10,max:2000,step:5},
+  {id:'simOccupancy',label:'入居率',unit:'%',def:90,min:50,max:100,step:1},
+  {id:'simDownPay',label:'自己資金',unit:'万円',def:500,min:0,max:5000,step:50},
+  {id:'simRate',label:'金利',unit:'%',def:2.0,min:0.5,max:6,step:0.1},
+  {id:'simTerm',label:'ローン期間',unit:'年',def:20,min:5,max:35,step:1},
+  {id:'simMgmtFee',label:'管理費率',unit:'%',def:5,min:0,max:15,step:0.5},
+  {id:'simRepairRate',label:'修繕費率',unit:'%',def:5,min:0,max:15,step:0.5},
+  {id:'simTax',label:'固定資産税',unit:'万円/年',def:25,min:0,max:200,step:1},
+  {id:'simBuildingPct',label:'建物割合',unit:'%',def:30,min:0,max:80,step:1},
+  {id:'simIncomeTax',label:'実効税率',unit:'%',def:30,min:0,max:55,step:1},
+  {id:'simRentDecline',label:'家賃下落率',unit:'%/年',def:1,min:0,max:5,step:0.5},
+  {id:'simLargeRepair',label:'大規模修繕',unit:'万円',def:150,min:0,max:1000,step:10},
+  {id:'simLargeYear',label:'大規模修繕 発生年',unit:'年目',def:12,min:1,max:35,step:1},
+  {id:'simAcqTax',label:'不動産取得税',unit:'万円',def:30,min:0,max:300,step:1},
+  {id:'simHoldYears',label:'保有年数',unit:'年',def:10,min:1,max:40,step:1},
+  {id:'simExitPrice',label:'売却価格',unit:'万円',def:2000,min:0,max:10000,step:50},
+];
+// renderSimInputs already defined above with tooltip support
+function onSimSlide(id,unit){
+  const v=document.getElementById(id).value;
+  const numEl=document.getElementById(id+'_num');
+  if(numEl)numEl.value=v;
+  runSim();
+}
+function syncSim(){
+  const map={simPrice:'propPrice',simMgmtFee:'rentalMgmtFee',simExitPrice:'exitPrice'};
+  Object.entries(map).forEach(([s,f])=>{
+    const v=document.getElementById(f)?.value;if(v&&!isNaN(v)){
+      const sl=document.getElementById(s);if(sl)sl.value=v;
+      const num=document.getElementById(s+'_num');if(num)num.value=v;
+    }
+  });
+  const price=parseFloat(document.getElementById('propPrice')?.value)||0;
+  const yld=parseFloat(document.getElementById('propYield')?.value)||0;
+  if(price&&yld){
+    const rent=Math.round(price*yld/100);
+    const sl=document.getElementById('simAnnualRent');if(sl)sl.value=rent;
+    const num=document.getElementById('simAnnualRent_num');if(num)num.value=rent;
+  }
+  runSim();
+}
+function getSimVal(id){
+  // prefer keyboard-editable number input, fall back to slider
+  const numEl=document.getElementById(id+'_num');
+  if(numEl&&numEl.value!=='')return parseFloat(numEl.value)||0;
+  return parseFloat(document.getElementById(id)?.value)||0;
+}
+function calcLoanPayment(principal,rate,termYears){
+  if(principal<=0||rate<=0)return principal/termYears;
+  const r=rate/100/12;const n=termYears*12;
+  return principal*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1)*12;
+}
+function runSim(){
+  const price=getSimVal('simPrice');const annualRentFull=getSimVal('simAnnualRent');
+  const occupancy=getSimVal('simOccupancy')/100;const downPay=getSimVal('simDownPay');
+  const rate=getSimVal('simRate');const term=getSimVal('simTerm');
+  const mgmtFee=getSimVal('simMgmtFee')/100;const repairRate=getSimVal('simRepairRate')/100;
+  const tax=getSimVal('simTax');const buildingPct=getSimVal('simBuildingPct')/100;
+  const incomeTax=getSimVal('simIncomeTax')/100;const rentDecline=getSimVal('simRentDecline')/100;
+  const largeRepair=getSimVal('simLargeRepair');const largeYear=getSimVal('simLargeYear');
+  const acqTax=getSimVal('simAcqTax');const holdYears=getSimVal('simHoldYears');const exitPrice=getSimVal('simExitPrice');
+
+  // 諸経費 = 物件価格 × 8%（自動計算）
+  const miscFees = Math.round(price * 0.08);
+  // 初期総投資 = 自己資金 + 諸経費 + 不動産取得税
+  const totalInitial = downPay + miscFees + acqTax;
+
+  const loan=price-downPay;const buildingVal=price*buildingPct;
+  const structure=document.getElementById('propStructure')?.value;
+  const propAge=parseInt(document.getElementById('propAge')?.value)||0;
+  const legalLife=LEGAL_LIFE[structure]||22;
+  const deprYears=propAge>=legalLife?Math.max(2,Math.ceil(legalLife*0.2)):Math.max(2,legalLife-propAge);
+  const annualDepr=deprYears>0?buildingVal/deprYears:0;
+  const annualLoan=calcLoanPayment(loan,rate,term);
+  const years=Array.from({length:40},(_,i)=>i+1);
+
+  // cumulCF_pure = CF累計のみ（初期投資なし）
+  // cumulCF_total = CF累計 - 初期総投資（自己資金＋諸経費＋取得税）
+  const cfArr=[],cumulCF_pure=[],cumulCF_total=[],sellCFArr=[];
+  let cumulPure=0, cumulTotal=-totalInitial;
+
+  years.forEach(y=>{
+    const rent=annualRentFull*occupancy*Math.max(0,1-rentDecline*(y-1));
+    const expenses=rent*(mgmtFee+repairRate)+tax;
+    const loanPay=y<=term?annualLoan:0;
+    const remainingLoan=y<=term?loan*(1-(y/term)):0;
+    const isLarge=y===largeYear?largeRepair:0;
+    const taxable=rent-expenses-(y<=deprYears?annualDepr:0)-(loan>0&&y<=term?loan*(rate/100):0)-isLarge;
+    const taxPay=taxable>0?taxable*incomeTax:0;
+    const cf=rent-expenses-loanPay-taxPay-isLarge;
+    cumulPure+=cf; cumulTotal+=cf;
+    cfArr.push(Math.round(cf));
+    cumulCF_pure.push(Math.round(cumulPure));
+    cumulCF_total.push(Math.round(cumulTotal));
+    if(y===holdYears){
+      const sg=exitPrice-price;const st=sg>0?sg*0.2:0;
+      const netSale=exitPrice-remainingLoan-st;
+      // 売却時累計：CF累計(純) + 売却手取り（初期投資控除後の実態）
+      sellCFArr.push({year:y, valPure:Math.round(cumulPure+netSale), valTotal:Math.round(cumulTotal+netSale)});
+    }
+  });
+
+  const holdIdx=Math.min(holdYears,35)-1;
+  const firstCF=cfArr[0]||0;
+  const holdCF=cfArr[holdIdx]||0;
+  const holdCumulPure=cumulCF_pure[holdIdx]||0;
+  const holdCumulTotal=cumulCF_total[holdIdx]||0;
+  const loanAnnual=Math.round(annualLoan);
+  const sellTot=sellCFArr[0]?.valTotal||0;
+
+  // Result cards
+  document.getElementById('simResultCards').innerHTML=`
+    <div class="result-card">
+      <div class="result-card-label">年間CF（初年度）</div>
+      <div class="result-card-val ${firstCF>=0?'val-green':'val-red'}">${firstCF.toLocaleString()}<span style="font-size:12px">万円</span></div>
+      <div class="result-card-sub">月${Math.round(firstCF/12).toLocaleString()}万円</div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-label">CF累計（${holdYears}年）純</div>
+      <div class="result-card-val ${holdCumulPure>=0?'val-green':'val-red'}">${holdCumulPure.toLocaleString()}<span style="font-size:12px">万円</span></div>
+      <div class="result-card-sub">CF合計のみ</div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-label">CF累計（${holdYears}年）実質</div>
+      <div class="result-card-val ${holdCumulTotal>=0?'val-green':'val-red'}">${holdCumulTotal.toLocaleString()}<span style="font-size:12px">万円</span></div>
+      <div class="result-card-sub">初期投資${totalInitial.toLocaleString()}万円控除</div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-label">諸経費（自動）</div>
+      <div class="result-card-val val-gold">${miscFees.toLocaleString()}<span style="font-size:12px">万円</span></div>
+      <div class="result-card-sub">物件価格×8% / 初期総投資 ${totalInitial.toLocaleString()}万</div>
+    </div>`;
+
+  // KPI row — pass totalInitial for CCR
+  renderKPI(firstCF,totalInitial,annualRentFull,annualLoan,price,sellTot,holdYears);
+
+  const sellDataPure=years.map(y=>{if(y!==holdYears)return null;const s=sellCFArr[0];return s?s.valPure:null});
+  const sellDataTotal=years.map(y=>{if(y!==holdYears)return null;const s=sellCFArr[0];return s?s.valTotal:null});
+
+  // Chart - dim bars after hold period
+  const cfColors=cfArr.map((v,i)=>{
+    const alpha=i>=holdYears?0.25:0.75;
+    return v>=0?`rgba(61,184,122,${alpha})`:`rgba(224,85,85,${alpha})`;
+  });
+
+  if(cfChart)cfChart.destroy();
+  const ctx=document.getElementById('cfChart').getContext('2d');
+  cfChart=new Chart(ctx,{type:'bar',data:{labels:years.map(y=>y+'年'),datasets:[
+    {label:'年間CF',data:cfArr,backgroundColor:cfColors,type:'bar',yAxisID:'y',order:3},
+    {label:'CF累計（純）',data:cumulCF_pure,
+      borderColor:years.map((_,i)=>i<holdYears?'rgba(212,168,67,0.9)':'rgba(212,168,67,0.3)'),
+      backgroundColor:'rgba(212,168,67,0.0)',
+      borderWidth:2,type:'line',yAxisID:'y2',fill:false,tension:0.3,pointRadius:0,order:2,
+      segment:{borderColor:ctx2=>ctx2.p0DataIndex<holdYears?'rgba(212,168,67,0.9)':'rgba(212,168,67,0.3)'}},
+    {label:'CF累計（初期投資込み）',data:cumulCF_total,
+      borderColor:years.map((_,i)=>i<holdYears?'rgba(74,143,212,0.9)':'rgba(74,143,212,0.3)'),
+      backgroundColor:'rgba(74,143,212,0.06)',
+      borderWidth:2,type:'line',yAxisID:'y2',fill:true,tension:0.3,pointRadius:0,order:1,
+      segment:{borderColor:ctx2=>ctx2.p0DataIndex<holdYears?'rgba(74,143,212,0.9)':'rgba(74,143,212,0.3)'}},
+    {label:'売却時CF（初期投資込み）',data:sellDataTotal,borderColor:'#e05555',backgroundColor:'rgba(224,85,85,0.9)',type:'scatter',yAxisID:'y2',pointRadius:10,pointStyle:'star',order:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#7a8099',font:{size:10}}},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{ticks:{color:'#7a8099',font:{size:9}},grid:{color:'rgba(42,48,71,0.8)'}},
+      y:{position:'left',ticks:{color:'#7a8099',font:{size:9}},grid:{color:'rgba(42,48,71,0.8)'},title:{display:true,text:'年間CF(万円)',color:'#7a8099',font:{size:9}}},
+      y2:{position:'right',ticks:{color:'#d4a843',font:{size:9}},grid:{display:false},title:{display:true,text:'累計CF(万円)',color:'#d4a843',font:{size:9}}}
+    }}});
+
+  const b=document.getElementById('badge-sim');
+  b.textContent=firstCF>=120?'✓ 目標達成':firstCF>=0?'CF+':'CF赤字';
+  b.className='section-badge '+(firstCF>=120?'badge-ok':firstCF>=0?'badge-warn':'badge-ng');
+}
+
+// ══ PROGRESS / BADGES ══
+function updateProgress(){
+  const total=document.querySelectorAll('input[type=checkbox]').length;
+  const checked=document.querySelectorAll('input[type=checkbox]:checked').length;
+  const filled=[...document.querySelectorAll('input[type=text],input[type=number]:not([readonly]),textarea,select')].filter(el=>el.value).length;
+  const totalFields=document.querySelectorAll('input[type=text],input[type=number]:not([readonly]),textarea,select').length;
+  const pct=Math.round(((checked/Math.max(total,1))*0.5+(filled/Math.max(totalFields,1))*0.5)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'%';
+}
+function updateSectionBadges(){
+  // finance
+  const fc=document.querySelectorAll('#financeChecks input[type=checkbox]');
+  const fd=[...fc].filter(c=>c.checked).length;
+  const fb=document.getElementById('badge-finance');
+  fb.textContent=fd===fc.length&&fc.length>0?'完了':fd>0?fd+'/'+fc.length:'未確認';
+  fb.className='section-badge '+(fd===fc.length&&fc.length>0?'badge-ok':fd>0?'badge-warn':'badge-todo');
+  // rental
+  const forbid=[...document.querySelectorAll('#rentalForbid input[type=checkbox]:checked')].length;
+  const rb=document.getElementById('badge-rental');
+  if(forbid>0){rb.textContent='禁忌項目あり';rb.className='section-badge badge-ng'}
+  else{const rc=[...document.querySelectorAll('#rentalChecks input[type=checkbox]')];const rd=rc.filter(c=>c.checked).length;
+    rb.textContent=rd===rc.length&&rc.length>0?'確認済':rd>0?rd+'/'+rc.length:'未確認';
+    rb.className='section-badge '+(rd===rc.length&&rc.length>0?'badge-ok':rd>0?'badge-warn':'badge-todo');}
+  // inspection
+  const ia=[...document.querySelectorAll('#inspLegal input[type=checkbox],#inspBuilding input[type=checkbox],#inspArea input[type=checkbox]')];
+  const id2=ia.filter(c=>c.checked).length;const ib=document.getElementById('badge-inspection');
+  ib.textContent=id2===ia.length&&ia.length>0?'完了':id2>0?id2+'/'+ia.length:'未実施';
+  ib.className='section-badge '+(id2===ia.length&&ia.length>0?'badge-ok':id2>0?'badge-warn':'badge-todo');
+  // tenant
+  const tb=document.getElementById('badge-tenant');const hasExit=(document.getElementById('exitReason')?.value||'').length>20;
+  tb.textContent=hasExit?'記載済':'未記載';tb.className='section-badge '+(hasExit?'badge-ok':'badge-todo');
+  // area
+  const ab=document.getElementById('badge-area');const as2=document.getElementById('areaScore')?.value;
+  ab.textContent=as2==='A'?'A評価':as2==='B'?'B評価':as2==='C'?'C評価':'未入力';
+  ab.className='section-badge '+(as2==='A'?'badge-ok':as2==='B'?'badge-warn':as2==='C'?'badge-ng':'badge-todo');
+}
+
+// ══ PDF UPLOAD ══
+function handlePdfDrop(e){e.preventDefault();document.getElementById('pdfZone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type==='application/pdf')handlePdfFile(f);else showToast('PDFファイルのみ対応')}
+async function handlePdfFile(file){
+  if(!file)return;
+  document.getElementById('pdfFilename').style.display='block';document.getElementById('pdfFilename').textContent='📄 '+file.name;
+  const loading=document.getElementById('pdfLoading');loading.classList.add('show');
+  try{
+    const base64=await fileToBase64(file);
+    const prompt=`以下の物件概要書PDFから情報を抽出してください。必ずJSON形式のみで回答（前置き・説明文は不要）。抽出できない項目はnull。
+{"propName":"物件名","propAddr":"所在地","propPrice":物件価格万円数値,"propYield":表面利回り%数値,"propBuildYear":建築年西暦数値,"propStructure":"木造/軽量鉄骨S（3mm以下）/軽量鉄骨S（3〜4mm）/重量鉄骨S/RC/SRC のどれか","propUnits":総戸数数値,"propFloorArea":延床面積㎡数値,"propLandArea":土地面積㎡数値,"propBuildingPrice":建物価格万円数値,"propBCR":建蔽率%数値,"propFAR":容積率%数値,"propLandPrice":土地価格万円数値,"room1_layout":"タイプA間取り","room1_area":専有面積㎡数値,"room1_units":戸数数値,"room1_rent":家賃円月数値,"room2_layout":null,"room2_area":null,"room2_units":null,"room2_rent":null,"room3_layout":null,"room3_area":null,"room3_units":null,"room3_rent":null,"areaStation":"最寄り駅・徒歩分数","propMemo":"その他特記事項"}`;
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_GEMINI_API_KEY`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[
+        {inline_data:{mime_type:'application/pdf',data:base64}},
+        {text:prompt}
+      ]}]})});
+    const data=await resp.json();
+    if(data.error){throw new Error('Gemini APIエラー: '+data.error.message);}
+    const rawText=data.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+    console.log('[PDF Gemini raw]', rawText);
+    // extract JSON robustly
+    const jsonMatch=rawText.match(/\{[\s\S]*\}/);
+    if(!jsonMatch)throw new Error('JSONが見つかりません。レスポンス: '+rawText.slice(0,200));
+    const text=jsonMatch[0];
+    const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
+    Object.entries(parsed).forEach(([k,v])=>{if(v===null||v===undefined)return;const el=document.getElementById(k);if(el){el.value=v;el.dispatchEvent(new Event('input'))}});
+    recalcAge();recalcAll();updateRakumachiLink();updatePropName();
+    showToast('✓ '+Object.values(parsed).filter(v=>v!==null).length+'項目を自動入力しました');
+  }catch(err){showToast('PDF読み取りエラー: '+(err.message||'不明なエラー'))}
+  finally{loading.classList.remove('show')}
+}
+function fileToBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('読み込み失敗'));r.readAsDataURL(f)})}
+
+// ══ AREA AI RESEARCH ══
+async function runAreaResearch(){
+  const munic=(document.getElementById('areaMunic')?.value||'').trim();
+  if(!munic){showToast('市区町村名を入力してください');return}
+  const btn=document.getElementById('btnResearch');const loading=document.getElementById('areaLoading');
+  btn.disabled=true;loading.classList.add('show');
+  document.getElementById('areaLoadingText').textContent=munic+' の人口・産業・居住ペルソナをリサーチ中...';
+  try{
+    const prompt=`「${munic}」について不動産投資の観点から以下をリサーチしてください。必ずJSON形式のみで回答（前置き・Markdownは不要）。
+{"areaPop":直近国勢調査の人口万人小数第1位数値,"areaPopChange":前回比増減率%数値例-2.3,"areaTrend":"増加傾向 or 横ばい or 微減 or 減少傾向","areaPopYear":"参照した国勢調査年例2020年","areaEmployer":"主要産業・雇用源の詳細（主な工場・大企業・大学・官公庁など。箇条書き300字以内）","areaPersona":"この地域の主な入居者層ペルソナ（年代・職業・家族構成・生活スタイル・賃料感度などを具体的に300字以内）","areaMemo":"賃貸需要・空室状況・エリア特性の投資家向け簡潔コメント200字以内"}`;
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_GEMINI_API_KEY`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{parts:[{text:prompt}]}],
+        tools:[{google_search:{}}]
+      })});
+    const data=await resp.json();
+    if(data.error){throw new Error('Gemini APIエラー: '+data.error.message);}
+    const rawText=data.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+    console.log('[Area Gemini raw]', rawText);
+    const jsonMatch=rawText.match(/\{[\s\S]*\}/);
+    if(!jsonMatch)throw new Error('JSONが見つかりません');
+    const parsed=JSON.parse(jsonMatch[0]);
+    const fills={areaPop:'areaPop',areaPopChange:'areaPopChange',areaEmployer:'areaEmployer',areaPersona:'areaPersona'};
+    Object.entries(fills).forEach(([k,id])=>{if(parsed[k]!=null){const el=document.getElementById(id);if(el)el.value=parsed[k]}});
+    if(parsed.areaTrend){const sel=document.getElementById('areaTrend');if(sel)[...sel.options].forEach(o=>{if(o.text===parsed.areaTrend)sel.value=o.value})}
+    if(parsed.areaMemo){const el=document.getElementById('areaMemo');if(el)el.value=(el.value?el.value+'\n\n':'')+`【AI調査 ${new Date().toLocaleDateString('ja-JP')}】\n`+parsed.areaMemo+(parsed.areaPopYear?'\n（人口出典：'+parsed.areaPopYear+'国勢調査）':'')}
+    updateSectionBadges();updateProgress();showToast('✓ '+munic+' のエリアデータを取得しました');
+  }catch(err){showToast('エリア調査エラー: '+(err.message||'不明なエラー'))}
+  finally{btn.disabled=false;loading.classList.remove('show')}
+}
+
+// ══ RAKUMACHI ══
+function updateRakumachiLink(){
+  const addr=(document.getElementById('propAddr')?.value||'').trim();
+  const link=document.getElementById('rakumachiLink');if(!link||!addr)return;
+  fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr+' 日本')}&format=json&limit=1`)
+    .then(r=>r.json()).then(data=>{if(data&&data[0]){const lat=parseFloat(data[0].lat).toFixed(8);const lng=parseFloat(data[0].lon).toFixed(8);link.href=`https://www.rakumachi.jp/property/land_price/map?lat=${lat}&lng=${lng}&category=crix_rent&zoom=13#ckmap_anchor_element`}}).catch(()=>{});
+}
+
+// ══ EXPORT ══
+function exportCSV(){
+  const d=collectData();const rows=[['項目','値']];
+  Object.entries(d).forEach(([k,v])=>rows.push([k,String(v).replace(/,/g,'、')]));
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='property_dd.csv';a.click();
+  showToast('CSV を出力しました');
+}
+function printView(){window.print()}
+
+// ══ TOAST ══
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+// ══ BUILDING VALUATION (収益還元法) ══
+function recalcValuation(){
+  const price = parseFloat(document.getElementById('propPrice')?.value)||0;
+  const annualRentFull = (()=>{
+    const r1=(parseFloat(document.getElementById('room1_rent')?.value)||0)*(parseFloat(document.getElementById('room1_units')?.value)||0);
+    const r2=(parseFloat(document.getElementById('room2_rent')?.value)||0)*(parseFloat(document.getElementById('room2_units')?.value)||0);
+    const r3=(parseFloat(document.getElementById('room3_rent')?.value)||0)*(parseFloat(document.getElementById('room3_units')?.value)||0);
+    const fromRooms=(r1+r2+r3)*12/10000;
+    if(fromRooms>0)return fromRooms;
+    const p2=parseFloat(document.getElementById('propPrice')?.value)||0;
+    const y=parseFloat(document.getElementById('propYield')?.value)||0;
+    return p2&&y?p2*y/100:0;
+  })();
+  const capRate = (parseFloat(document.getElementById('valCapRate')?.value)||0)/100;
+  const expenseRate = (parseFloat(document.getElementById('valExpenseRate')?.value)||25)/100;
+  const landGrowth = (parseFloat(document.getElementById('valLandGrowth')?.value)||(-0.5))/100;
+  const landArea = parseFloat(document.getElementById('propLandArea')?.value)||0;
+  const rosen = (parseFloat(document.getElementById('areaRosen')?.value)||0)*1000;
+  const landPriceInput = parseFloat(document.getElementById('propLandPrice')?.value)||0;
+  const landPriceCalc = landArea>0&&rosen>0 ? Math.round(landArea*rosen/10000*0.8) : 0;
+  const landPrice = landPriceInput>0 ? landPriceInput : landPriceCalc;
+  const bookBldPrice = parseFloat(document.getElementById('propBuildingPrice')?.value)||0;
+
+  // A: Direct cap
+  const noi = annualRentFull*(1-expenseRate);
+  const propValA = capRate>0 ? Math.round(noi/capRate) : 0;
+  const bldValA = propValA>0 ? propValA-landPrice : 0;
+  const diffA = bookBldPrice>0&&bldValA>0 ? bldValA-bookBldPrice : null;
+
+  setText('va-noi', noi>0 ? noi.toFixed(1)+'万円/年' : '—');
+  setText('va-propval', propValA>0 ? propValA.toLocaleString()+'万円' : 'Cap Rate・収入を入力');
+  const bldAEl=document.getElementById('va-bldval');
+  if(bldAEl){bldAEl.textContent=bldValA>0?bldValA.toLocaleString()+'万円':'—';bldAEl.className='val-num'+(bldValA<0?' danger':'')}
+  const diffAEl=document.getElementById('va-diff');
+  if(diffAEl&&diffA!==null){diffAEl.textContent=(diffA>=0?'+':'')+Math.round(diffA).toLocaleString()+'万円';diffAEl.className='val-num'+(diffA<0?' danger':diffA<bookBldPrice*0.1?'':' val-green')}
+  else if(diffAEl){diffAEl.textContent='—';diffAEl.className='val-num'}
+
+  // B: Residual (price - land)
+  const bldValB = price>0&&landPrice>0 ? price-landPrice : 0;
+  const bldDiffB = bldValA>0&&bldValB>0 ? bldValA-bldValB : null;
+  const adoptBld = bldValA>0&&bldValB>0 ? Math.min(bldValA,bldValB) : (bldValA||bldValB);
+  setText('vb-land', landPrice>0?landPrice.toLocaleString()+'万円（'+(landPriceInput>0?'入力値':'路線価算出')+'）':'土地価格・路線価を入力');
+  setText('vb-bld', bldValB>0?bldValB.toLocaleString()+'万円':'—');
+  const bldBDiffEl=document.getElementById('vb-diff');
+  if(bldBDiffEl&&bldDiffB!==null){bldBDiffEl.textContent=(bldDiffB>=0?'+':'')+Math.round(bldDiffB).toLocaleString()+'万円';bldBDiffEl.className='val-num'+(Math.abs(bldDiffB)>bldValB*0.3?' warn':'')}
+  else if(bldBDiffEl){bldBDiffEl.textContent='—';bldBDiffEl.className='val-num'}
+  const adoptEl=document.getElementById('vb-adopt');
+  if(adoptEl){adoptEl.textContent=adoptBld>0?adoptBld.toLocaleString()+'万円（保守的評価）':'—';adoptEl.className='val-num'+(adoptBld<bookBldPrice*0.8?' danger':'val-green')}
+
+  // Verdict
+  const verdictEl=document.getElementById('valuationVerdict');
+  if(verdictEl&&price>0&&propValA>0){
+    verdictEl.style.display='flex';
+    const gap=Math.round((propValA-price)/price*100);
+    if(gap>=0){verdictEl.className='val-verdict verdict-safe';verdictEl.textContent='✅ 収益価格が物件価格を上回っています（+'+gap+'%）。収益的に合理的な水準です。'}
+    else if(gap>=-15){verdictEl.className='val-verdict verdict-warn';verdictEl.textContent='⚠ 収益価格が物件価格を'+Math.abs(gap)+'%下回っています。指値余地または将来賃料上昇が必要。'}
+    else{verdictEl.className='val-verdict verdict-danger';verdictEl.textContent='🚨 収益価格が物件価格を'+Math.abs(gap)+'%下回り、割高感が強い。購入根拠を数値で明確に説明できる場合のみ検討。'}
+  } else if(verdictEl){verdictEl.style.display='none'}
+
+  // Update defense panels
+  recalcDefense(price,annualRentFull,landPrice,propValA,landGrowth);
+}
+function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=val}
+
+function recalcDefense(price,annualRentFull,landPrice,propValA,landGrowth){
+  const strat=activeStrategy;
+  const holdYears=parseFloat(document.getElementById('simHoldYears')?.value)||10;
+  const downPay=parseFloat(document.getElementById('simDownPay')?.value)||0;
+  const noi=(annualRentFull*(1-(parseFloat(document.getElementById('valExpenseRate')?.value)||25)/100));
+  const loanAnnual=parseFloat(document.getElementById('simRate')?.value)||2;
+
+  // Strat 1 & 2: break-even line
+  if(strat===1||strat===2){
+    const idx=strat;
+    const g=document.getElementById('defense-'+idx+'-grid');if(!g)return;
+    const minExitPrice=price>0?Math.round(price-noi*holdYears+downPay):0;
+    const breakEvenYield=annualRentFull>0&&minExitPrice>0?Math.round(annualRentFull/minExitPrice*100*10)/10:0;
+    const landBuffer=landPrice>0&&price>0?Math.round((landPrice/price)*100):0;
+    g.innerHTML=`
+      <div class="defense-item"><span class="defense-label">負けない最低売却価格</span><span class="defense-val">${minExitPrice>0?minExitPrice.toLocaleString()+'万円':'入力待ち'}</span><span class="defense-sub">CF累計＋自己資金回収ライン</span></div>
+      <div class="defense-item"><span class="defense-label">出口時の許容利回り上限</span><span class="defense-val">${breakEvenYield>0?breakEvenYield+'%':'—'}</span><span class="defense-sub">この利回り以下で売れればOK</span></div>
+      <div class="defense-item"><span class="defense-label">土地値バッファ</span><span class="defense-val" style="color:${landBuffer>40?'var(--green)':landBuffer>25?'var(--warn)':'var(--danger)'}">${landBuffer>0?landBuffer+'%':'—'}</span><span class="defense-sub">物件価格に占める土地の割合</span></div>
+      <div class="defense-item"><span class="defense-label">収益価格 vs 取得価格</span><span class="defense-val" style="color:${propValA>=price?'var(--green)':'var(--danger)'}">${propValA>0?propValA.toLocaleString()+'万円':'—'}</span><span class="defense-sub">直接還元法（Cap Rate入力要）</span></div>
+      <div class="defense-item"><span class="defense-label">インカム保有${holdYears}年総CF目安</span><span class="defense-val">${noi>0?Math.round(noi*holdYears).toLocaleString()+'万円':'—'}</span><span class="defense-sub">NOI×保有年数（税引前概算）</span></div>
+      <div class="defense-item"><span class="defense-label">自己資金回収年数</span><span class="defense-val">${noi>0&&downPay>0?Math.round(downPay/noi*10)/10+'年':'—'}</span><span class="defense-sub">NOIベース・概算</span></div>`;
+  }
+  // Strat 3: land 35yr forecast
+  if(strat===3){
+    const g=document.getElementById('defense-3-grid');if(!g)return;
+    if(landPrice<=0){g.innerHTML='<div style="color:var(--muted);font-size:11px;grid-column:1/-1">土地価格・年間変動率を入力してください</div>';return}
+    const rates=[landGrowth,-0.01,-0.02,0];
+    const scenarios=[
+      {label:'入力シナリオ ('+((landGrowth*100).toFixed(1))+'%/年)',rate:landGrowth,color:'var(--gold)'},
+      {label:'慎重 (-1%/年)',rate:-0.01,color:'var(--warn)'},
+      {label:'最悪 (-2%/年)',rate:-0.02,color:'var(--danger)'},
+      {label:'横ばい (0%/年)',rate:0,color:'var(--green)'},
+    ];
+    let html='';
+    scenarios.forEach(s=>{
+      const val35=Math.round(landPrice*Math.pow(1+s.rate,35));
+      const val10=Math.round(landPrice*Math.pow(1+s.rate,holdYears));
+      html+=`<div class="defense-item">
+        <span class="defense-label">${s.label}</span>
+        <span class="defense-val" style="color:${s.color}">${val35.toLocaleString()}万円</span>
+        <span class="defense-sub">${holdYears}年後：${val10.toLocaleString()}万円 / 現在：${landPrice.toLocaleString()}万円</span>
+      </div>`;
+    });
+    const cfTotal=noi>0?Math.round(noi*35):0;
+    const totalReturn35=Math.round(landPrice*Math.pow(1+landGrowth,35))+cfTotal-price;
+    html+=`<div class="defense-item" style="grid-column:1/-1;padding-top:8px;border-top:1px solid var(--border)">
+      <span class="defense-label">入力シナリオ 35年後 総合損益（土地売却＋CF累計−取得価格）</span>
+      <span class="defense-val" style="color:${totalReturn35>=0?'var(--green)':'var(--danger)'}">${totalReturn35>=0?'+':''}${totalReturn35.toLocaleString()}万円</span>
+      <span class="defense-sub">CF概算：${cfTotal.toLocaleString()}万円 + 土地売却益</span>
+    </div>`;
+    g.innerHTML=html;
+  }
+}
+
+// ══ HEARING TABS ══
+const HEARING_FIELDS=[
+  {id:'storeName',label:'店舗名',type:'text',placeholder:'例：〇〇不動産'},
+  {id:'staffName',label:'担当者名',type:'text',placeholder:'例：田中 花子'},
+  {id:'targetCustomer',label:'想定顧客（年齢・性別・引っ越し理由）',type:'textarea',placeholder:'例：20〜30代男性・転勤・工場勤務'},
+  {id:'minRent',label:'間取り×最低家賃',type:'textarea',placeholder:'例：1K→40,000円〜 / 1LDK→55,000円〜'},
+  {id:'parking',label:'駐車場：要否・相場',type:'text',placeholder:'例：必要 80%以上・相場3,000〜5,000円/月'},
+  {id:'deposit',label:'敷金礼金の相場',type:'text',placeholder:'例：敷1ヶ月・礼0〜1ヶ月'},
+  {id:'adCost',label:'広告費：相場と優先案内基準',type:'text',placeholder:'例：AD2〜3ヶ月・ポータル優先'},
+  {id:'petPolicy',label:'ペット：可否・需要・家賃増加幅',type:'text',placeholder:'例：小型犬可で+3,000円、需要多い'},
+  {id:'giftMoney',label:'個人謝礼',type:'text',placeholder:'例：決まれば3,000円クオカード'},
+  {id:'floorWall',label:'床・壁：希望・決まりやすい仕様',type:'textarea',placeholder:'例：フローリング必須、白クロスが決まりやすい'},
+  {id:'kitchen',label:'キッチン：好まれる仕様',type:'text',placeholder:'例：2口以上・IH需要増'},
+  {id:'bath',label:'お風呂：希望が多い点',type:'text',placeholder:'例：追い焚き必須・浴室乾燥あると強い'},
+  {id:'toilet',label:'トイレ：希望',type:'text',placeholder:'例：温水洗浄便座ほぼ必須'},
+  {id:'washer',label:'洗濯機：室内必須か',type:'text',placeholder:'例：室内置きほぼ必須・ベランダNGが増えている'},
+  {id:'aircon',label:'エアコン：標準か追加か',type:'text',placeholder:'例：全室付き前提、ないと決まらない'},
+  {id:'tvIntercom',label:'TVインターフォン：言及の程度',type:'text',placeholder:'例：あれば安心程度、必須とは言われない'},
+  {id:'lighting',label:'照明：付き不付き需要',type:'text',placeholder:'例：照明なしでも問題なし'},
+  {id:'wifi',label:'無料Wi-Fi：需要',type:'text',placeholder:'例：あれば差別化になる、単身者に効く'},
+  {id:'propaneGas',label:'プロパンガス：反応・変更可否',type:'textarea',placeholder:'例：都市ガス比べ割高感あり。変更には〇〇万円かかる'},
+  {id:'popularProperty',label:'類似していて満室or人気物件は？',type:'textarea',placeholder:'例：〇〇マンション（築18年・駅7分）が常に満室'},
+  {id:'mgmtFeeRate',label:'管理費用（%）',type:'text',placeholder:'例：5%（入居中）'},
+  {id:'overallComment',label:'担当者の総評',type:'textarea',placeholder:'この物件・エリアに対する担当者の率直な意見'},
+];
+
+function renderHearingPanels(){
+  const container=document.getElementById('hearingPanels');
+  if(!container)return;
+  container.innerHTML='';
+  for(let i=1;i<=4;i++){
+    const panel=document.createElement('div');
+    panel.className='tab-panel'+(i===1?' active':'');
+    panel.id='hearing-panel-'+i;
+    let html='<div class="hearing-grid">';
+    HEARING_FIELDS.forEach(f=>{
+      const fid=`h${i}_${f.id}`;
+      const isArea=f.id==='targetCustomer'||f.id==='minRent'||f.id==='floorWall'||f.id==='propaneGas'||f.id==='popularProperty'||f.id==='overallComment';
+      html+=`<div class="field${isArea?' field-full':''}">
+        <label>${f.label}</label>
+        ${f.type==='textarea'
+          ?`<textarea id="${fid}" placeholder="${f.placeholder}" style="min-height:60px"></textarea>`
+          :`<input type="${f.type}" id="${fid}" placeholder="${f.placeholder}">`}
+      </div>`;
+    });
+    html+='</div>';
+    panel.innerHTML=html;
+    container.appendChild(panel);
+  }
+}
+
+function switchHearingTab(n){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===n-1));
+  updateHearingBadge();
+}
+
+function updateHearingBadge(){
+  let filled=0;
+  for(let i=1;i<=3;i++){
+    const nm=document.getElementById('h'+i+'_storeName')?.value;
+    if(nm)filled++;
+  }
+  const b=document.getElementById('badge-rental');
+  if(filled>=3){b.textContent='3社完了';b.className='section-badge badge-ok'}
+  else if(filled>0){b.textContent=filled+'/3社';b.className='section-badge badge-warn'}
+  else{b.textContent='未確認';b.className='section-badge badge-todo'}
+}
+
+// ══ BCR/FAR CHECK ══
+function checkBCRFAR(){
+  const landArea=parseFloat(document.getElementById('propLandArea')?.value)||0;
+  const floorArea=parseFloat(document.getElementById('propFloorArea')?.value)||0;
+  const bcr=parseFloat(document.getElementById('propBCR')?.value)||0;
+  const far=parseFloat(document.getElementById('propFAR')?.value)||0;
+  const warn=document.getElementById('bcrWarning');
+  if(!warn)return;
+  const msgs=[];
+  if(landArea>0&&floorArea>0&&bcr>0){
+    const actualBCR=Math.round(floorArea/landArea/parseFloat(document.getElementById('propUnits')?.value||1)*100);
+    // FAR check: floor/land
+    if(far>0){const actualFAR=Math.round(floorArea/landArea*100);if(actualFAR>far*1.05)msgs.push(`容積率超過の可能性（実態${actualFAR}% / 法定${far}%）`);}
+  }
+  // simple check: if both bcr and far entered, check floor/land ratio
+  if(landArea>0&&floorArea>0&&far>0){
+    const actualFAR=Math.round(floorArea/landArea*100);
+    if(actualFAR>far+5){msgs.push(`容積率超過の可能性（床面積÷土地面積=${actualFAR}% > 容積率${far}%）— 役所で確認を`)}
+  }
+  if(msgs.length>0){warn.classList.add('show');document.getElementById('bcrWarningText').textContent=msgs.join(' / ');}
+  else warn.classList.remove('show');
+}
+
+// ══ BANK DOC CHECKS ══
+const BANK_DOCS=[
+  '本人確認書類（運転免許証・マイナンバー）',
+  '源泉徴収票 or 確定申告書（2〜3年分）',
+  '住民税決定通知書（直近）',
+  '預金残高証明書（2ヶ月前後）',
+  '既保有物件の謄本・賃貸借契約書',
+  '既保有ローン残高証明書',
+  '法人決算書（3期分）',
+  '物件登記簿謄本',
+  '固定資産税課税明細書',
+  'レントロール（賃貸借条件一覧）',
+  '収支計画書（シミュレーション）',
+  '物件概要書・パンフレット',
+];
+function renderBankDocChecks(){
+  const c=document.getElementById('bankDocChecks');if(!c)return;
+  c.innerHTML=BANK_DOCS.map((doc,i)=>`
+    <label class="bank-check-item" id="bdoc-${i}" onclick="toggleBankDoc(${i})">
+      <input type="checkbox" id="bdoc-cb-${i}" onchange="toggleBankDoc(${i});event.stopPropagation()">
+      <span style="flex:1;font-size:11px">${doc}</span>
+      <span class="bank-check-status" id="bdoc-status-${i}">未</span>
+    </label>`).join('');
+}
+function toggleBankDoc(i){
+  const cb=document.getElementById('bdoc-cb-'+i);
+  const item=document.getElementById('bdoc-'+i);
+  const status=document.getElementById('bdoc-status-'+i);
+  if(!cb)return;
+  // toggle is handled by label click naturally, just update styles
+  setTimeout(()=>{
+    const checked=cb.checked;
+    item.classList.toggle('have',checked);
+    item.classList.toggle('nothave',!checked&&item.classList.contains('nothave'));
+    status.textContent=checked?'✓ あり':'未';
+    updateFinanceBadge();
+    if(currentPropId)saveData();
+  },0);
+}
+function updateFinanceBadge(){
+  const total=BANK_DOCS.length;
+  const have=[...document.querySelectorAll('[id^="bdoc-cb-"]')].filter(c=>c.checked).length;
+  const b=document.getElementById('badge-finance');
+  if(!b)return;
+  b.textContent=have===total?'書類完備':have>0?have+'/'+total+'件':' 未確認';
+  b.className='section-badge '+(have===total?'badge-ok':have>0?'badge-warn':'badge-todo');
+}
+
+// ══ SENSITIVITY TABLE ══
+function renderSensTable(){
+  const price=parseFloat(document.getElementById('propPrice')?.value)||parseFloat(document.getElementById('simPrice')?.value)||2480;
+  const annualRent=parseFloat(document.getElementById('simAnnualRent')?.value)||300;
+  const downPay=parseFloat(document.getElementById('sensDown')?.value)||500;
+  document.getElementById('sensPrice').textContent=price.toLocaleString()+'万円';
+  document.getElementById('sensRent').textContent=annualRent.toLocaleString()+'万円/年';
+  const RATES=[1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0];
+  const TERMS=[10,15,20,25,30,35];
+  const loan=price-downPay;
+  const occupancy=0.9;
+  const expRate=0.10; // mgmt+repair
+  const fixedTax=25;
+  const incomeTax=0.30;
+  const acqTax=30;
+  const tbl=document.getElementById('sensTable');if(!tbl)return;
+  let html=`<thead><tr><th>金利 ↓ / 期間 →</th>${TERMS.map(t=>`<th>${t}年</th>`).join('')}</tr></thead><tbody>`;
+  RATES.forEach(r=>{
+    html+=`<tr><td class="row-head">${r.toFixed(1)}%</td>`;
+    TERMS.forEach(t=>{
+      const monthR=r/100/12;const n=t*12;
+      const annualLoan=loan>0&&r>0?loan*monthR*Math.pow(1+monthR,n)/(Math.pow(1+monthR,n)-1)*12:loan/t;
+      const rent=annualRent*occupancy;
+      const expenses=rent*expRate+fixedTax;
+      const interest=loan>0&&r>0?loan*(r/100):0;
+      const taxable=rent-expenses-(interest); // simplified (no depr)
+      const taxPay=taxable>0?taxable*incomeTax:0;
+      const cf=Math.round(rent-expenses-annualLoan-taxPay);
+      let cls=cf>=120?'sens-green':cf>=0?'sens-warn':'sens-red';
+      html+=`<td class="${cls}">${cf>=0?'+':''}${cf.toLocaleString()}</td>`;
+    });
+    html+=`</tr>`;
+  });
+  html+=`</tbody>`;
+  tbl.innerHTML=html;
+}
+
+// ══ BANK SUMMARY (auto-collect) ══
+function updateBankSummary(){
+  const get=id=>document.getElementById(id)?.value||'—';
+  const setText2=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v||'—'};
+  setText2('bs-name',get('propName'));
+  setText2('bs-addr',get('propAddr'));
+  setText2('bs-price',(parseFloat(get('propPrice'))||0).toLocaleString()+'万円');
+  setText2('bs-structure',get('propStructure')+(get('propAge')!=='—'?' 築'+get('propAge')+'年':''));
+  setText2('bs-yield',get('propYield')+'%');
+  setText2('bs-rent',document.getElementById('drvFullRent')?.textContent||'—');
+  setText2('bs-area','土地'+get('propLandArea')+'㎡ / 床'+get('propFloorArea')+'㎡');
+  setText2('bs-land',document.getElementById('drvLandCalc')?.textContent||'—');
+  setText2('bs-income',document.getElementById('va-propval')?.textContent||'—');
+  setText2('bs-area-pop',(get('areaMunic')||'')+' '+(get('areaPop')||'')+' 万人 '+(get('areaTrend')||''));
+  setText2('bs-occupancy',get('rentalOccupancy')+'%');
+  const strat=activeStrategy?['①築浅キャピタル','②地銀インカム＆キャピタル','③築古土地値'][activeStrategy-1]:'—';
+  setText2('bs-strategy',strat);
+  setText2('bs-exit',get('exitPeriod')+'保有 / '+get('exitPrice')+'万円で売却想定');
+  // CCR and CF from KPI if available
+  const ccrEl=document.querySelector('#kpiRow .kpi-val');
+  setText2('bs-ccr',ccrEl?ccrEl.textContent:'—');
+  const simCards=document.querySelector('#simResultCards .result-card-val');
+  setText2('bs-cf',simCards?simCards.textContent+'万円/年':'—');
+}
+
+function printBankPDF(){
+  updateBankSummary();
+  renderSensTable();
+  window.print();
+}
+
+// ══ PROPERTY NAME INLINE EDIT ══
+function renderSidebar(){
+  const list=document.getElementById('propertyList');
+  const props=getProperties();
+  if(!props.length){list.innerHTML='<div style="padding:16px 20px;font-size:11px;color:var(--muted)">物件がありません</div>';return}
+  list.innerHTML=props.map((p,idx)=>`
+    <div class="property-item ${p.id===currentPropId?'active':''}" id="pitem-${p.id}">
+      <div class="property-dot" onclick="loadProperty('${p.id}')"></div>
+      <div style="flex:1;min-width:0" onclick="loadProperty('${p.id}')">
+        <div style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name||'無題物件'}</div>
+        ${idx>=6?'<div class="prop-item-save-badge">保存推奨</div>':''}
+      </div>
+      <span style="font-size:11px;cursor:pointer;color:var(--muted);padding:2px 4px" title="名前を変更" onclick="renameProp('${p.id}',event)">✏</span>
+    </div>`).join('');
+}
+function renameProp(id,e){
+  e.stopPropagation();
+  const props=getProperties();const p=props.find(x=>x.id===id);if(!p)return;
+  const newName=prompt('物件名を入力してください',p.name||'');
+  if(newName===null)return;
+  p.name=newName.trim()||p.name;
+  saveProperties(props);renderSidebar();
+  if(id===currentPropId){document.getElementById('propNameDisplay').textContent=p.name;document.getElementById('propName').value=p.name;}
+  showToast('名前を変更しました');
+}
+
+// Override newProperty with 10-limit check
+function newProperty(){
+  const props=getProperties();
+  if(props.length>=10){showToast('最大10件です。不要な物件を削除してください');return}
+  const id='prop_'+Date.now();
+  props.push({id,name:'新規物件 '+(props.length+1),createdAt:new Date().toISOString(),data:{}});
+  saveProperties(props);loadProperty(id);renderSidebar();showToast('新規物件を作成しました');
+}
+
+// ══ INIT ══
+document.addEventListener('DOMContentLoaded',()=>{
+  renderAllChecks();renderRepairGrid();renderSimInputs();
+  buildMatrix('matrix1');buildMatrix('matrix2');buildMatrix('matrix3');
+  renderHearingPanels();renderBankDocChecks();
+  renderSidebar();runSim();renderSensTable();
+  const props=getProperties();
+  if(props.length>0)loadProperty(props[props.length-1].id);else newProperty();
+  setTimeout(()=>{recalcAll();recalcValuation();updateBankSummary();},100);
+  let saveTimer;
+  document.addEventListener('input',()=>{
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(()=>{if(currentPropId)saveData()},2000);
+    updateProgress();updateHearingBadge();
+    updateBankSummary();renderSensTable();
+  });
+  document.addEventListener('change',()=>{updateProgress();updateSectionBadges();updateBankSummary();renderSensTable();if(currentPropId)saveData()});
+  // Tooltip fixed positioning
+  document.querySelectorAll('.tip-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const popup=btn.parentElement.querySelector('.tip-popup');
+      if(!popup)return;
+      document.querySelectorAll('.tip-popup.show').forEach(p=>{if(p!==popup)p.classList.remove('show')});
+      const rect=btn.getBoundingClientRect();
+      popup.style.top=(rect.top+window.scrollY-popup.offsetHeight-8)+'px';
+      popup.style.left=Math.min(rect.left,window.innerWidth-270)+'px';
+      popup.classList.toggle('show');
+    });
+  });
+});
+// ══ LOGIN ══
+function getTodayKey(){
+  const d=new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  // password = YYYYMMDD + suffix (suffix stored only in user's head)
+  return y+m+day;
+}
+function doLogin(){
+  const input=document.getElementById('loginInput')?.value||'';
+  const errEl=document.getElementById('loginError');
+  // validate: input must be todayDateString + "kuma"
+  const expected=getTodayKey()+'kuma';
+  if(input===expected){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appContent').style.display='flex';
+    sessionStorage.setItem('ddauth',getTodayKey());
+  } else {
+    if(errEl){errEl.textContent='パスワードが違います。もう一度お試しください。';setTimeout(()=>{errEl.textContent=''},3000);}
+    document.getElementById('loginInput').value='';
+    document.getElementById('loginInput').focus();
+  }
+}
+// auto-unlock if already authenticated today
+(function(){
+  const stored=sessionStorage.getItem('ddauth');
+  if(stored&&stored===getTodayKey()){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appContent').style.display='flex';
+  } else {
+    // show date hint (format only, no password)
+    const h=document.getElementById('loginDateHint');
+    if(h){const d=new Date();h.textContent='ヒント形式：YYYYMMDD＋キーワード（例：'+d.getFullYear()+'MMDD＋キーワード）';}
+    setTimeout(()=>{document.getElementById('loginInput')?.focus()},100);
+  }
+})();
+</script>
+</body>
+</html>
