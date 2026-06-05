@@ -259,6 +259,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .buy-caution{background:linear-gradient(135deg,rgba(212,148,58,0.2),rgba(212,148,58,0.1));border:1px solid rgba(212,148,58,0.5);color:var(--warn)}
 .buy-no{background:linear-gradient(135deg,rgba(224,85,85,0.2),rgba(224,85,85,0.1));border:1px solid rgba(224,85,85,0.5);color:var(--danger)}
 
+/* Property status */
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:0.04em;white-space:nowrap}
+.status-kento{background:rgba(122,128,153,0.2);color:var(--muted)}
+.status-kaitsuke{background:rgba(212,168,67,0.2);color:var(--gold)}
+.status-kounyuzumi{background:rgba(61,184,122,0.2);color:var(--green)}
+.status-miokuri{background:rgba(224,85,85,0.15);color:var(--danger)}
+.property-item .status-badge{font-size:8px;padding:1px 5px}
+
+/* Portfolio banner */
+.portfolio-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(61,184,122,0.08);border:1px solid rgba(61,184,122,0.3);border-radius:8px;margin-bottom:14px}
+.portfolio-banner a{color:var(--green);font-weight:700;font-size:12px;text-decoration:none}
+.portfolio-banner a:hover{text-decoration:underline}
+
 /* Inline property name edit */
 .prop-name-edit{background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--muted);font-size:12px;width:140px;padding:2px 4px;font-family:var(--font-sans);outline:none;cursor:text}
 .prop-name-edit:focus{border-bottom-color:var(--gold);color:var(--text)}
@@ -320,6 +333,37 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .sub-memo-input{background:rgba(255,255,255,0.04)!important;border:1px dashed rgba(122,128,153,0.3)!important;border-radius:4px!important;font-size:10px!important;padding:4px 8px!important;color:var(--muted)!important;width:100%!important;transition:all 0.2s!important}
 .sub-memo-input:focus{border-color:rgba(212,168,67,0.5)!important;background:rgba(212,168,67,0.04)!important;color:var(--text)!important;outline:none!important}
 .sub-memo-input.has-content{border-color:rgba(212,168,67,0.4)!important;color:var(--gold2)!important;background:rgba(212,168,67,0.05)!important}
+
+/* Owner hearing grid */
+.owner-hearing-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+.oh-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.oh-label{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:2px}
+.oh-sublabel{font-size:10px;color:var(--muted);margin-bottom:8px;line-height:1.5}
+.oh-item textarea{width:100%;min-height:80px;background:rgba(0,0,0,0.2);border:1px solid rgba(42,48,71,0.8);border-radius:5px;color:var(--text);font-size:11px;padding:8px 10px;resize:vertical;line-height:1.6}
+.oh-item textarea:focus{border-color:var(--gold);outline:none}
+@media(max-width:600px){.owner-hearing-grid{grid-template-columns:1fr}}
+
+/* Risk item */
+.risk-item{padding:12px 14px;border-radius:7px;margin-bottom:8px;border-left:3px solid}
+.risk-high{background:rgba(224,85,85,0.08);border-color:var(--danger)}
+.risk-mid{background:rgba(212,148,58,0.08);border-color:var(--warn)}
+.risk-low{background:rgba(122,128,153,0.08);border-color:var(--muted)}
+.risk-title{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.risk-desc{font-size:11px;color:var(--muted);line-height:1.7}
+.risk-advice{font-size:11px;color:var(--green);margin-top:6px;padding:6px 10px;background:rgba(61,184,122,0.06);border-radius:4px}
+
+/* Demand supply grid */
+.demand-supply-grid{display:grid;grid-template-columns:140px 1fr 1fr 80px;gap:4px;font-size:11px;margin-bottom:4px}
+.ds-header{font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;padding:4px 6px;border-bottom:1px solid var(--border);font-weight:600}
+.ds-label{color:var(--text);font-size:11px;padding:5px 6px;display:flex;align-items:center;border-bottom:1px solid rgba(42,48,71,0.5)}
+.ds-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;padding:4px 8px;outline:none;transition:border-color 0.15s}
+.ds-input:focus{border-color:var(--gold)}
+.ds-input.ai-filled{border-color:rgba(74,143,212,0.4);color:var(--blue)}
+.ds-judge{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border-radius:4px;padding:4px}
+.ds-judge.oversupply{background:rgba(224,85,85,0.12);color:var(--danger)}
+.ds-judge.undersupply{background:rgba(61,184,122,0.12);color:var(--green)}
+.ds-judge.balanced{background:rgba(122,128,153,0.12);color:var(--muted)}
+@media(max-width:600px){.demand-supply-grid{grid-template-columns:100px 1fr 1fr 60px}}
 
 /* Sensitivity table */
 .sens-wrap{overflow-x:auto;margin-top:12px}
@@ -550,6 +594,36 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="field"><label>総戸数</label><input type="number" id="propUnits" placeholder="8" oninput="recalcAll()"></div>
       </div>
 
+      <!-- 家賃収入サマリー -->
+      <hr class="divider">
+      <div class="subsection-title" style="margin-top:0">家賃収入サマリー</div>
+      <div class="field-grid">
+        <div class="field">
+          <label>現状家賃収入（月）</label>
+          <input type="number" id="rentCurrentMonth" placeholder="例：350000（円）" oninput="recalcRentSummary()">
+        </div>
+        <div class="field">
+          <label>満室時家賃収入（月）</label>
+          <input type="number" id="rentFullMonth" placeholder="例：400000（円）" oninput="recalcRentSummary()">
+        </div>
+        <div class="field">
+          <label>現状家賃収入（年・自動）</label>
+          <input type="number" id="rentCurrentYear" readonly placeholder="自動計算" style="background:rgba(0,0,0,0.2);color:var(--gold)">
+        </div>
+        <div class="field">
+          <label>満室時家賃収入（年・自動）</label>
+          <input type="number" id="rentFullYear" readonly placeholder="自動計算" style="background:rgba(0,0,0,0.2);color:var(--gold)">
+        </div>
+        <div class="field">
+          <label>現状表面利回り（自動）</label>
+          <input type="text" id="rentCurrentYield" readonly placeholder="—" style="background:rgba(0,0,0,0.2);color:var(--green);font-weight:700">
+        </div>
+        <div class="field">
+          <label>最大表面利回り・満室時（自動）</label>
+          <input type="text" id="rentFullYield" readonly placeholder="—" style="background:rgba(0,0,0,0.2);color:var(--gold);font-weight:700">
+        </div>
+      </div>
+
       <hr class="divider">
       <div class="subsection-title" style="margin-top:0">土地・建物情報</div>
       <div class="field-grid">
@@ -592,7 +666,24 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
       <hr class="divider">
       <div class="subsection-title" style="margin-top:0">物件詳細情報</div>
+
+      <!-- ポートフォリオ誘導バナー（購入済み時のみ表示） -->
+      <div class="portfolio-banner" id="portfolioBanner" style="display:none">
+        <span>🎉</span>
+        <div style="flex:1;font-size:12px;color:var(--green)">購入済み物件です。ポートフォリオシートで収支・資産管理を行いましょう。</div>
+        <a href="portfolio.html" target="_blank">📊 ポートフォリオシートを開く →</a>
+      </div>
+
       <div class="field-grid">
+        <div class="field">
+          <label>物件ステータス</label>
+          <select id="propStatus" onchange="onStatusChange()">
+            <option value="kento">🔍 検討中</option>
+            <option value="kaitsuke">📝 買付済</option>
+            <option value="kounyuzumi">🏠 購入済み</option>
+            <option value="miokuri">❌ 見送り</option>
+          </select>
+        </div>
         <div class="field">
           <label>階数</label>
           <input type="text" id="propFloors" placeholder="例：地上3階建て">
@@ -635,6 +726,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <label>宅建免許番号</label>
           <input type="text" id="propAgencyLicense" placeholder="例：国土交通大臣（3）第〇〇〇〇号">
         </div>
+        <div class="field">
+          <label>現入居率（%）</label>
+          <input type="number" id="rentalOccupancy" placeholder="87.5" oninput="recalcRentalDemand()">
+        </div>
+        <div class="field">
+          <label>管理会社</label>
+          <input type="text" id="rentalMgmt" placeholder="例：〇〇不動産管理">
+        </div>
+        <div class="field">
+          <label>管理費率（%）</label>
+          <input type="number" id="rentalMgmtFee" placeholder="5" oninput="syncSim()">
+        </div>
+        <div class="field field-full">
+          <label>売却理由（ヒアリング内容）</label>
+          <textarea id="rentalSellReason" placeholder="業者から聞いた売却理由をそのまま記録"></textarea>
+        </div>
       </div>
 
       <!-- 土地積算 derived -->
@@ -642,32 +749,38 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="land-derived-item"><span class="derived-label">土地価格（路線価×面積）</span><span class="derived-val" id="drvLandCalc">—</span></div>
         <div class="land-derived-item"><span class="derived-label">実勢価格（土地価格×1.15）</span><span class="derived-val" id="drvJisseki">—</span></div>
         <div class="land-derived-item"><span class="derived-label">土地積算割合（土地÷建物+土地）</span><span class="derived-val" id="drvLandRatio">—</span></div>
-        <div class="land-derived-item"><span class="derived-label">土地÷物件価格</span><span class="derived-val" id="drvLandVsPrice">—</span></div>
+        <div class="land-derived-item">
+          <span class="derived-label">土地÷物件価格</span>
+          <span class="derived-val" id="drvLandVsPrice">—</span>
+          <span id="landRatioEval" style="display:none;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:6px"></span>
+        </div>
       </div>
 
       <!-- 収益還元法 建物価格評価 -->
       <div class="subsection-title" style="margin-top:16px">収益還元法ベース 建物価格評価</div>
       <div class="val-inputs-row">
         <div class="field"><label>Cap Rate（%）— 直接還元利回り <button class="tip-btn" onclick="showTip('valCapRate',this);event.stopPropagation()">?</button></label><input type="number" id="valCapRate" placeholder="例：7.5（近畿圏木造：8〜10%）" step="0.1" oninput="recalcValuation()"></div>
-        <div class="field"><label>空室・経費控除率（%）</label><input type="number" id="valExpenseRate" placeholder="例：25（空室+管理+修繕）" oninput="recalcValuation()"></div>
-        <div class="field"><label>35年後 年間地価変動率（%）</label><input type="number" id="valLandGrowth" placeholder="例：-0.5" step="0.1" oninput="recalcValuation()"></div>
+        <div class="field"><label>空室・経費控除率（%）<button class="tip-btn" onclick="showTip('valExpenseRate',this);event.stopPropagation()">?</button></label><input type="number" id="valExpenseRate" placeholder="例：25（空室+管理+修繕）" oninput="recalcValuation()"></div>
+        <div class="field"><label>割引率 r（DCF用・%）<button class="tip-btn" onclick="showTip('valDiscountRate',this);event.stopPropagation()">?</button></label><input type="number" id="valDiscountRate" placeholder="例：8（期待収益率）" step="0.1" oninput="recalcValuation()"></div>
+        <div class="field"><label>年間地価変動率（%）<button class="tip-btn" onclick="showTip('valLandGrowth',this);event.stopPropagation()">?</button></label><input type="number" id="valLandGrowth" placeholder="例：-0.5" step="0.1" oninput="recalcValuation()"></div>
       </div>
       <div class="valuation-panel" id="valuationPanel">
         <div class="val-card">
           <div class="val-card-title">A）直接還元法（NOI ÷ Cap Rate）</div>
-          <div class="val-formula">NOI = 満室年収 × (1 − 経費率)<br>収益価値 = NOI ÷ Cap Rate<br>建物価格(収益) = 収益価値 − 土地価格</div>
+          <div class="val-formula">NOI = 満室年収 × (1 − 経費率)<br>収益価値 = NOI ÷ Cap Rate<br>建物価格 = 収益価値 − 土地価格</div>
           <div class="val-result"><span class="val-key">NOI（年）</span><span class="val-num" id="va-noi">—</span></div>
           <div class="val-result"><span class="val-key">物件収益価格</span><span class="val-num" id="va-propval">—</span></div>
           <div class="val-result"><span class="val-key">建物価格（収益）</span><span class="val-num" id="va-bldval">—</span></div>
           <div class="val-result"><span class="val-key" style="font-weight:700">書類価格との乖離</span><span class="val-num" id="va-diff">—</span></div>
         </div>
         <div class="val-card">
-          <div class="val-card-title">B）積算按分（収益価格から土地を逆算）</div>
-          <div class="val-formula">積算土地価格 = 路線価 × 面積 × 80%<br>建物価格(積算) = 物件価格 − 積算土地価格<br>比較：収益法 vs 積算法</div>
-          <div class="val-result"><span class="val-key">積算土地価格</span><span class="val-num" id="vb-land">—</span></div>
-          <div class="val-result"><span class="val-key">建物価格（積算按分）</span><span class="val-num" id="vb-bld">—</span></div>
-          <div class="val-result"><span class="val-key">収益法との差</span><span class="val-num" id="vb-diff">—</span></div>
-          <div class="val-result"><span class="val-key" style="font-weight:700">採用建物価格（保守的）</span><span class="val-num" id="vb-adopt">—</span></div>
+          <div class="val-card-title">B）DCF法（割引キャッシュフロー）</div>
+          <div class="val-formula">PV = Σ NOI/(1+r)^t + 復帰価値/(1+r)^n<br>復帰価値 = n年目NOI ÷ Cap Rate<br>保有年数はCFシミュレーションと連動</div>
+          <div class="val-result"><span class="val-key">分析期間</span><span class="val-num" id="vb-period">—</span></div>
+          <div class="val-result"><span class="val-key">NOI現在価値合計</span><span class="val-num" id="vb-pvnoi">—</span></div>
+          <div class="val-result"><span class="val-key">復帰価値（現在価値）</span><span class="val-num" id="vb-pvreversal">—</span></div>
+          <div class="val-result"><span class="val-key" style="font-weight:700">DCF収益価格</span><span class="val-num" id="vb-dcfval">—</span></div>
+          <div class="val-result"><span class="val-key">物件価格との差</span><span class="val-num" id="vb-dcfdiff">—</span></div>
         </div>
       </div>
       <div id="valuationVerdict" class="val-verdict verdict-warn" style="display:none"></div>
@@ -935,15 +1048,96 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
     </div>
     <div class="section-body">
 
-      <!-- 共通データ -->
-      <div class="field-grid">
-        <div class="field"><label>現入居率（%）</label><input type="number" id="rentalOccupancy" placeholder="87.5"></div>
-        <div class="field"><label>満室想定家賃（万円/月）</label><input type="number" id="rentalFull" placeholder="25" oninput="syncSim()"></div>
-        <div class="field"><label>現行平均賃料（円/㎡）</label><input type="number" id="rentalPerSqm" placeholder="1800"></div>
-        <div class="field"><label>近隣相場（円/㎡）</label><input type="number" id="rentalMarket" placeholder="1950"></div>
-        <div class="field"><label>管理会社</label><input type="text" id="rentalMgmt" placeholder="例：〇〇不動産管理"></div>
-        <div class="field"><label>管理費率（%）</label><input type="number" id="rentalMgmtFee" placeholder="5" oninput="syncSim()"></div>
-        <div class="field field-full"><label>売却理由（ヒアリング内容）</label><textarea id="rentalSellReason" placeholder="業者から聞いた売却理由をそのまま記録"></textarea></div>
+      <!-- 需給データ -->
+      <div class="subsection-title" style="margin-top:0">需給アンバランス調査</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+        <span style="font-size:11px;color:var(--muted)">LIFULL HOME'S 投資用データで間取り・面積・築年数の需給を確認：</span>
+        <a href="https://toushi.homes.co.jp/owner/" target="_blank"
+          style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(74,143,212,0.12);border:1px solid rgba(74,143,212,0.3);border-radius:6px;color:var(--blue);font-size:11px;font-weight:600;text-decoration:none;transition:all 0.2s"
+          onmouseover="this.style.background='rgba(74,143,212,0.22)'" onmouseout="this.style.background='rgba(74,143,212,0.12)'">
+          🏠 LIFULL HOME'S 投資用データ ↗
+        </a>
+        <button class="btn btn-ghost" style="font-size:10px;padding:5px 12px" onclick="fetchLIFULLData()">
+          🤖 AI自動取得
+        </button>
+        <button class="btn" style="font-size:10px;padding:5px 14px;background:rgba(61,184,122,0.15);border-color:rgba(61,184,122,0.4);color:var(--green)" onclick="runDemandEval()" id="btnDemandEval">
+          ✅ 需給評価を実行
+        </button>
+        <div class="matrix-mini-spin" id="lifullSpin"></div>
+        <span style="font-size:9px;color:var(--muted)" id="lifullStatus"></span>
+      </div>
+
+      <!-- 市区町村入力（AI取得用） -->
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+        <input type="text" id="lifullMunic" placeholder="市区町村名（例：名古屋市南区）" style="max-width:220px">
+        <span style="font-size:10px;color:var(--muted)">← AI取得時に使用</span>
+      </div>
+
+      <!-- 間取り需給 -->
+      <div class="subsection-title" style="font-size:10px;margin-top:0">間取り需給（入居希望者の検索割合 vs 掲載物件割合）</div>
+      <div class="demand-supply-grid" id="demandLayoutGrid">
+        <div class="ds-header">間取り</div><div class="ds-header">検索割合（需要）</div><div class="ds-header">掲載割合（供給）</div><div class="ds-header">需給判定</div>
+        <div class="ds-label">ワンルーム/1K/1DK</div><input type="text" class="ds-input" id="ds_layout_1r_demand" placeholder="例：18.3%"><input type="text" class="ds-input" id="ds_layout_1r_supply" placeholder="例：16.9%"><div class="ds-judge" id="ds_layout_1r_judge">—</div>
+        <div class="ds-label">1LDK/2K/2DK</div><input type="text" class="ds-input" id="ds_layout_2k_demand" placeholder="—"><input type="text" class="ds-input" id="ds_layout_2k_supply" placeholder="—"><div class="ds-judge" id="ds_layout_2k_judge">—</div>
+        <div class="ds-label">2LDK/3K/3DK</div><input type="text" class="ds-input" id="ds_layout_3k_demand" placeholder="—"><input type="text" class="ds-input" id="ds_layout_3k_supply" placeholder="—"><div class="ds-judge" id="ds_layout_3k_judge">—</div>
+        <div class="ds-label">3LDK/4K/4DK</div><input type="text" class="ds-input" id="ds_layout_4k_demand" placeholder="—"><input type="text" class="ds-input" id="ds_layout_4k_supply" placeholder="—"><div class="ds-judge" id="ds_layout_4k_judge">—</div>
+      </div>
+
+      <!-- 築年数需給 -->
+      <div class="subsection-title" style="font-size:10px;margin-top:14px">築年数需給（入居希望者の検索割合 vs 掲載物件割合）</div>
+      <div class="demand-supply-grid" id="demandAgeGrid">
+        <div class="ds-header">築年数</div><div class="ds-header">検索割合（需要）</div><div class="ds-header">掲載割合（供給）</div><div class="ds-header">需給判定</div>
+        <div class="ds-label">〜10年</div><input type="text" class="ds-input" id="ds_age_10_demand" placeholder="—"><input type="text" class="ds-input" id="ds_age_10_supply" placeholder="—"><div class="ds-judge" id="ds_age_10_judge">—</div>
+        <div class="ds-label">〜15年</div><input type="text" class="ds-input" id="ds_age_15_demand" placeholder="—"><input type="text" class="ds-input" id="ds_age_15_supply" placeholder="—"><div class="ds-judge" id="ds_age_15_judge">—</div>
+        <div class="ds-label">〜20年</div><input type="text" class="ds-input" id="ds_age_20_demand" placeholder="—"><input type="text" class="ds-input" id="ds_age_20_supply" placeholder="—"><div class="ds-judge" id="ds_age_20_judge">—</div>
+        <div class="ds-label">〜25年</div><input type="text" class="ds-input" id="ds_age_25_demand" placeholder="—"><input type="text" class="ds-input" id="ds_age_25_supply" placeholder="—"><div class="ds-judge" id="ds_age_25_judge">—</div>
+        <div class="ds-label">〜30年</div><input type="text" class="ds-input" id="ds_age_30_demand" placeholder="—"><input type="text" class="ds-input" id="ds_age_30_supply" placeholder="—"><div class="ds-judge" id="ds_age_30_judge">—</div>
+        <div class="ds-label">31年以上</div><input type="text" class="ds-input" id="ds_age_31_demand" placeholder="—"><input type="text" class="ds-input" id="ds_age_31_supply" placeholder="—"><div class="ds-judge" id="ds_age_31_judge">—</div>
+      </div>
+
+      <!-- 希望家賃需給 -->
+      <div class="subsection-title" style="font-size:10px;margin-top:14px">希望家賃需給（入居希望者の検索割合 vs 掲載物件割合）</div>
+      <div class="demand-supply-grid" id="demandRentGrid">
+        <div class="ds-header">家賃帯</div><div class="ds-header">検索割合（需要）</div><div class="ds-header">掲載割合（供給）</div><div class="ds-header">需給判定</div>
+        <div class="ds-label">〜3万円</div><input type="text" class="ds-input" id="ds_rent_3_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_3_supply" placeholder="—"><div class="ds-judge" id="ds_rent_3_judge">—</div>
+        <div class="ds-label">3〜4万円</div><input type="text" class="ds-input" id="ds_rent_4_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_4_supply" placeholder="—"><div class="ds-judge" id="ds_rent_4_judge">—</div>
+        <div class="ds-label">4〜5万円</div><input type="text" class="ds-input" id="ds_rent_5_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_5_supply" placeholder="—"><div class="ds-judge" id="ds_rent_5_judge">—</div>
+        <div class="ds-label">5〜6万円</div><input type="text" class="ds-input" id="ds_rent_6_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_6_supply" placeholder="—"><div class="ds-judge" id="ds_rent_6_judge">—</div>
+        <div class="ds-label">6〜7万円</div><input type="text" class="ds-input" id="ds_rent_7_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_7_supply" placeholder="—"><div class="ds-judge" id="ds_rent_7_judge">—</div>
+        <div class="ds-label">7〜8万円</div><input type="text" class="ds-input" id="ds_rent_8_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_8_supply" placeholder="—"><div class="ds-judge" id="ds_rent_8_judge">—</div>
+        <div class="ds-label">8〜10万円</div><input type="text" class="ds-input" id="ds_rent_10_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_10_supply" placeholder="—"><div class="ds-judge" id="ds_rent_10_judge">—</div>
+        <div class="ds-label">10万円〜</div><input type="text" class="ds-input" id="ds_rent_hi_demand" placeholder="—"><input type="text" class="ds-input" id="ds_rent_hi_supply" placeholder="—"><div class="ds-judge" id="ds_rent_hi_judge">—</div>
+      </div>
+
+      <!-- 住戸の広さ需給 -->
+      <div class="subsection-title" style="font-size:10px;margin-top:14px">住戸の広さ需給（入居希望者の検索割合 vs 掲載物件割合）</div>
+      <div class="demand-supply-grid" id="demandAreaGrid">
+        <div class="ds-header">専有面積</div><div class="ds-header">検索割合（需要）</div><div class="ds-header">掲載割合（供給）</div><div class="ds-header">需給判定</div>
+        <div class="ds-label">〜20㎡</div><input type="text" class="ds-input" id="ds_area_20_demand" placeholder="—"><input type="text" class="ds-input" id="ds_area_20_supply" placeholder="—"><div class="ds-judge" id="ds_area_20_judge">—</div>
+        <div class="ds-label">20〜30㎡</div><input type="text" class="ds-input" id="ds_area_30_demand" placeholder="—"><input type="text" class="ds-input" id="ds_area_30_supply" placeholder="—"><div class="ds-judge" id="ds_area_30_judge">—</div>
+        <div class="ds-label">30〜40㎡</div><input type="text" class="ds-input" id="ds_area_40_demand" placeholder="—"><input type="text" class="ds-input" id="ds_area_40_supply" placeholder="—"><div class="ds-judge" id="ds_area_40_judge">—</div>
+        <div class="ds-label">40〜50㎡</div><input type="text" class="ds-input" id="ds_area_50_demand" placeholder="—"><input type="text" class="ds-input" id="ds_area_50_supply" placeholder="—"><div class="ds-judge" id="ds_area_50_judge">—</div>
+        <div class="ds-label">50〜60㎡</div><input type="text" class="ds-input" id="ds_area_60_demand" placeholder="—"><input type="text" class="ds-input" id="ds_area_60_supply" placeholder="—"><div class="ds-judge" id="ds_area_60_judge">—</div>
+        <div class="ds-label">60〜70㎡</div><input type="text" class="ds-input" id="ds_area_70_demand" placeholder="—"><input type="text" class="ds-input" id="ds_area_70_supply" placeholder="—"><div class="ds-judge" id="ds_area_70_judge">—</div>
+        <div class="ds-label">70㎡〜</div><input type="text" class="ds-input" id="ds_area_hi_demand" placeholder="—"><input type="text" class="ds-input" id="ds_area_hi_supply" placeholder="—"><div class="ds-judge" id="ds_area_hi_judge">—</div>
+      </div>
+
+      <!-- 需給サマリーメモ -->
+      <div class="field" style="margin-top:12px">
+        <label>需給分析メモ・投資判断コメント</label>
+        <textarea id="demandSupplyMemo" placeholder="例：築20〜30年の需要が高いが供給が少ない→本物件はこの層に刺さる可能性高い"></textarea>
+      </div>
+
+      <!-- 総合需給評価パネル -->
+      <div id="demandEvalPanel" style="display:none;margin-top:14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:var(--text)">📊 総合需給評価</div>
+          <div id="evalScoreBadge" style="font-size:18px;font-weight:900;padding:4px 16px;border-radius:6px">—</div>
+          <div id="evalScoreLabel" style="font-size:12px;font-weight:600">—</div>
+        </div>
+        <div id="evalAxes" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px"></div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:0.06em">総合コメント</div>
+        <div id="evalComment" style="font-size:12px;color:var(--text);line-height:1.8;padding:10px 12px;background:rgba(0,0,0,0.2);border-radius:6px;border-left:3px solid var(--gold)">—</div>
       </div>
 
       <!-- 仲介ヒアリング タブ -->
@@ -1011,7 +1205,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <div class="section-chevron">▼</div>
     </div>
     <div class="section-body">
-      <div class="subsection-title" style="margin-top:0">客付け戦略</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="subsection-title" style="margin:0">客付け戦略</div>
+        <a href="https://app.notion.com/p/yamori/6f401411fbf1422db0fa11c234bde79a" target="_blank" class="notion-ref">📋 客付け戦略ガイド（Notion）</a>
+      </div>
       <div class="field-grid">
         <div class="field"><label>ターゲット入居者層</label><input type="text" id="tenantTarget" placeholder="例：工場勤務の単身者・20〜40代"></div>
         <div class="field"><label>訴求ポイント</label><input type="text" id="tenantAppeal" placeholder="例：駅徒歩8分・リノベ済・ペット可"></div>
@@ -1161,14 +1358,97 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <div class="subsection-title" style="margin-top:0">登記・法務確認</div>
       <div class="check-list" id="inspLegal"></div>
       <hr class="divider">
-      <div class="subsection-title">建物・設備確認</div>
+      <div class="subsection-title" style="margin-top:0">🏗 建物状態・設備確認（現地で見るべきポイント）</div>
       <div class="check-list" id="inspBuilding"></div>
       <hr class="divider">
-      <div class="subsection-title">周辺環境・需要確認</div>
+      <div class="subsection-title">🌍 周辺環境・需要確認</div>
       <div class="check-list" id="inspArea"></div>
       <hr class="divider">
       <div class="field field-full"><label>現地調査の総合所見</label>
         <textarea id="inspMemo" placeholder="現地を見て感じたこと・写真で確認した内容・懸念点などを自由記述"></textarea>
+      </div>
+
+      <hr class="divider">
+
+      <!-- ══ 現オーナーヒアリング ══ -->
+      <div class="subsection-title">現オーナーヒアリング</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">売主・現オーナーから直接聞き取った内容を記録。事実確認のベースとして活用。</div>
+
+      <div class="owner-hearing-grid" id="ownerHearingGrid">
+
+        <div class="oh-item">
+          <div class="oh-label">🔧 物件設備</div>
+          <div class="oh-sublabel">注意が必要な設備・経年劣化・動作不良など</div>
+          <textarea id="oh_equipment" placeholder="例：給湯器が2016年製で交換時期が近い。エアコンは各室なし。"></textarea>
+        </div>
+
+        <div class="oh-item">
+          <div class="oh-label">🏗 修繕履歴</div>
+          <div class="oh-sublabel">注意が必要な修繕・地場の信頼できる業者情報</div>
+          <textarea id="oh_repair" placeholder="例：2020年に外壁塗装実施（〇〇建設）。屋根は未補修で雨漏り歴あり要確認。"></textarea>
+        </div>
+
+        <div class="oh-item">
+          <div class="oh-label">👥 入居者</div>
+          <div class="oh-sublabel">問題行動・滞納・長期入居者の状況など</div>
+          <textarea id="oh_tenant" placeholder="例：301号室の入居者が2ヶ月滞納中。101号室は10年超の長期入居。"></textarea>
+        </div>
+
+        <div class="oh-item">
+          <div class="oh-label">🏢 管理会社</div>
+          <div class="oh-sublabel">継承可否・管理契約詳細・レスポンス・客付け力</div>
+          <textarea id="oh_mgmt" placeholder="例：〇〇管理（月額家賃の5%）。レスポンス遅め。客付けは地元仲介に委託。継承を検討中。"></textarea>
+        </div>
+
+        <div class="oh-item">
+          <div class="oh-label">🔑 入居付け</div>
+          <div class="oh-sublabel">過去に効果があった工夫・AD設定・条件緩和など</div>
+          <textarea id="oh_leasing" placeholder="例：ADを1.5ヶ月設定したら1週間で決まった。ペット可にしたら問い合わせ増加。"></textarea>
+        </div>
+
+        <div class="oh-item">
+          <div class="oh-label">💴 その他費用</div>
+          <div class="oh-sublabel">町会費・自治会費・清掃費・その他定期費用など</div>
+          <textarea id="oh_othercost" placeholder="例：町会費 年3,000円。共用部清掃を月1回業者委託（月5,000円）。"></textarea>
+        </div>
+
+      </div>
+
+      <hr class="divider">
+
+      <!-- ══ 重要事項説明書・契約書 AIリスク分析 ══ -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap">
+        <div class="subsection-title" style="margin:0">重要事項説明書・契約書 AIリスク分析</div>
+        <span style="font-size:10px;color:var(--muted)">PDF/画像をアップロードしてAIが重要リスク箇所を抽出します</span>
+      </div>
+
+      <div class="pdf-drop-zone" id="contractDropZone" onclick="document.getElementById('contractFileInput').click()"
+        ondragover="event.preventDefault();this.classList.add('drag-over')"
+        ondragleave="this.classList.remove('drag-over')"
+        ondrop="event.preventDefault();this.classList.remove('drag-over');handleContractFile(event.dataTransfer.files[0])">
+        <div class="pdf-drop-icon">📄</div>
+        <div class="pdf-drop-text">重要事項説明書 / 売買契約書をアップロード</div>
+        <div class="pdf-drop-sub">クリックまたはドラッグ＆ドロップ — AIがリスク箇所を抽出します</div>
+        <div id="contractFilename" style="display:none;margin-top:6px;font-size:11px;color:var(--gold)"></div>
+        <div class="loading-bar" id="contractLoading"><div class="loading-fill"></div></div>
+      </div>
+      <input type="file" id="contractFileInput" accept="application/pdf,image/*" style="display:none"
+        onchange="handleContractFile(this.files[0])">
+
+      <!-- 日付系抽出 -->
+      <div id="contractDatesPanel" style="display:none;margin-top:12px">
+        <div class="subsection-title" style="font-size:10px;color:var(--gold)">📅 抽出された重要日程</div>
+        <div class="field-grid" id="contractDatesGrid"></div>
+      </div>
+
+      <!-- リスク分析結果 -->
+      <div id="contractRiskPanel" style="display:none;margin-top:14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px">⚠ AIリスク抽出結果</div>
+        <div id="contractRiskItems"></div>
+        <div style="margin-top:12px">
+          <label style="font-size:11px;color:var(--muted)">追記・確認メモ</label>
+          <textarea id="contractRiskMemo" style="margin-top:6px" placeholder="AIの指摘を踏まえた確認事項・対応策を記録"></textarea>
+        </div>
       </div>
     </div>
   </div>
@@ -1234,6 +1514,12 @@ function loadProperty(id){
   fillFields(prop.data||{});
   document.getElementById('propNameDisplay').textContent=prop.name||'—';
   document.getElementById('propDateDisplay').textContent=prop.createdAt?'登録：'+prop.createdAt.slice(0,10):'';
+  // restore status
+  const status=prop.status||'kento';
+  const statusEl=document.getElementById('propStatus');
+  if(statusEl)statusEl.value=status;
+  const banner=document.getElementById('portfolioBanner');
+  if(banner)banner.style.display=status==='kounyuzumi'?'flex':'none';
   renderSidebar();recalcAll();updateProgress();
 }
 function collectData(){
@@ -1340,12 +1626,12 @@ function recalcLand(){
     document.getElementById('drvLandCalc').textContent='土地面積・路線価を入力してください';
   }
 
-  // 手動入力がなければ土地価格を自動セット
+  // 手動入力がなければ土地価格を自動セット（手動入力済みは上書きしない）
   const lpEl=document.getElementById('propLandPrice');
-  let landPrice=parseFloat(lpEl?.value)||0;
-  if(!landPrice&&landCalc>0){
-    if(lpEl)lpEl.value=landCalc;
-    landPrice=landCalc;
+  const landPriceManual=parseFloat(lpEl?.value)||0;
+  let landPrice=landPriceManual>0?landPriceManual:landCalc;
+  if(!landPriceManual&&landCalc>0&&lpEl&&document.activeElement!==lpEl){
+    lpEl.value=landCalc;
   }
 
   const ratioEl=document.getElementById('propLandRatio');
@@ -1358,6 +1644,28 @@ function recalcLand(){
   if(ratioEl)ratioEl.value=ratioVsPrice||'';
   document.getElementById('drvLandRatio').textContent=ratio?ratio+'%（土地÷(土地+建物)）':'—';
   document.getElementById('drvLandVsPrice').textContent=ratioVsPrice?ratioVsPrice+'%（土地÷物件価格）':'—';
+
+  // 土地積算割合の評価バッジ
+  const evalEl=document.getElementById('landRatioEval');
+  if(evalEl&&ratioVsPrice>0){
+    evalEl.style.display='inline-block';
+    if(ratioVsPrice<50){
+      evalEl.textContent='⛔ 見送り推奨';
+      evalEl.style.background='rgba(224,85,85,0.15)';evalEl.style.color='var(--danger)';
+    } else if(ratioVsPrice<65){
+      evalEl.textContent='△ 可';
+      evalEl.style.background='rgba(212,148,58,0.15)';evalEl.style.color='var(--warn)';
+    } else if(ratioVsPrice<80){
+      evalEl.textContent='○ 良';
+      evalEl.style.background='rgba(212,168,67,0.15)';evalEl.style.color='var(--gold)';
+    } else if(ratioVsPrice<=100){
+      evalEl.textContent='◎ 優';
+      evalEl.style.background='rgba(61,184,122,0.15)';evalEl.style.color='var(--green)';
+    } else {
+      evalEl.textContent='⚠ 注意（土地値＞物件価格）';
+      evalEl.style.background='rgba(74,143,212,0.15)';evalEl.style.color='var(--blue)';
+    }
+  } else if(evalEl){evalEl.style.display='none';}
 }
 
 function recalcExitPrice(){
@@ -1407,7 +1715,7 @@ function recalcFullRent(){
     const num=document.getElementById('simAnnualRent_num');if(num)num.value=annualForSim;
   }
 }
-function recalcAll(){recalcAge();recalcDepreciation();recalcLand();recalcFullRent();recalcValuation();recalcExitPrice();syncSim();updateSectionBadges()}
+function recalcAll(){recalcAge();recalcDepreciation();recalcLand();recalcFullRent();recalcRentSummary();recalcValuation();recalcExitPrice();syncSim();updateSectionBadges()}
 
 // ══ RAKUMACHI LINK ══
 function updateRakumachiLink(){
@@ -1496,56 +1804,100 @@ const CHECKS={
       subs:['境界標が全地点に存在するか','隣地との境界確認書が取得済みか','実測面積と登記面積の誤差が2%以内か']},
   ],
   inspBuilding:[
-    {key:'ib01',text:'屋根・外壁の劣化状況確認',needNote:true,
-      risk:'屋根防水不良→雨漏り→内装損傷・カビ→居住不能。外壁クラック→雨水浸入→構造材腐食。修繕費が数百万単位になる。',
-      how:'双眼鏡で屋根を確認。外壁はクラック（0.3mm超は要補修）・シーリング劣化・塗装剥離を目視。屋上はドレン詰まりも確認。',
-      subs:['コーキング（シーリング）の亀裂・剥離はないか','外壁タイルの浮き・欠損（打診棒で確認が理想）','屋上防水の膨れ・亀裂・ドレン周辺の状態']},
-    {key:'ib02',text:'給排水管の状態（錆・詰まり・年数）',needNote:true,
-      risk:'鉄管（VLP）は築30年超で赤水・漏水リスク。排水管詰まりは賃借人クレームの最頻出。全管交換は一棟で100〜300万円。',
-      how:'管理会社に清掃・高圧洗浄の実施履歴を確認。給水管の材質（VLP=鉄、VP=塩ビ、SUS=ステンレス）を確認。',
-      subs:['給水管の材質：塩ビ（VP）かステンレスが理想','排水管の高圧洗浄は年1回程度実施されているか','水道メーター廻りで水漏れ・錆がないか','各室蛇口から赤水・濁りが出ないか']},
-    {key:'ib03',text:'電気設備（アンペア・配線の年数）',needNote:true,
-      risk:'単相2線式30A以下は電気容量不足で入居者敬遠。アルミ配線（1970年代）は火災リスクあり。分電盤が古い場合はブレーカー落ち多発。',
-      how:'各室の分電盤でアンペア・配線年数を確認。電力会社に供給状況を問い合わせ可。',
-      subs:['単相3線式100/200V対応か（エアコン200V使用可否に直結）','一室あたり30A以上あるか（40〜60Aが現代標準）','漏電遮断器が設置されているか','配線がアルミ製でないか（ビニール被覆が黄変していたら要注意）']},
-    {key:'ib04',text:'共用部（廊下・階段・駐車場）の状態',needNote:true,
-      risk:'共用部の劣化は入居者の第一印象に直結し、空室率に影響。鉄部錆・防水不良は修繕費の前兆。',
-      how:'実際に歩いて手すり・階段床・廊下天井・照明・駐車場ライン等を目視。',
-      subs:['鉄部（手すり・外階段）の錆・腐食','廊下・階段の防水・塗装の状態','照明のLED化状況（電気代に影響）','駐車場の舗装割れ・白線消えていないか','ゴミ置き場の清潔さ（管理状況の指標）']},
-    {key:'ib05',text:'空室内部の状態（原状回復要否・残留物）',needNote:true,
-      risk:'原状回復費用が予想外に膨らむと収益計画が狂う。残留物の処分費用は数万〜数十万円になることも。',
-      how:'空室は全室内部を確認。床・壁・天井のダメージ・臭い（タバコ・ペット）・設備の動作確認。',
-      subs:['床・壁クロスの損傷範囲とグレード感','タバコ・ペット臭の有無（脱臭工事が別途必要か）','残留物の有無と撤去費用見積','水回り設備（キッチン・浴室・トイレ）の動作確認','窓・サッシ・鍵の開閉正常か']},
-    {key:'ib06',text:'耐震基準（1981年以前は旧耐震要確認）',needNote:true,
-      risk:'旧耐震基準の物件は倒壊リスクに加え、銀行融資が通りにくく出口が困難。地震保険料も高くなる。',
-      how:'建築確認日で判定（1981年6月1日以降の確認=新耐震）。木造の場合は耐震診断書の取得を交渉。',
-      subs:['建築確認日が1981年6月1日以降か（新耐震基準）','旧耐震の場合、耐震診断・耐震補強の実施有無','2000年基準（木造）：地盤・接合部・耐力壁の強化有無','RC造は第三者機関の耐震診断書があるか']},
-    {key:'ib07',text:'大規模修繕履歴の書面確認',needNote:true,
-      risk:'修繕履歴がないと「いつ何が壊れるか」の予測ができない。直近に大規模修繕済みなら買い時だが、未実施なら即座に修繕費が発生する。',
+    // 建物の状態
+    {key:'ib01',text:'クラック・ヒビワレの確認',needNote:true,
+      risk:'外壁クラック→雨水浸入→構造材腐食→大規模修繕が数百万単位になる。',
+      how:'外壁全面を目視。0.3mm超のヒビは要補修。シーリング劣化・塗装剥離も確認。',
+      subs:['外壁クラックの幅・長さ・箇所数','コーキング（シーリング）の亀裂・剥離','外壁タイルの浮き・欠損（打診棒で確認が理想）','屋上防水の膨れ・亀裂・ドレン詰まり']},
+    {key:'ib02',text:'水漏れ・水染み・雨漏り跡の確認',needNote:true,
+      risk:'雨漏り→内装損傷・カビ→居住不能。過去の水染み跡は根本対処されていない可能性が高い。',
+      how:'天井・壁・床の茶色いシミ・カビ跡を目視。特に最上階・外壁際・水回り周辺を重点確認。',
+      subs:['天井・壁の水染み・カビ跡','最上階室内の天井状態','外壁際の壁面状態','水回り（浴室・キッチン下）の水漏れ跡']},
+    {key:'ib03',text:'板・壁の破損・汚れ・鉄部の錆',needNote:true,
+      risk:'鉄部の錆は腐食が進むと構造強度に影響。放置すると手すりや階段の崩落リスクになる。',
+      how:'共用廊下・外階段の手すり・鉄扉等を目視・触手確認。',
+      subs:['外階段・廊下手すりの錆・腐食度','鉄扉・シャッターの錆・動作確認','共用部壁面の汚れ・落書き','ペンキ塗装の状態（剥離・浮き）']},
+    {key:'ib04',text:'階段・廊下の広さと状態',needNote:true,
+      risk:'共用部の狭さは大型家具の搬入困難→入居者敬遠の原因に。老朽化は修繕費の前兆。',
+      how:'実際に歩いて幅員・照明・防水・床材の状態を確認。',
+      subs:['廊下幅（冷蔵庫・洗濯機が運べる幅か）','照明のLED化状況','廊下・階段の防水・塗装状態','ゴミ置き場の清潔さ（管理状況の指標）']},
+    // 設備の状態
+    {key:'ib05',text:'ガス設備（都市ガス or プロパン）の確認',needNote:true,
+      risk:'プロパンは入居者負担が重く敬遠される。都市ガス化工事は数十〜数百万円かかることも。',
+      how:'ガスメーターの種類・供給会社を確認。都市ガス引き込み可能かガス会社に問い合わせ可。',
+      subs:['都市ガスかプロパンか','プロパンの場合、切り替え可能か・費用概算','ガスメーターの設置状況','給湯器の製造年・型番（10年超は交換検討）']},
+    {key:'ib06',text:'電気メーター・電気設備の確認',needNote:true,
+      risk:'単相2線式30A以下は電気容量不足で入居者敬遠。アルミ配線は火災リスクあり。',
+      how:'各室の分電盤でアンペア・配線年数を確認。電力会社に供給状況の問い合わせ可。',
+      subs:['電気メーターの回転確認（稼働中の部屋か）','単相3線式100/200V対応か','一室あたり30A以上あるか（40〜60Aが現代標準）','漏電遮断器の設置有無','アルミ配線でないか（ビニール被覆が黄変していたら要注意）']},
+    {key:'ib07',text:'水道メーター（一括か個別か）の確認',needNote:true,
+      risk:'一括メーターは入居者が個別に契約できず敬遠される。給排水管の老朽化は赤水・漏水リスク。',
+      how:'水道メーターの設置状況を確認。給水管の材質（VLP=鉄、VP=塩ビ、SUS=ステンレス）を確認。',
+      subs:['水道メーターが各戸個別か一括か','給水管の材質（塩ビ・ステンレスが理想）','排水管の高圧洗浄実施履歴','水道メーター廻りの錆・水漏れ跡','各室蛇口から赤水・濁りが出ないか']},
+    {key:'ib08',text:'エレベーターの有無・状態',
+      risk:'エレベーターがある場合、保守費用・更新費用が毎月発生。未保守は事故リスクと行政指導の原因に。',
+      how:'エレベーターの製造年・保守会社・保守記録を確認。',
+      subs:['製造年と法定耐用年数（20〜25年）','保守会社との契約有無と費用','最終点検日と次回点検予定','緊急時連絡先の表示有無']},
+    {key:'ib09',text:'洗濯機置場（外か内か）・ベランダ',
+      risk:'室内洗濯機置場がないと単身者に敬遠される。ベランダ・物干し竿の有無は女性入居者の入居意欲に直結。',
+      how:'各室の洗濯機置場・防水パン・ベランダ・物干し設備を確認。',
+      subs:['洗濯機置場の場所（室内か廊下か外か）','防水パン・洗濯機用オートストッパーの有無','ベランダ・バルコニーの広さと状態','物干し竿・物干し金物の有無']},
+    {key:'ib10',text:'駐輪場・駐車場の有無と状態',
+      risk:'駐輪場がない物件は単身者・ファミリーともに敬遠される。駐車場は賃料外収入の源泉。',
+      how:'駐輪場の台数・状態・屋根有無を確認。駐車場の台数・サイズ・収益を確認。',
+      subs:['駐輪場の台数と戸数のバランス','駐輪場の屋根有無・整理状況','駐車場の台数・寸法・月額収入','駐車場の舗装・白線の状態']},
+    {key:'ib11',text:'共同ゴミ置き場の有無と状態',
+      risk:'ゴミ置き場が汚れている物件は管理が行き届いていないサイン。悪臭・害虫の原因にもなる。',
+      how:'ゴミ置き場の場所・清潔さ・分別状況・扉・施錠を確認。',
+      subs:['ゴミ置き場の清潔さ・悪臭の有無','扉・ネットの状態と施錠状況','分別ルールの掲示有無','ゴミ収集日と近隣への影響']},
+    {key:'ib12',text:'耐震基準（1981年以前は旧耐震要確認）',needNote:true,
+      risk:'旧耐震基準の物件は倒壊リスクに加え、銀行融資が通りにくく出口が困難。',
+      how:'建築確認日で判定（1981年6月1日以降の確認=新耐震）。木造は耐震診断書の取得を交渉。',
+      subs:['建築確認日が1981年6月1日以降か','旧耐震の場合、耐震診断・補強の実施有無','2000年基準（木造）：地盤・接合部・耐力壁の強化有無','RC造は第三者機関の耐震診断書があるか']},
+    {key:'ib13',text:'大規模修繕履歴の書面確認',needNote:true,
+      risk:'修繕履歴がないと「いつ何が壊れるか」の予測ができない。未実施なら即座に修繕費が発生する。',
       how:'管理会社・売主から修繕記録台帳を取得。屋根・外壁・給排水・電気の最終施工年を確認。',
       subs:['外壁塗装・防水の最終施工年（10年周期が目安）','給排水管の交換・更生工事の有無','エレベーターがある場合の保守・改修履歴','共用部電気設備（幹線・分電盤）の更新有無']},
+    // 管理の状況
+    {key:'ib14',text:'入居者の状況確認（電気メーター・郵便受け）',
+      risk:'表面上の入居率と実態が乖離していることがある。空室を入居中に見せかけるケースも実在する。',
+      how:'電気メーターの回転を確認。郵便受けに名前があるか、新聞受けに目張りがないか確認。',
+      subs:['電気メーターの回転有無（全室確認）','郵便受けに表札・名前があるか','新聞受けに目張り・詰まりがないか','近所からのクレーム情報の有無']},
+    {key:'ib15',text:'清潔さ・共用部の管理状況確認',
+      risk:'共用部の清潔さは管理会社の質を直接反映する。汚れた共用部は入居者の満足度を下げ退去を促進する。',
+      how:'共用廊下・ゴミ置き場・自転車置き場・掲示板を目視確認。',
+      subs:['共用部に大量の私物が放置されていないか','ゴミ置き場は清潔に保たれているか','窓ガラスに割れがないか','自転車が雑然と置かれていないか','草木の管理状況・異音・異臭の有無','水たまりができていないか（排水不良のサイン）']},
   ],
   inspArea:[
-    {key:'ia01',text:'現地周辺の空室・募集物件を歩いて確認',
-      risk:'周辺の空室が多い＝需給が緩い＝入居付けに苦労する。自分の物件の競争環境を過小評価すると計画が破綻する。',
-      how:'物件から半径500m程度を徒歩で一周。SUUMOの「現地確認」機能も活用。看板・ポスターの数を数える。',
-      subs:['築年・仕様が類似する競合物件の家賃水準','空室のまま長期間放置されている物件の数','新築・築浅物件の供給状況（竣工予定含む）','近隣管理会社に「このエリアの客付け難易度」を直接聞く']},
-    {key:'ia02',text:'駅・スーパー・病院などの生活利便性確認',
-      risk:'生活利便性が低いと入居者ターゲットが絞られ、空室リスクが上がる。特に単身者向けは駅距離と買い物利便性が決め手。',
+    // 物件の周囲
+    {key:'ia01',text:'道路との間口・道路幅の確認',
+      risk:'間口が狭い・道路幅が不十分だと搬入困難・緊急車両の進入不可。接道義務違反は再建築不可に直結。',
+      how:'間口の幅員を目測・メジャーで確認。前面道路の幅員・種別（公道・私道）を確認。',
+      subs:['前面道路が4m以上あるか（接道義務）','間口の幅が家財搬入に十分か','救急車両が進入できる幅か','夜間でも道路が明るいか（照明の状況）']},
+    {key:'ia02',text:'周辺施設・生活利便性の確認',
+      risk:'生活利便性が低いと入居者ターゲットが絞られ空室リスクが上がる。駅距離・買い物環境は入居決定率に直結。',
       how:'実際に駅から歩く（徒歩時間を自分の足で計測）。地図で半径500m圏内の施設を確認。',
-      subs:['実際に歩いた駅距離（公称時間との差）','コンビニ・スーパーの有無と距離','医療機関（クリニック・薬局）の有無','学校・保育所（ファミリー向けの場合）']},
-    {key:'ia03',text:'嫌悪施設（ゴミ処理場・風俗店等）の有無',needNote:true,
-      risk:'嫌悪施設が近いと入居者が決まりにくく、家賃相場も下押しされる。売却時にも買い手が付きにくくなる。',
+      subs:['実際に歩いた駅距離（公称時間との差）','スーパー・コンビニまでの距離','学校・公園までの距離（ファミリー向け）','駐車場・コインパーキングの有無と距離','医療機関（クリニック・薬局）の有無']},
+    {key:'ia03',text:'嫌悪施設（墓・火葬場・風俗店等）の有無',needNote:true,
+      risk:'嫌悪施設が近いと入居者が決まりにくく家賃相場も下押しされる。売却時にも買い手が付きにくくなる。',
       how:'地図確認＋現地歩き。Google マップのレビューも参照。夜間帯に再訪できると理想。',
-      subs:['風俗店・パチンコ店・飲み屋街との距離','ゴミ処理場・産廃施設・工場（臭い・騒音）','高架・幹線道路（騒音・振動）','墓地・葬儀場（心理的嫌悪感）']},
-    {key:'ia04',text:'夜間の環境確認（治安・騒音）',
-      risk:'昼間は問題なくても、夜間に騒音・治安問題が発生するエリアがある。入居者からのクレーム→退去→空室のサイクルに陥る。',
+      subs:['墓地・火葬場・葬儀場との距離','風俗店・パチンコ店・飲み屋街との距離','ゴミ処理場・産廃施設・工場（臭い・騒音）','〇〇事務所・反社関連施設の有無','高架・幹線道路（騒音・振動）']},
+    {key:'ia04',text:'ハザードリスク（河川・傾斜・埋立地）の確認',needNote:true,
+      risk:'水害・土砂・地震リスクが高いエリアは保険料高騰・入居者忌避・出口困難。',
+      how:'国土交通省ハザードマップポータルサイト・自治体HPで確認。現地で水路・傾斜地の近接も目視。',
+      subs:['河川からの距離・海抜（標高）の確認','傾斜地・崖・盛土・埋立地でないか','洪水浸水想定区域（浸水深0.5m超は要注意）','土砂災害警戒区域・特別警戒区域の確認','救急車両が通れる道幅か','交番・消防署の近さ']},
+    {key:'ia05',text:'夜間の環境確認（治安・騒音）',
+      risk:'昼間は問題なくても夜間に騒音・治安問題が発生するエリアがある。入居者クレーム→退去→空室のサイクルに陥る。',
       how:'可能であれば夜間（20〜22時頃）に再訪。照明の状況・人通り・騒音源を確認。',
       subs:['夜間の照明・街灯の整備状況','近隣の飲食店・バー等の閉店時間と騒音','線路・幹線道路の夜間騒音レベル','治安統計（警察署・自治体の犯罪マップ）']},
-    {key:'ia05',text:'近隣業者（管理会社・仲介）に聞き込み',
+    {key:'ia06',text:'現地周辺の空室・競合物件を歩いて確認',
+      risk:'周辺の空室が多い＝需給が緩い＝入居付けに苦労する。競争環境を過小評価すると収支計画が破綻する。',
+      how:'物件から半径500m程度を徒歩で一周。SUUMOの「現地確認」機能も活用。看板・ポスターの数を数える。',
+      subs:['築年・仕様が類似する競合物件の家賃水準','空室のまま長期間放置されている物件の数','新築・築浅物件の供給状況（竣工予定含む）','近隣管理会社に客付け難易度を直接確認']},
+    {key:'ia07',text:'近隣業者（管理会社・仲介）に聞き込み',
       risk:'書類や売主からは出てこないエリアの「生の情報」を逃す。管理会社の評判・過去のトラブルも業者は知っている。',
-      how:'周辺の仲介業者に飛び込みで「このエリアで賃貸探している人いますか？」と聞く。管理会社には「空室期間の平均」を聞く。',
-      subs:['近隣仲介2〜3社に入居需要を直接ヒアリング','現在の管理会社への満足度（入居者からの評判）','過去に問題があった入居者・トラブルの有無','オーナーチェンジの理由を第三者目線で確認']},
+      how:'周辺の仲介業者に飛び込みで「このエリアで賃貸探している人いますか？」と聞く。',
+      subs:['近隣仲介2〜3社に入居需要を直接ヒアリング','現在の管理会社への満足度','過去に問題があった入居者・トラブルの有無','オーナーチェンジの理由を第三者目線で確認']},
   ],
 };
 function buildCheckItem(item){
@@ -1832,7 +2184,10 @@ const TIPS={
   netYield:{title:'実質利回り（NOI利回り）',def:'経費を控除したNOIをベースにした利回り。物件の真の収益力を示す。',formula:'実質利回り = NOI ÷ 物件価格 × 100　NOI = 実質年収 − 管理費 − 修繕費 − 固定資産税',criteria:'6%以上：優良　4〜6%：普通　4%未満：費用構造・価格を要見直し'},
   totalReturn:{title:'保有期間 総合損益',def:'保有期間中のCF累計と売却手取りの合計から、初期総投資を引いた実質損益（万円）。',formula:'総合損益 = CF累計 + (売却価格 − 残債 − 譲渡税) − 総初期投資',criteria:'プラスであれば投資として成立。マイナスになるシナリオは「死ぬライン」として即撤退基準にする。'},
   cfPerYear:{title:'年あたりCF（初年度）',def:'初年度の税引後キャッシュフロー（万円）。ローン・経費・税をすべて引いた手残り。',formula:'CF = 実質家賃収入 − 経費 − ローン返済額 − 所得税',criteria:'月10万円（年120万円）以上：目標水準。マイナスは原則NG（築浅キャピタル戦略は除く）。'},
-  valCapRate:{title:'Cap Rate（直接還元利回り）',def:'物件が生み出すNOI（純収益）を物件価格で割った利回り。収益価格を算出するための還元率。「この利回りで買う人がいる」という市場の期待値。',formula:'収益価格 = NOI ÷ Cap Rate　例：NOI 200万円 ÷ Cap Rate 8% = 2,500万円',criteria:'近畿圏一棟アパート目安：木造築15〜25年：8〜10%　RC築15年以内：6〜8%　築古・地方：10〜12%以上。Cap Rateが高いほど収益価格は低く評価される（リスク大と見なされる）。自分が売る側になるときの出口利回りとしても使う。'},
+  valCapRate:{title:'Cap Rate（直接還元利回り）',def:'物件が生み出すNOI（純収益）を物件価格で割った利回り。収益価格を算出するための還元率。「この利回りで買う人がいる」という市場の期待値。',formula:'収益価格 = NOI ÷ Cap Rate　例：NOI 200万円 ÷ Cap Rate 8% = 2,500万円',criteria:'近畿圏一棟アパート目安：木造築15〜25年：8〜10%　RC築15年以内：6〜8%　築古・地方：10〜12%以上。Cap Rateが高いほど収益価格は低く評価される（リスク大と見なされる）。自分が売る側になるときの出口利回りとしても使う。\n\n👉 おすすめ初期値：近畿圏木造築20年前後 → 9%'},
+  valExpenseRate:{title:'空室・経費控除率',def:'満室年収から差し引く経費の合計率（%）。空室損失＋管理費＋修繕費の合算。NOI（純収益）を算出するために使う。',formula:'NOI = 満室年収 × (1 − 経費率)\n例：500万円 × (1 − 0.25) = 375万円',criteria:'一般的な構成：空室損失10% + 管理費5〜8% + 修繕費5〜8% = 合計20〜26%。\n\n👉 おすすめ初期値：築古木造なら25〜30%、築浅RCなら20〜22%で試算。保守的に見るなら25%固定でOK。'},
+  valDiscountRate:{title:'割引率 r（DCF法）',def:'将来のキャッシュフローを現在価値に換算するための利率（%）。投資家が「この物件に期待する収益率」を意味する。高いほど将来CFの現在価値は小さくなる。',formula:'現在価値 = 将来CF ÷ (1 + r)^t\nDCF価格 = Σ NOI/(1+r)^t + 復帰価値/(1+r)^n',criteria:'不動産投資では一般的に6〜10%が使われる。リスクが高い物件ほど高い割引率を設定。\n\n👉 おすすめ初期値：木造築古・地方 → 9〜10%　RC・都市部 → 7〜8%　保守的試算なら10%固定。'},
+  valLandGrowth:{title:'年間地価変動率',def:'保有期間中の土地価格の毎年の変化率（%/年）。DCF法の復帰価値計算と出口戦略の土地値予測に使用。',formula:'N年後の土地価格 = 現在の土地価格 × (1 + 変動率)^N\n例：1000万円 × (1 − 0.005)^10 = 951万円',criteria:'近年の国土交通省地価公示の傾向：大阪圏住宅地：+0.5〜+2.0%（上昇中）、地方小都市：-0.5〜-1.5%、過疎地域：-2%以下。\n\n👉 おすすめ初期値：大阪・京都近郊 → +0.5〜+1.0%、地方 → -0.5〜-1.0%。保守的試算なら-0.5%固定。'},
 };
 
 // ══ TOOLTIP ENGINE (body-level single popup, no z-index conflict) ══
@@ -2050,27 +2405,37 @@ function onSimSlide(id,unit){
   runSim();
 }
 function syncSim(){
-  const map={simPrice:'propPrice',simMgmtFee:'rentalMgmtFee',simExitPrice:'exitPrice'};
-  Object.entries(map).forEach(([s,f])=>{
-    const v=document.getElementById(f)?.value;if(v&&!isNaN(v)){
-      const sl=document.getElementById(s);if(sl)sl.value=v;
-      const num=document.getElementById(s+'_num');if(num)num.value=v;
-    }
-  });
+  // sync property price → sim price
   const price=parseFloat(document.getElementById('propPrice')?.value)||0;
-  const yld=parseFloat(document.getElementById('propYield')?.value)||0;
-  if(price&&yld){
-    const rent=Math.round(price*yld/100);
-    const sl=document.getElementById('simAnnualRent');if(sl)sl.value=rent;
-    const num=document.getElementById('simAnnualRent_num');if(num)num.value=rent;
-  }
+  if(price>0){const sl=document.getElementById('simPrice');if(sl)sl.value=price;const num=document.getElementById('simPrice_num');if(num)num.value=price;}
+  // sync mgmt fee
+  const mgmt=parseFloat(document.getElementById('rentalMgmtFee')?.value)||0;
+  if(mgmt>0){const sl=document.getElementById('simMgmtFee');if(sl)sl.value=mgmt;const num=document.getElementById('simMgmtFee_num');if(num)num.value=mgmt;}
+  // sync exit price
+  const exitP=parseFloat(document.getElementById('exitPrice')?.value)||0;
+  if(exitP>0){const sl=document.getElementById('simExitPrice');if(sl)sl.value=exitP;const num=document.getElementById('simExitPrice_num');if(num)num.value=exitP;}
+  // sync annual rent: prefer rentFullMonth > rooms > yield
+  const fullMonth=parseFloat(document.getElementById('rentFullMonth')?.value)||0;
+  const r1=(parseFloat(document.getElementById('room1_rent')?.value)||0)*(parseFloat(document.getElementById('room1_units')?.value)||0);
+  const r2=(parseFloat(document.getElementById('room2_rent')?.value)||0)*(parseFloat(document.getElementById('room2_units')?.value)||0);
+  const r3=(parseFloat(document.getElementById('room3_rent')?.value)||0)*(parseFloat(document.getElementById('room3_units')?.value)||0);
+  const roomsAnnual=Math.round((r1+r2+r3)*12/10000);
+  let annualRent=0;
+  if(fullMonth>0)annualRent=Math.round(fullMonth*12);
+  else if(roomsAnnual>0)annualRent=roomsAnnual;
+  else{const yld=parseFloat(document.getElementById('propYield')?.value)||0;if(price>0&&yld>0)annualRent=Math.round(price*yld/100);}
+  if(annualRent>0){const sl=document.getElementById('simAnnualRent');if(sl)sl.value=annualRent;const num=document.getElementById('simAnnualRent_num');if(num)num.value=annualRent;}
   runSim();
 }
 function getSimVal(id){
-  // prefer keyboard-editable number input, fall back to slider
+  // _num input (keyboard editable) takes priority over slider
   const numEl=document.getElementById(id+'_num');
-  if(numEl&&numEl.value!=='')return parseFloat(numEl.value)||0;
-  return parseFloat(document.getElementById(id)?.value)||0;
+  if(numEl&&numEl.value!==''&&numEl.value!==null)return parseFloat(numEl.value)||0;
+  const slEl=document.getElementById(id);
+  if(slEl&&slEl.value!=='')return parseFloat(slEl.value)||0;
+  // fallback to SIM_PARAMS default
+  const p=SIM_PARAMS.find(x=>x.id===id);
+  return p?p.def:0;
 }
 function calcLoanPayment(principal,rate,termYears){
   if(principal<=0||rate<=0)return principal/termYears;
@@ -2245,7 +2610,7 @@ async function handlePdfFile(file){
   try{
     const base64=await fileToBase64(file);
     const prompt=`以下の物件概要書PDFから情報を抽出してください。必ずJSON形式のみで回答（前置き・説明文は不要）。抽出できない項目はnull。
-{"propName":"物件名","propAddr":"所在地","propPrice":物件価格万円数値,"propYield":表面利回り%数値,"propBuildYear":建築年西暦数値,"propStructure":"木造/軽量鉄骨S（3mm以下）/軽量鉄骨S（3〜4mm）/重量鉄骨S/RC/SRC のどれか","propUnits":総戸数数値,"propFloorArea":延床面積㎡数値,"propLandArea":土地面積㎡数値,"propBuildingPrice":建物価格万円数値,"propBCR":建蔽率%数値,"propFAR":容積率%数値,"propLandPrice":土地価格万円数値,"room1_layout":"タイプA間取り","room1_area":専有面積㎡数値,"room1_units":戸数数値,"room1_rent":家賃円月数値,"room2_layout":null,"room2_area":null,"room2_units":null,"room2_rent":null,"room3_layout":null,"room3_area":null,"room3_units":null,"room3_rent":null,"areaStation":"最寄り駅・徒歩分数","propMemo":"その他特記事項"}`;
+{"propName":"物件名","propAddr":"所在地","propPrice":物件価格万円数値,"propYield":表面利回り%数値,"propBuildYear":建築年西暦数値,"propStructure":"木造/軽量鉄骨S（3mm以下）/軽量鉄骨S（3〜4mm）/重量鉄骨S/RC/SRC のどれか","propUnits":総戸数数値,"propFloorArea":延床面積㎡数値,"propLandArea":土地面積㎡数値,"propBuildingPrice":建物価格万円数値,"propBCR":建蔽率%数値,"propFAR":容積率%数値,"propLandPrice":土地価格万円数値,"rentCurrentMonth":現状家賃収入合計円月数値,"rentFullMonth":満室時家賃収入合計円月数値,"room1_layout":"タイプA間取り","room1_area":専有面積㎡数値,"room1_units":戸数数値,"room1_rent":家賃円月数値,"room2_layout":null,"room2_area":null,"room2_units":null,"room2_rent":null,"room3_layout":null,"room3_area":null,"room3_units":null,"room3_rent":null,"areaStation":"最寄り駅・徒歩分数","propMemo":"その他特記事項"}`;
     const resp=await fetch(`https://gemini-proxy.takutakusoccer0.workers.dev`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({endpoint:'gemini-2.5-flash:generateContent',payload:{contents:[{parts:[
@@ -2262,7 +2627,7 @@ async function handlePdfFile(file){
     const text=jsonMatch[0];
     const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
     Object.entries(parsed).forEach(([k,v])=>{if(v===null||v===undefined)return;const el=document.getElementById(k);if(el){el.value=v;el.dispatchEvent(new Event('input'))}});
-    recalcAge();recalcAll();updateRakumachiLink();updatePropName();
+    recalcAge();recalcAll();recalcRentSummary();recalcRentalDemand();updateRakumachiLink();updatePropName();
     showToast('✓ '+Object.values(parsed).filter(v=>v!==null).length+'項目を自動入力しました');
   }catch(err){showToast('PDF読み取りエラー: '+(err.message||'不明なエラー'))}
   finally{loading.classList.remove('show')}
@@ -2323,66 +2688,346 @@ function printView(){window.print()}
 // ══ TOAST ══
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
-// ══ BUILDING VALUATION (収益還元法) ══
+async function runDemandEval(){
+  const btn=document.getElementById('btnDemandEval');
+  if(btn){btn.disabled=true;btn.textContent='評価中...';}
+  try{
+    // ── 物件情報の収集 ──
+    const layout1=document.getElementById('room1_layout')?.value||'';
+    const layout2=document.getElementById('room2_layout')?.value||'';
+    const layout3=document.getElementById('room3_layout')?.value||'';
+    const area1=document.getElementById('room1_area')?.value||'';
+    const rent1=parseFloat(document.getElementById('room1_rent')?.value)||0;
+    const rent2=parseFloat(document.getElementById('room2_rent')?.value)||0;
+    const propAge=document.getElementById('propAge')?.value||'';
+    const propName=document.getElementById('propName')?.value||'本物件';
+
+    // ── 需給データの収集 ──
+    const collectDS=(prefix,keys)=>{
+      return keys.map(k=>({
+        key:k,
+        demand:document.getElementById('ds_'+prefix+'_'+k+'_demand')?.value||'',
+        supply:document.getElementById('ds_'+prefix+'_'+k+'_supply')?.value||'',
+      })).filter(r=>r.demand||r.supply);
+    };
+    const layoutDS=collectDS('layout',DS_LAYOUT_KEYS);
+    const ageDS=collectDS('age',DS_AGE_KEYS);
+    const rentDS=collectDS('rent',DS_RENT_KEYS);
+    const areaDS=collectDS('area',DS_AREA_KEYS);
+
+    const munic=document.getElementById('lifullMunic')?.value||document.getElementById('areaMunic')?.value||'不明';
+
+    const prompt=`あなたは不動産投資の需給分析の専門家です。以下の物件情報と需給データをもとに、この物件の市場適合性を評価してください。
+
+【物件情報】
+- 物件名：${propName}
+- エリア：${munic}
+- 築年数：${propAge}年
+- 間取り：${[layout1,layout2,layout3].filter(Boolean).join('、')}
+- 専有面積：${area1}㎡前後
+- 家賃水準：${rent1>0?Math.round(rent1/10000)+'万円/月':'不明'}
+
+【需給データ（検索割合 vs 掲載割合）】
+間取り：${JSON.stringify(layoutDS)}
+築年数：${JSON.stringify(ageDS)}
+家賃帯：${JSON.stringify(rentDS)}
+面積帯：${JSON.stringify(areaDS)}
+
+以下のJSONのみで回答してください（前置き不要）：
+{
+  "totalScore": "S/A/B/C/D のいずれか",
+  "totalLabel": "総合評価の一言ラベル（例：需要適合・高稼働期待）",
+  "axes": [
+    {"name":"間取り適合度","score":"S/A/B/C/D","comment":"30字以内"},
+    {"name":"築年数適合度","score":"S/A/B/C/D","comment":"30字以内"},
+    {"name":"家賃帯適合度","score":"S/A/B/C/D","comment":"30字以内"},
+    {"name":"面積適合度","score":"S/A/B/C/D","comment":"30字以内"}
+  ],
+  "comment": "この物件の需給面での投資判断コメント（150字以内。具体的な数値・需給ギャップに言及）",
+  "risks": "需給面での主なリスク（80字以内）"
+}`;
+
+    const resp=await fetch('https://gemini-proxy.takutakusoccer0.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({endpoint:'gemini-2.5-flash:generateContent',payload:{
+        contents:[{parts:[{text:prompt}]}]
+      }})});
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+    const match=raw.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('評価データを取得できませんでした');
+    const result=JSON.parse(match[0]);
+
+    // ── 表示 ──
+    const scoreColors={S:'var(--green)',A:'var(--gold)',B:'var(--warn)',C:'rgba(200,160,100,0.9)',D:'var(--danger)'};
+    const scoreBg={S:'rgba(61,184,122,0.15)',A:'rgba(212,168,67,0.15)',B:'rgba(212,148,58,0.12)',C:'rgba(200,130,60,0.12)',D:'rgba(224,85,85,0.12)'};
+    const score=result.totalScore||'—';
+    const badge=document.getElementById('evalScoreBadge');
+    if(badge){badge.textContent=score;badge.style.color=scoreColors[score]||'var(--text)';badge.style.background=scoreBg[score]||'var(--surface)';}
+    const lbl=document.getElementById('evalScoreLabel');
+    if(lbl){lbl.textContent=result.totalLabel||'';lbl.style.color=scoreColors[score]||'var(--muted)';}
+
+    const axesEl=document.getElementById('evalAxes');
+    if(axesEl&&result.axes){
+      axesEl.innerHTML=result.axes.map(ax=>`
+        <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:10px 12px;border-left:3px solid ${scoreColors[ax.score]||'var(--border)'}">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:10px;color:var(--muted)">${ax.name}</span>
+            <span style="font-size:14px;font-weight:900;color:${scoreColors[ax.score]||'var(--muted)'}">${ax.score}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text)">${ax.comment||''}</div>
+        </div>`).join('');
+    }
+    const commentEl=document.getElementById('evalComment');
+    if(commentEl)commentEl.innerHTML=(result.comment||'—')+(result.risks?`<div style="margin-top:8px;font-size:11px;color:var(--warn)">⚠ リスク：${result.risks}</div>`:'');
+
+    document.getElementById('demandEvalPanel').style.display='block';
+    document.getElementById('demandEvalPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+    showToast('✓ 需給評価が完了しました（総合：'+score+'）');
+  }catch(err){
+    showToast('評価エラー：'+err.message);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='✅ 需給評価を実行';}
+  }
+}
+
+// ══ LIFULL DEMAND SUPPLY ══
+const DS_LAYOUT_KEYS=['1r','2k','3k','4k'];
+const DS_AGE_KEYS=['10','15','20','25','30','31'];
+const DS_RENT_KEYS=['3','4','5','6','7','8','10','hi'];
+const DS_AREA_KEYS=['20','30','40','50','60','70','hi'];
+
+function updateDSJudge(prefix,keys){
+  keys.forEach(k=>{
+    const d=parseFloat(document.getElementById('ds_'+prefix+'_'+k+'_demand')?.value)||0;
+    const s=parseFloat(document.getElementById('ds_'+prefix+'_'+k+'_supply')?.value)||0;
+    const el=document.getElementById('ds_'+prefix+'_'+k+'_judge');
+    if(!el||(!d&&!s))return;
+    const diff=d-s;
+    if(diff>3){el.textContent='需要超✅';el.className='ds-judge undersupply';}
+    else if(diff<-3){el.textContent='供給過多⚠';el.className='ds-judge oversupply';}
+    else{el.textContent='均衡';el.className='ds-judge balanced';}
+  });
+}
+document.addEventListener('input',e=>{
+  if(e.target.classList.contains('ds-input')){
+    updateDSJudge('layout',DS_LAYOUT_KEYS);
+    updateDSJudge('age',DS_AGE_KEYS);
+    updateDSJudge('rent',DS_RENT_KEYS);
+    updateDSJudge('area',DS_AREA_KEYS);
+  }
+});
+
+async function fetchLIFULLData(){
+  const munic=(document.getElementById('lifullMunic')?.value||document.getElementById('areaMunic')?.value||'').trim();
+  if(!munic){showToast('市区町村名を入力してください（上の入力欄）');return}
+  const spin=document.getElementById('lifullSpin');
+  const status=document.getElementById('lifullStatus');
+  if(spin)spin.classList.add('show');
+  if(status)status.textContent='取得中...';
+  try{
+    const prompt=`「${munic}」の賃貸物件の需給データをLIFULL HOME'Sの投資用データ（https://toushi.homes.co.jp/owner/）から調べてください。
+以下のJSONのみで回答してください（前置き不要）。値は%の数値のみ（%記号なし）、不明はnull。
+{
+  "layout":{
+    "1r":{"demand":ワンルーム1K1DK検索割合,"supply":掲載割合},
+    "2k":{"demand":1LDK2K2DK検索割合,"supply":掲載割合},
+    "3k":{"demand":2LDK3K3DK検索割合,"supply":掲載割合},
+    "4k":{"demand":3LDK4K4DK検索割合,"supply":掲載割合}
+  },
+  "age":{
+    "10":{"demand":築10年以下検索割合,"supply":掲載割合},
+    "15":{"demand":築15年以下検索割合,"supply":掲載割合},
+    "20":{"demand":築20年以下検索割合,"supply":掲載割合},
+    "25":{"demand":築25年以下検索割合,"supply":掲載割合},
+    "30":{"demand":築30年以下検索割合,"supply":掲載割合},
+    "31":{"demand":築31年以上検索割合,"supply":掲載割合}
+  },
+  "rent":{
+    "3":{"demand":3万円未満検索割合,"supply":掲載割合},
+    "4":{"demand":3〜4万円検索割合,"supply":掲載割合},
+    "5":{"demand":4〜5万円検索割合,"supply":掲載割合},
+    "6":{"demand":5〜6万円検索割合,"supply":掲載割合},
+    "7":{"demand":6〜7万円検索割合,"supply":掲載割合},
+    "8":{"demand":7〜8万円検索割合,"supply":掲載割合},
+    "10":{"demand":8〜10万円検索割合,"supply":掲載割合},
+    "hi":{"demand":10万円以上検索割合,"supply":掲載割合}
+  },
+  "area":{
+    "20":{"demand":20㎡未満検索割合,"supply":掲載割合},
+    "30":{"demand":20〜30㎡検索割合,"supply":掲載割合},
+    "40":{"demand":30〜40㎡検索割合,"supply":掲載割合},
+    "50":{"demand":40〜50㎡検索割合,"supply":掲載割合},
+    "60":{"demand":50〜60㎡検索割合,"supply":掲載割合},
+    "70":{"demand":60〜70㎡検索割合,"supply":掲載割合},
+    "hi":{"demand":70㎡以上検索割合,"supply":掲載割合}
+  },
+  "memo":"需給特徴の簡潔なコメント（100字以内）"
+}`;
+    const resp=await fetch('https://gemini-proxy.takutakusoccer0.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({endpoint:'gemini-2.5-flash:generateContent',payload:{
+        contents:[{parts:[{text:prompt}]}],
+        tools:[{google_search:{}}]
+      }})});
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+    const match=raw.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('データ取得できませんでした');
+    const parsed=JSON.parse(match[0]);
+    // fill by category
+    const fillCat=(cat,keys)=>{
+      keys.forEach(k=>{
+        const v=parsed[cat]?.[k];if(!v)return;
+        const d=document.getElementById('ds_'+cat+'_'+k+'_demand');
+        const s=document.getElementById('ds_'+cat+'_'+k+'_supply');
+        if(d&&v.demand!=null){d.value=v.demand+'%';d.classList.add('ai-filled')}
+        if(s&&v.supply!=null){s.value=v.supply+'%';s.classList.add('ai-filled')}
+      });
+    };
+    fillCat('layout',DS_LAYOUT_KEYS);
+    fillCat('age',DS_AGE_KEYS);
+    fillCat('rent',DS_RENT_KEYS);
+    fillCat('area',DS_AREA_KEYS);
+    if(parsed.memo){const m=document.getElementById('demandSupplyMemo');if(m&&!m.value)m.value='【AI取得 '+new Date().toLocaleDateString('ja-JP')+'】\n'+parsed.memo;}
+    updateDSJudge('layout',DS_LAYOUT_KEYS);
+    updateDSJudge('age',DS_AGE_KEYS);
+    updateDSJudge('rent',DS_RENT_KEYS);
+    updateDSJudge('area',DS_AREA_KEYS);
+    if(status)status.textContent='✓ 取得完了（青色＝AI入力値）';
+    showToast('✓ '+munic+' の需給データを取得しました');
+  }catch(err){
+    showToast('取得エラー：'+err.message);
+    if(status)status.textContent='⚠ 取得失敗 — 手動入力してください';
+  }finally{
+    if(spin)spin.classList.remove('show');
+  }
+}
+
+// ══ RENTAL DEMAND AUTO-CALC ══
+function recalcRentalDemand(){
+  // 現入居率 × 満室家賃（物件概要から）
+  const occupancy=(parseFloat(document.getElementById('rentalOccupancy')?.value)||0)/100;
+  const fullMonth=parseFloat(document.getElementById('rentFullMonth')?.value)||
+                  parseFloat(document.getElementById('rentCurrentMonth')?.value)||0;
+  // 賃料乖離率は物件概要の家賃収入サマリーで対応 → ここでは入居率連動の収入計算のみ
+  if(occupancy>0&&fullMonth>0){
+    const currentMonth=Math.round(fullMonth*occupancy*10)/10;
+    // sync to rentCurrentMonth if empty
+    const cm=document.getElementById('rentCurrentMonth');
+    if(cm&&!cm.value)cm.value=currentMonth;
+    recalcRentSummary();
+  }
+}
+
+// ══ RENT SUMMARY ══
+function recalcRentSummary(){
+  const price=parseFloat(document.getElementById('propPrice')?.value)||0;
+  const currentMonth=parseFloat(document.getElementById('rentCurrentMonth')?.value)||0;
+  const fullMonth=parseFloat(document.getElementById('rentFullMonth')?.value)||0;
+  const currentYear=Math.round(currentMonth*12/10000)*10000; // 円/年
+  const fullYear=Math.round(fullMonth*12/10000)*10000;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||''};
+  set('rentCurrentYear', currentYear||'');
+  set('rentFullYear', fullYear||'');
+  // yields
+  if(price>0){
+    const cy=currentYear>0?(currentYear/10000/price*100).toFixed(2)+'%':'—';
+    const fy=fullYear>0?(fullYear/10000/price*100).toFixed(2)+'%':'—';
+    const ce=document.getElementById('rentCurrentYield');if(ce)ce.value=cy;
+    const fe=document.getElementById('rentFullYield');if(fe)fe.value=fy;
+  }
+  // sync満室to sim if available
+  if(fullMonth>0){
+    const annual=Math.round(fullMonth*12/10000);
+    const sl=document.getElementById('simAnnualRent');if(sl)sl.value=annual;
+    const num=document.getElementById('simAnnualRent_num');if(num)num.value=annual;
+  }
+}
+
+// ══ BUILDING VALUATION (直接還元法 + DCF法) ══
 function recalcValuation(){
-  const price = parseFloat(document.getElementById('propPrice')?.value)||0;
-  const annualRentFull = (()=>{
+  const price=parseFloat(document.getElementById('propPrice')?.value)||0;
+  // NOI用満室年収
+  const annualRentFull=(()=>{
+    // 優先順位: 満室月額入力 > 部屋タイプ合計 > 利回り逆算
+    const fullMonth=parseFloat(document.getElementById('rentFullMonth')?.value)||0;
+    if(fullMonth>0)return fullMonth*12/10000;
     const r1=(parseFloat(document.getElementById('room1_rent')?.value)||0)*(parseFloat(document.getElementById('room1_units')?.value)||0);
     const r2=(parseFloat(document.getElementById('room2_rent')?.value)||0)*(parseFloat(document.getElementById('room2_units')?.value)||0);
     const r3=(parseFloat(document.getElementById('room3_rent')?.value)||0)*(parseFloat(document.getElementById('room3_units')?.value)||0);
     const fromRooms=(r1+r2+r3)*12/10000;
     if(fromRooms>0)return fromRooms;
-    const p2=parseFloat(document.getElementById('propPrice')?.value)||0;
     const y=parseFloat(document.getElementById('propYield')?.value)||0;
-    return p2&&y?p2*y/100:0;
+    return price&&y?price*y/100:0;
   })();
-  const capRate = (parseFloat(document.getElementById('valCapRate')?.value)||0)/100;
-  const expenseRate = (parseFloat(document.getElementById('valExpenseRate')?.value)||25)/100;
-  const landGrowth = (parseFloat(document.getElementById('valLandGrowth')?.value)||(-0.5))/100;
-  const landArea = parseFloat(document.getElementById('propLandArea')?.value)||0;
-  const rosen = (parseFloat(document.getElementById('areaRosen')?.value)||0)*1000;
-  const landPriceInput = parseFloat(document.getElementById('propLandPrice')?.value)||0;
-  const landPriceCalc = landArea>0&&rosen>0 ? Math.round(landArea*rosen/10000*0.8) : 0;
-  const landPrice = landPriceInput>0 ? landPriceInput : landPriceCalc;
-  const bookBldPrice = parseFloat(document.getElementById('propBuildingPrice')?.value)||0;
+  const capRate=(parseFloat(document.getElementById('valCapRate')?.value)||0)/100;
+  const expenseRate=(parseFloat(document.getElementById('valExpenseRate')?.value)||25)/100;
+  const discountRate=(parseFloat(document.getElementById('valDiscountRate')?.value)||8)/100;
+  const landGrowth=(parseFloat(document.getElementById('valLandGrowth')?.value)||(-0.5))/100;
+  const holdYears=parseFloat(document.getElementById('simHoldYears_num')?.value||document.getElementById('simHoldYears')?.value)||10;
+  const landArea=parseFloat(document.getElementById('propLandArea')?.value)||0;
+  const rosen=(parseFloat(document.getElementById('areaRosen')?.value)||0)*1000;
+  const landPriceInput=parseFloat(document.getElementById('propLandPrice')?.value)||0;
+  const landPriceCalc=landArea>0&&rosen>0?Math.round(landArea*rosen/10000):0;
+  const landPrice=landPriceInput>0?landPriceInput:landPriceCalc;
+  const bookBldPrice=parseFloat(document.getElementById('propBuildingPrice')?.value)||0;
 
-  // A: Direct cap
-  const noi = annualRentFull*(1-expenseRate);
-  const propValA = capRate>0 ? Math.round(noi/capRate) : 0;
-  const bldValA = propValA>0 ? propValA-landPrice : 0;
-  const diffA = bookBldPrice>0&&bldValA>0 ? bldValA-bookBldPrice : null;
-
-  setText('va-noi', noi>0 ? noi.toFixed(1)+'万円/年' : '—');
-  setText('va-propval', propValA>0 ? propValA.toLocaleString()+'万円' : 'Cap Rate・収入を入力');
+  // ── A）直接還元法 ──
+  const noi=annualRentFull*(1-expenseRate);
+  const propValA=capRate>0?Math.round(noi/capRate):0;
+  const bldValA=propValA>0&&landPrice>0?propValA-landPrice:0;
+  const diffA=bookBldPrice>0&&bldValA>0?bldValA-bookBldPrice:null;
+  setText('va-noi',noi>0?noi.toFixed(1)+'万円/年':'—');
+  setText('va-propval',propValA>0?propValA.toLocaleString()+'万円':'Cap Rate・収入を入力');
   const bldAEl=document.getElementById('va-bldval');
   if(bldAEl){bldAEl.textContent=bldValA>0?bldValA.toLocaleString()+'万円':'—';bldAEl.className='val-num'+(bldValA<0?' danger':'')}
   const diffAEl=document.getElementById('va-diff');
-  if(diffAEl&&diffA!==null){diffAEl.textContent=(diffA>=0?'+':'')+Math.round(diffA).toLocaleString()+'万円';diffAEl.className='val-num'+(diffA<0?' danger':diffA<bookBldPrice*0.1?'':' val-green')}
+  if(diffAEl&&diffA!==null){diffAEl.textContent=(diffA>=0?'+':'')+Math.round(diffA).toLocaleString()+'万円';diffAEl.className='val-num'+(diffA<0?' danger':' val-green')}
   else if(diffAEl){diffAEl.textContent='—';diffAEl.className='val-num'}
 
-  // B: Residual (price - land)
-  const bldValB = price>0&&landPrice>0 ? price-landPrice : 0;
-  const bldDiffB = bldValA>0&&bldValB>0 ? bldValA-bldValB : null;
-  const adoptBld = bldValA>0&&bldValB>0 ? Math.min(bldValA,bldValB) : (bldValA||bldValB);
-  setText('vb-land', landPrice>0?landPrice.toLocaleString()+'万円（'+(landPriceInput>0?'入力値':'路線価算出')+'）':'土地価格・路線価を入力');
-  setText('vb-bld', bldValB>0?bldValB.toLocaleString()+'万円':'—');
-  const bldBDiffEl=document.getElementById('vb-diff');
-  if(bldBDiffEl&&bldDiffB!==null){bldBDiffEl.textContent=(bldDiffB>=0?'+':'')+Math.round(bldDiffB).toLocaleString()+'万円';bldBDiffEl.className='val-num'+(Math.abs(bldDiffB)>bldValB*0.3?' warn':'')}
-  else if(bldBDiffEl){bldBDiffEl.textContent='—';bldBDiffEl.className='val-num'}
-  const adoptEl=document.getElementById('vb-adopt');
-  if(adoptEl){adoptEl.textContent=adoptBld>0?adoptBld.toLocaleString()+'万円（保守的評価）':'—';adoptEl.className='val-num'+(adoptBld<bookBldPrice*0.8?' danger':'val-green')}
+  // ── B）DCF法 ──
+  setText('vb-period',holdYears+'年間');
+  if(noi>0&&discountRate>0&&capRate>0){
+    // 各年NOIを割引（家賃下落は rentDecline から取得）
+    const rentDecline=(parseFloat(document.getElementById('simRentDecline_num')?.value||document.getElementById('simRentDecline')?.value)||0)/100;
+    let pvNOI=0;
+    for(let t=1;t<=holdYears;t++){
+      const noiT=noi*Math.pow(1-rentDecline,t-1);
+      pvNOI+=noiT/Math.pow(1+discountRate,t);
+    }
+    // 復帰価値 = n年目NOI ÷ Cap Rate（復帰時の地価変動を考慮）
+    const noiN=noi*Math.pow(1-rentDecline,holdYears-1);
+    const landAtN=landPrice*Math.pow(1+landGrowth,holdYears);
+    const reversalVal=Math.round(noiN/capRate+(landAtN-landPrice));
+    const pvReversal=Math.round(reversalVal/Math.pow(1+discountRate,holdYears));
+    const dcfTotal=Math.round(pvNOI+pvReversal);
+    const dcfDiff=price>0?dcfTotal-price:null;
+    setText('vb-pvnoi',Math.round(pvNOI).toLocaleString()+'万円');
+    setText('vb-pvreversal',pvReversal.toLocaleString()+'万円');
+    const dcfEl=document.getElementById('vb-dcfval');
+    if(dcfEl){dcfEl.textContent=dcfTotal.toLocaleString()+'万円';dcfEl.className='val-num val-green'}
+    const dcfDiffEl=document.getElementById('vb-dcfdiff');
+    if(dcfDiffEl&&dcfDiff!==null){
+      dcfDiffEl.textContent=(dcfDiff>=0?'+':'')+dcfDiff.toLocaleString()+'万円';
+      dcfDiffEl.className='val-num'+(dcfDiff>=0?' val-green':' danger');
+    }
+  } else {
+    ['vb-pvnoi','vb-pvreversal','vb-dcfval','vb-dcfdiff'].forEach(id=>setText(id,'Cap Rate・割引率を入力'));
+  }
 
-  // Verdict
+  // ── 判定バナー ──
   const verdictEl=document.getElementById('valuationVerdict');
   if(verdictEl&&price>0&&propValA>0){
     verdictEl.style.display='flex';
     const gap=Math.round((propValA-price)/price*100);
-    if(gap>=0){verdictEl.className='val-verdict verdict-safe';verdictEl.textContent='✅ 収益価格が物件価格を上回っています（+'+gap+'%）。収益的に合理的な水準です。'}
-    else if(gap>=-15){verdictEl.className='val-verdict verdict-warn';verdictEl.textContent='⚠ 収益価格が物件価格を'+Math.abs(gap)+'%下回っています。指値余地または将来賃料上昇が必要。'}
-    else{verdictEl.className='val-verdict verdict-danger';verdictEl.textContent='🚨 収益価格が物件価格を'+Math.abs(gap)+'%下回り、割高感が強い。購入根拠を数値で明確に説明できる場合のみ検討。'}
+    if(gap>=0){verdictEl.className='val-verdict verdict-safe';verdictEl.textContent='✅ 直接還元価格が物件価格を上回っています（+'+gap+'%）。収益的に合理的な水準です。'}
+    else if(gap>=-15){verdictEl.className='val-verdict verdict-warn';verdictEl.textContent='⚠ 直接還元価格が物件価格を'+Math.abs(gap)+'%下回っています。指値余地または将来賃料上昇が必要。'}
+    else{verdictEl.className='val-verdict verdict-danger';verdictEl.textContent='🚨 直接還元価格が物件価格を'+Math.abs(gap)+'%下回り、割高感が強い。購入根拠を数値で明確に説明できる場合のみ検討。'}
   } else if(verdictEl){verdictEl.style.display='none'}
 
-  // Update defense panels
   recalcDefense(price,annualRentFull,landPrice,propValA,landGrowth);
 }
 function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=val}
@@ -2510,6 +3155,93 @@ function updateHearingBadge(){
   else{b.textContent='未確認';b.className='section-badge badge-todo'}
 }
 
+// ══ CONTRACT / IMPORTANT DOC AI ANALYSIS ══
+async function handleContractFile(file){
+  if(!file)return;
+  document.getElementById('contractFilename').style.display='block';
+  document.getElementById('contractFilename').textContent='📄 '+file.name;
+  const loading=document.getElementById('contractLoading');
+  loading.classList.add('show');
+  try{
+    const base64=await fileToBase64(file);
+    const isImage=file.type.startsWith('image/');
+    const prompt=`あなたは不動産取引の法務専門家です。以下の書類（重要事項説明書または売買契約書）を精査し、購入者にとってリスクとなりうる箇所を抽出してください。
+
+必ずJSON形式のみで回答（前置き不要）：
+{
+  "docType": "書類の種類（重要事項説明書 or 売買契約書 or その他）",
+  "dates": [
+    {"label": "日付項目名（例：手付解除期限）", "date": "YYYY年MM月DD日または記載の日付文字列", "note": "補足（任意）"}
+  ],
+  "risks": [
+    {
+      "level": "high/mid/low",
+      "title": "リスク項目名（20字以内）",
+      "clause": "該当条項・ページ等",
+      "desc": "何が問題なのか・何が起きうるか（80字以内）",
+      "advice": "このケースならOK・このケースは要注意 という判断基準（80字以内）"
+    }
+  ],
+  "summary": "書類全体の総評（100字以内）"
+}`;
+
+    const parts=isImage?
+      [{type:'image',source:{type:'base64',media_type:file.type,data:base64}},{type:'text',text:prompt}]:
+      [{inline_data:{mime_type:'application/pdf',data:base64}},{text:prompt}];
+
+    const resp=await fetch('https://gemini-proxy.takutakusoccer0.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({endpoint:'gemini-2.5-flash:generateContent',payload:{
+        contents:[{parts:isImage?
+          [{inline_data:{mime_type:file.type,data:base64}},{text:prompt}]:
+          [{inline_data:{mime_type:'application/pdf',data:base64}},{text:prompt}]
+        }]
+      }})});
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+    const match=raw.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('解析結果を取得できませんでした');
+    const result=JSON.parse(match[0]);
+
+    // ── 日付パネル ──
+    if(result.dates&&result.dates.length>0){
+      const panel=document.getElementById('contractDatesPanel');
+      const grid=document.getElementById('contractDatesGrid');
+      if(panel)panel.style.display='block';
+      if(grid)grid.innerHTML=result.dates.map(d=>`
+        <div class="field">
+          <label style="color:var(--gold)">${d.label}</label>
+          <input type="text" value="${d.date||'—'}" style="font-weight:700;color:var(--gold2)" readonly>
+          ${d.note?`<div style="font-size:10px;color:var(--muted);margin-top:3px">${d.note}</div>`:''}
+        </div>`).join('');
+    }
+
+    // ── リスクパネル ──
+    const riskPanel=document.getElementById('contractRiskPanel');
+    const riskItems=document.getElementById('contractRiskItems');
+    if(riskPanel)riskPanel.style.display='block';
+    if(riskItems){
+      const levelIcon={high:'🔴',mid:'🟡',low:'🔵'};
+      const levelLabel={high:'要注意',mid:'確認推奨',low:'参考情報'};
+      riskItems.innerHTML=(result.summary?`<div style="font-size:11px;color:var(--muted);padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:5px;margin-bottom:12px">${result.summary}</div>`:'')
+        +(result.risks||[]).map(r=>`
+        <div class="risk-item risk-${r.level}">
+          <div class="risk-title">
+            <span>${levelIcon[r.level]||'⚪'}</span>
+            <span style="color:${r.level==='high'?'var(--danger)':r.level==='mid'?'var(--warn)':'var(--muted)'}">[${levelLabel[r.level]||r.level}]</span>
+            <span>${r.title}</span>
+            ${r.clause?`<span style="font-size:10px;color:var(--muted);font-weight:400;margin-left:auto">${r.clause}</span>`:''}
+          </div>
+          <div class="risk-desc">${r.desc||''}</div>
+          ${r.advice?`<div class="risk-advice">💡 ${r.advice}</div>`:''}
+        </div>`).join('');
+    }
+    showToast('✓ リスク分析完了（'+((result.risks||[]).length)+'件）');
+  }catch(err){showToast('分析エラー：'+err.message);}
+  finally{loading.classList.remove('show');}
+}
+
 // ══ MOBILE SIDEBAR ══
 function toggleSidebar(){
   const sb=document.getElementById('mainSidebar');
@@ -2561,38 +3293,76 @@ function checkBCRFAR(){
 
 // ══ BANK DOC CHECKS ══
 const BANK_DOCS=[
-  '本人確認書類（運転免許証・マイナンバー）',
-  '源泉徴収票 or 確定申告書（2〜3年分）',
-  '住民税決定通知書（直近）',
-  '預金残高証明書（2ヶ月前後）',
-  '既保有物件の謄本・賃貸借契約書',
-  '既保有ローン残高証明書',
-  '法人決算書（3期分）',
-  '物件登記簿謄本',
-  '固定資産税課税明細書',
-  'レントロール（賃貸借条件一覧）',
-  '収支計画書（シミュレーション）',
-  '物件概要書・パンフレット',
+  // ── 金融機関 事前審査申込 ──
+  {id:'pre01',cat:'📋 金融機関 事前審査申込',label:'本人確認書類（免許証・保険証・パスポート等）コピー表裏両方'},
+  {id:'pre02',cat:'📋 金融機関 事前審査申込',label:'実印'},
+  {id:'pre03',cat:'📋 金融機関 事前審査申込',label:'事前審査申込書'},
+  {id:'pre04',cat:'📋 金融機関 事前審査申込',label:'会社の源泉徴収票（直近3年分）コピー'},
+  {id:'pre05',cat:'📋 金融機関 事前審査申込',label:'確定申告書（直近3年分）コピー'},
+  {id:'pre06',cat:'📋 金融機関 事前審査申込',label:'預貯金残高確認書類（通帳表紙・1ページ目・残高ページ・直近6か月の取引履歴）コピー'},
+  {id:'pre07',cat:'📋 金融機関 事前審査申込',label:'株式・保険解約返戻金等の金融資産確認書類（保有株式書類・解約返戻金がわかる保険証券等）'},
+  {id:'pre08',cat:'📋 金融機関 事前審査申込',label:'購入予定物件情報（販売図面・レントロール・登記情報・公図）'},
+  {id:'pre09',cat:'📋 金融機関 事前審査申込',label:'所有不動産確認書類（権利証・登記簿謄本）'},
+  {id:'pre10',cat:'📋 金融機関 事前審査申込',label:'所有不動産の固定資産税・都市計画税課税明細'},
+  {id:'pre11',cat:'📋 金融機関 事前審査申込',label:'既存ローンの返済予定表'},
+  {id:'pre12',cat:'📋 金融機関 事前審査申込',label:'賃料収入証明書類（通帳の表紙・1ページ目・直近の家賃入金額と残高がわかるページ）コピー'},
+  // ── 売買契約（不動産屋で取得） ──
+  {id:'buy01',cat:'🏠 売買契約',label:'売買契約書・重要事項説明書'},
+  {id:'buy02',cat:'🏠 売買契約',label:'手付金'},
+  {id:'buy03',cat:'🏠 売買契約',label:'収入印紙（売買契約書用）'},
+  {id:'buy04',cat:'🏠 売買契約',label:'本人確認書類（免許証・保険証・パスポート等）'},
+  {id:'buy05',cat:'🏠 売買契約',label:'実印（認印も可）'},
+  // ── 金融機関 本審査申込 ──
+  {id:'hon01',cat:'🏦 金融機関 本審査申込',label:'印鑑証明書（3通以上・登記用を含む・有効期限3か月）'},
+  {id:'hon02',cat:'🏦 金融機関 本審査申込',label:'住民票（世帯全員・続柄記載・本籍・マイナンバー省略・2通以上・有効期限3か月）'},
+  {id:'hon03',cat:'🏦 金融機関 本審査申込',label:'納税証明書（その1・その2・その3の2）直近3年分'},
+  {id:'hon04',cat:'🏦 金融機関 本審査申込',label:'住民税課税証明書 or 納税証明書 or 所得証明書（直近3年分）'},
+  {id:'hon05',cat:'🏦 金融機関 本審査申込',label:'所有不動産の固定資産税納税証明書（必要な場合のみ）'},
+  {id:'hon06',cat:'🏦 金融機関 本審査申込',label:'健康診断書（会社の健康診断 or 銀行指定の診断書）'},
+  {id:'hon07',cat:'🏦 金融機関 本審査申込',label:'実印'},
+  {id:'hon08',cat:'🏦 金融機関 本審査申込',label:'本人確認書類（免許証・保険証・パスポート等）'},
+  // ── 金消契約 ──
+  {id:'kin01',cat:'💳 金消契約',label:'口座振替依頼書（ローン引き落としの申込書類）'},
+  {id:'kin02',cat:'💳 金消契約',label:'申し込むローン引き落とし口座の通帳と印鑑'},
+  {id:'kin03',cat:'💳 金消契約',label:'実印'},
+  {id:'kin04',cat:'💳 金消契約',label:'本人確認書類（免許証・保険証・パスポート等）'},
+  {id:'kin05',cat:'💳 金消契約',label:'収入印紙（金消契約用・200円を数枚）'},
+  // ── 決済 ──
+  {id:'set01',cat:'🎉 決済',label:'実印'},
+  {id:'set02',cat:'🎉 決済',label:'本人確認書類（免許証・保険証・パスポート等）'},
+  {id:'set03',cat:'🎉 決済',label:'収入印紙（領収書用・200円を数枚）'},
+  // ── 法人関連（追加提出） ──
+  {id:'corp01',cat:'🏢 法人関連（追加提出）',label:'定款（原本証明付き）'},
+  {id:'corp02',cat:'🏢 法人関連（追加提出）',label:'法人登記簿謄本（履歴事項全部証明書）'},
+  {id:'corp03',cat:'🏢 法人関連（追加提出）',label:'決算書3期分（BS・PL・科目内訳書）'},
+  {id:'corp04',cat:'🏢 法人関連（追加提出）',label:'決算概況説明書（今後の見通し・事業方針を記載）'},
+  {id:'corp05',cat:'🏢 法人関連（追加提出）',label:'所有物件全物件のレントロール（直近1年）'},
+  {id:'corp06',cat:'🏢 法人関連（追加提出）',label:'所有物件全物件の登記簿謄本（土地・建物）'},
+  {id:'corp07',cat:'🏢 法人関連（追加提出）',label:'事業計画書'},
+  {id:'corp08',cat:'🏢 法人関連（追加提出）',label:'資金繰り計画書'},
 ];
 function renderBankDocChecks(){
   const c=document.getElementById('bankDocChecks');if(!c)return;
-  c.innerHTML=BANK_DOCS.map((doc,i)=>`
-    <label class="bank-check-item" id="bdoc-${i}" onclick="toggleBankDoc(${i})">
-      <input type="checkbox" id="bdoc-cb-${i}" onchange="toggleBankDoc(${i});event.stopPropagation()">
-      <span style="flex:1;font-size:11px">${doc}</span>
-      <span class="bank-check-status" id="bdoc-status-${i}">未</span>
-    </label>`).join('');
+  const cats=[...new Set(BANK_DOCS.map(d=>d.cat))];
+  c.innerHTML=cats.map(cat=>{
+    const items=BANK_DOCS.filter(d=>d.cat===cat);
+    return '<div style="grid-column:1/-1;margin-top:10px;margin-bottom:4px"><span style="font-size:10px;color:var(--gold);font-weight:700;letter-spacing:0.1em">◆ '+cat+'</span></div>'+
+    items.map(doc=>`
+      <label class="bank-check-item" id="bdoc-${doc.id}" onclick="toggleBankDoc('${doc.id}')">
+        <input type="checkbox" id="bdoc-cb-${doc.id}" onchange="toggleBankDoc('${doc.id}');event.stopPropagation()">
+        <span style="flex:1;font-size:11px">${doc.label}</span>
+        <span class="bank-check-status" id="bdoc-status-${doc.id}">未</span>
+      </label>`).join('');
+  }).join('');
 }
-function toggleBankDoc(i){
-  const cb=document.getElementById('bdoc-cb-'+i);
-  const item=document.getElementById('bdoc-'+i);
-  const status=document.getElementById('bdoc-status-'+i);
+function toggleBankDoc(id){
+  const cb=document.getElementById('bdoc-cb-'+id);
+  const item=document.getElementById('bdoc-'+id);
+  const status=document.getElementById('bdoc-status-'+id);
   if(!cb)return;
-  // toggle is handled by label click naturally, just update styles
   setTimeout(()=>{
     const checked=cb.checked;
     item.classList.toggle('have',checked);
-    item.classList.toggle('nothave',!checked&&item.classList.contains('nothave'));
     status.textContent=checked?'✓ あり':'未';
     updateFinanceBadge();
     if(currentPropId)saveData();
@@ -2603,7 +3373,7 @@ function updateFinanceBadge(){
   const have=[...document.querySelectorAll('[id^="bdoc-cb-"]')].filter(c=>c.checked).length;
   const b=document.getElementById('badge-finance');
   if(!b)return;
-  b.textContent=have===total?'書類完備':have>0?have+'/'+total+'件':' 未確認';
+  b.textContent=have===total?'書類完備':have>0?have+'/'+total+'件':'未確認';
   b.className='section-badge '+(have===total?'badge-ok':have>0?'badge-warn':'badge-todo');
 }
 
@@ -2676,20 +3446,57 @@ function printBankPDF(){
 }
 
 // ══ PROPERTY NAME INLINE EDIT ══
+const STATUS_CONFIG={
+  kento:   {label:'検討中', cls:'status-kento',  icon:'🔍'},
+  kaitsuke:{label:'買付済', cls:'status-kaitsuke',icon:'📝'},
+  kounyuzumi:{label:'購入済み',cls:'status-kounyuzumi',icon:'🏠'},
+  miokuri: {label:'見送り', cls:'status-miokuri', icon:'❌'},
+};
+
 function renderSidebar(){
   const list=document.getElementById('propertyList');
   const props=getProperties();
   if(!props.length){list.innerHTML='<div style="padding:16px 20px;font-size:11px;color:var(--muted)">物件がありません</div>';return}
-  list.innerHTML=props.map((p,idx)=>`
-    <div class="property-item ${p.id===currentPropId?'active':''}" id="pitem-${p.id}">
-      <div class="property-dot" onclick="loadProperty('${p.id}')"></div>
-      <div style="flex:1;min-width:0" onclick="loadProperty('${p.id}')">
-        <div style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name||'無題物件'}</div>
-        ${idx>=6?'<div class="prop-item-save-badge">保存推奨</div>':''}
-      </div>
-      <span style="font-size:11px;cursor:pointer;color:var(--muted);padding:2px 4px" title="名前を変更" onclick="renameProp('${p.id}',event)">✏</span>
-    </div>`).join('');
+
+  // Group by status
+  const order=['kaitsuke','kento','kounyuzumi','miokuri'];
+  const grouped={};
+  order.forEach(s=>grouped[s]=[]);
+  props.forEach(p=>{const s=p.status||'kento';if(grouped[s])grouped[s].push(p);else grouped['kento'].push(p);});
+
+  let html='';
+  order.forEach(status=>{
+    const group=grouped[status];
+    if(!group.length)return;
+    const sc=STATUS_CONFIG[status];
+    html+=`<div style="padding:6px 20px 2px;font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;border-top:1px solid var(--border);margin-top:4px">${sc.icon} ${sc.label}（${group.length}件）</div>`;
+    html+=group.map(p=>`
+      <div class="property-item ${p.id===currentPropId?'active':''}" id="pitem-${p.id}">
+        <div class="property-dot" onclick="loadProperty('${p.id}')"></div>
+        <div style="flex:1;min-width:0" onclick="loadProperty('${p.id}')">
+          <div style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name||'無題物件'}</div>
+          <span class="status-badge ${sc.cls}">${sc.icon} ${sc.label}</span>
+        </div>
+        <span style="font-size:11px;cursor:pointer;color:var(--muted);padding:2px 4px" title="名前を変更" onclick="renameProp('${p.id}',event)">✏</span>
+      </div>`).join('');
+  });
+  list.innerHTML=html;
 }
+
+function onStatusChange(){
+  const status=document.getElementById('propStatus')?.value||'kento';
+  // update stored status
+  if(currentPropId){
+    const props=getProperties();const p=props.find(x=>x.id===currentPropId);
+    if(p){p.status=status;saveProperties(props);}
+  }
+  // show/hide portfolio banner
+  const banner=document.getElementById('portfolioBanner');
+  if(banner)banner.style.display=status==='kounyuzumi'?'flex':'none';
+  // update dot color in sidebar
+  renderSidebar();
+}
+
 function renameProp(id,e){
   e.stopPropagation();
   const props=getProperties();const p=props.find(x=>x.id===id);if(!p)return;
@@ -2701,12 +3508,12 @@ function renameProp(id,e){
   showToast('名前を変更しました');
 }
 
-// Override newProperty with 10-limit check
+// Override newProperty with 30-limit check
 function newProperty(){
   const props=getProperties();
-  if(props.length>=10){showToast('最大10件です。不要な物件を削除してください');return}
+  if(props.length>=30){showToast('最大30件です。不要な物件を削除してください');return}
   const id='prop_'+Date.now();
-  props.push({id,name:'新規物件 '+(props.length+1),createdAt:new Date().toISOString(),data:{}});
+  props.push({id,name:'新規物件 '+(props.length+1),status:'kento',createdAt:new Date().toISOString(),data:{}});
   saveProperties(props);loadProperty(id);renderSidebar();showToast('新規物件を作成しました');
 }
 
