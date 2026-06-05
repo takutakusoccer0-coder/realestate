@@ -1057,14 +1057,27 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           onmouseover="this.style.background='rgba(74,143,212,0.22)'" onmouseout="this.style.background='rgba(74,143,212,0.12)'">
           🏠 LIFULL HOME'S 投資用データ ↗
         </a>
-        <button class="btn btn-ghost" style="font-size:10px;padding:5px 12px" onclick="fetchLIFULLData()">
-          🤖 AI自動取得
+        <button class="btn btn-ghost" style="font-size:10px;padding:5px 12px" onclick="document.getElementById('lifullImageInput').click()">
+          📸 スクリーンショットから読み取り（複数枚OK）
         </button>
+        <input type="file" id="lifullImageInput" accept="image/*" multiple style="display:none" onchange="readLIFULLImages(Array.from(this.files))">
         <button class="btn" style="font-size:10px;padding:5px 14px;background:rgba(61,184,122,0.15);border-color:rgba(61,184,122,0.4);color:var(--green)" onclick="runDemandEval()" id="btnDemandEval">
           ✅ 需給評価を実行
         </button>
         <div class="matrix-mini-spin" id="lifullSpin"></div>
         <span style="font-size:9px;color:var(--muted)" id="lifullStatus"></span>
+      </div>
+
+      <!-- 画像ドロップゾーン -->
+      <div id="lifullDropZone"
+        style="border:1.5px dashed rgba(74,143,212,0.4);border-radius:8px;padding:14px 18px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:12px;background:rgba(74,143,212,0.03)"
+        onclick="document.getElementById('lifullImageInput').click()"
+        ondragover="event.preventDefault();this.style.borderColor='var(--blue)';this.style.background='rgba(74,143,212,0.08)'"
+        ondragleave="this.style.borderColor='rgba(74,143,212,0.4)';this.style.background='rgba(74,143,212,0.03)'"
+        ondrop="event.preventDefault();this.style.borderColor='rgba(74,143,212,0.4)';this.style.background='rgba(74,143,212,0.03)';readLIFULLImages(Array.from(event.dataTransfer.files))">
+        <div style="font-size:11px;color:var(--muted)">📸 LIFULLのスクリーンショットをここにドロップ（複数枚同時OK）</div>
+        <div style="font-size:10px;color:rgba(122,128,153,0.6);margin-top:3px">間取り・築年数・家賃帯・面積を別々に撮っても自動でまとめて入力します</div>
+        <div id="lifullImageName" style="display:none;font-size:11px;color:var(--blue);margin-top:6px"></div>
       </div>
 
       <!-- 市区町村入力（AI取得用） -->
@@ -2667,13 +2680,6 @@ async function runAreaResearch(){
 }
 
 // ══ RAKUMACHI ══
-function updateRakumachiLink(){
-  const addr=(document.getElementById('propAddr')?.value||'').trim();
-  const link=document.getElementById('rakumachiLink');if(!link||!addr)return;
-  fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr+' 日本')}&format=json&limit=1`)
-    .then(r=>r.json()).then(data=>{if(data&&data[0]){const lat=parseFloat(data[0].lat).toFixed(8);const lng=parseFloat(data[0].lon).toFixed(8);link.href=`https://www.rakumachi.jp/property/land_price/map?lat=${lat}&lng=${lng}&category=crix_rent&zoom=13#ckmap_anchor_element`}}).catch(()=>{});
-}
-
 // ══ EXPORT ══
 function exportCSV(){
   const d=collectData();const rows=[['項目','値']];
@@ -2819,88 +2825,134 @@ document.addEventListener('input',e=>{
   }
 });
 
-async function fetchLIFULLData(){
-  const munic=(document.getElementById('lifullMunic')?.value||document.getElementById('areaMunic')?.value||'').trim();
-  if(!munic){showToast('市区町村名を入力してください（上の入力欄）');return}
+async function readLIFULLImages(files){
+  if(!files||!files.length)return;
+  const nameEl=document.getElementById('lifullImageName');
+  if(nameEl){nameEl.style.display='block';nameEl.textContent='📸 '+files.map(f=>f.name).join('、');}
+  const status=document.getElementById('lifullStatus');
+  if(status)status.textContent=`${files.length}枚を順番に解析中...`;
+  let totalFilled=0;
+  for(let i=0;i<files.length;i++){
+    if(status)status.textContent=`${i+1}/${files.length}枚目を解析中...`;
+    const filled=await readLIFULLImage(files[i],true);
+    totalFilled+=filled;
+  }
+  updateDSJudge('layout',DS_LAYOUT_KEYS);
+  updateDSJudge('age',DS_AGE_KEYS);
+  updateDSJudge('rent',DS_RENT_KEYS);
+  updateDSJudge('area',DS_AREA_KEYS);
+  if(status)status.textContent=`✓ ${files.length}枚から合計${totalFilled}項目を読み取りました`;
+  showToast('✓ '+files.length+'枚のスクリーンショットから'+totalFilled+'項目を自動入力しました');
+}
+
+async function readLIFULLImage(file, silent=false){
+  if(!file)return 0;
+  if(!silent){
+    const nameEl=document.getElementById('lifullImageName');
+    if(nameEl){nameEl.style.display='block';nameEl.textContent='📸 '+file.name;}
+  }
   const spin=document.getElementById('lifullSpin');
   const status=document.getElementById('lifullStatus');
   if(spin)spin.classList.add('show');
-  if(status)status.textContent='取得中...';
+  if(!silent&&status)status.textContent='画像を解析中...';
   try{
-    const prompt=`「${munic}」の賃貸物件の需給データをLIFULL HOME'Sの投資用データ（https://toushi.homes.co.jp/owner/）から調べてください。
-以下のJSONのみで回答してください（前置き不要）。値は%の数値のみ（%記号なし）、不明はnull。
+    // Convert to base64
+    const base64=await new Promise((res,rej)=>{
+      const r=new FileReader();
+      r.onload=()=>res(r.result.split(',')[1]);
+      r.onerror=()=>rej(new Error('ファイル読み込み失敗'));
+      r.readAsDataURL(file);
+    });
+    const prompt=`この画像はLIFULL HOME'Sの賃貸需給データのスクリーンショットです。
+表に記載されている数値をすべて読み取り、以下のJSONのみで回答してください（前置き不要）。
+値は%の数値のみ（%記号なし）。該当する表が画像にない場合はそのキーをnullにしてください。
+
 {
   "layout":{
-    "1r":{"demand":ワンルーム1K1DK検索割合,"supply":掲載割合},
-    "2k":{"demand":1LDK2K2DK検索割合,"supply":掲載割合},
-    "3k":{"demand":2LDK3K3DK検索割合,"supply":掲載割合},
-    "4k":{"demand":3LDK4K4DK検索割合,"supply":掲載割合}
+    "1r":{"demand":ワンルーム/1K/1DK 検索割合,"supply":掲載割合},
+    "2k":{"demand":1LDK/2K/2DK 検索割合,"supply":掲載割合},
+    "3k":{"demand":2LDK/3K/3DK 検索割合,"supply":掲載割合},
+    "4k":{"demand":3LDK/4K/4DK 検索割合,"supply":掲載割合}
   },
   "age":{
-    "10":{"demand":築10年以下検索割合,"supply":掲載割合},
-    "15":{"demand":築15年以下検索割合,"supply":掲載割合},
-    "20":{"demand":築20年以下検索割合,"supply":掲載割合},
-    "25":{"demand":築25年以下検索割合,"supply":掲載割合},
-    "30":{"demand":築30年以下検索割合,"supply":掲載割合},
-    "31":{"demand":築31年以上検索割合,"supply":掲載割合}
+    "10":{"demand":新築〜10年 検索割合,"supply":掲載割合},
+    "15":{"demand":〜15年 検索割合,"supply":掲載割合},
+    "20":{"demand":〜20年 検索割合,"supply":掲載割合},
+    "25":{"demand":〜25年 検索割合,"supply":掲載割合},
+    "30":{"demand":〜30年 検索割合,"supply":掲載割合},
+    "31":{"demand":31年以上 検索割合,"supply":掲載割合}
   },
   "rent":{
-    "3":{"demand":3万円未満検索割合,"supply":掲載割合},
-    "4":{"demand":3〜4万円検索割合,"supply":掲載割合},
-    "5":{"demand":4〜5万円検索割合,"supply":掲載割合},
-    "6":{"demand":5〜6万円検索割合,"supply":掲載割合},
-    "7":{"demand":6〜7万円検索割合,"supply":掲載割合},
-    "8":{"demand":7〜8万円検索割合,"supply":掲載割合},
-    "10":{"demand":8〜10万円検索割合,"supply":掲載割合},
-    "hi":{"demand":10万円以上検索割合,"supply":掲載割合}
+    "3":{"demand":3万円未満 検索割合,"supply":掲載割合},
+    "4":{"demand":3〜4万円 検索割合,"supply":掲載割合},
+    "5":{"demand":4〜5万円 検索割合,"supply":掲載割合},
+    "6":{"demand":5〜6万円 検索割合,"supply":掲載割合},
+    "7":{"demand":6〜7万円 検索割合,"supply":掲載割合},
+    "8":{"demand":7〜8万円 検索割合,"supply":掲載割合},
+    "10":{"demand":8〜10万円 検索割合,"supply":掲載割合},
+    "hi":{"demand":10万円以上 検索割合,"supply":掲載割合}
   },
   "area":{
-    "20":{"demand":20㎡未満検索割合,"supply":掲載割合},
-    "30":{"demand":20〜30㎡検索割合,"supply":掲載割合},
-    "40":{"demand":30〜40㎡検索割合,"supply":掲載割合},
-    "50":{"demand":40〜50㎡検索割合,"supply":掲載割合},
-    "60":{"demand":50〜60㎡検索割合,"supply":掲載割合},
-    "70":{"demand":60〜70㎡検索割合,"supply":掲載割合},
-    "hi":{"demand":70㎡以上検索割合,"supply":掲載割合}
-  },
-  "memo":"需給特徴の簡潔なコメント（100字以内）"
+    "20":{"demand":20㎡未満 検索割合,"supply":掲載割合},
+    "30":{"demand":20〜30㎡ 検索割合,"supply":掲載割合},
+    "40":{"demand":30〜40㎡ 検索割合,"supply":掲載割合},
+    "50":{"demand":40〜50㎡ 検索割合,"supply":掲載割合},
+    "60":{"demand":50〜60㎡ 検索割合,"supply":掲載割合},
+    "70":{"demand":60〜70㎡ 検索割合,"supply":掲載割合},
+    "hi":{"demand":70㎡以上 検索割合,"supply":掲載割合}
+  }
 }`;
+
     const resp=await fetch('https://gemini-proxy.takutakusoccer0.workers.dev',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({endpoint:'gemini-2.5-flash:generateContent',payload:{
-        contents:[{parts:[{text:prompt}]}],
-        tools:[{google_search:{}}]
+        contents:[{parts:[
+          {inline_data:{mime_type:file.type,data:base64}},
+          {text:prompt}
+        ]}]
       }})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const raw=data.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
     const match=raw.match(/\{[\s\S]*\}/);
-    if(!match)throw new Error('データ取得できませんでした');
+    if(!match)throw new Error('データを読み取れませんでした');
     const parsed=JSON.parse(match[0]);
-    // fill by category
+
+    // Fill all tables
+    let filled=0;
     const fillCat=(cat,keys)=>{
       keys.forEach(k=>{
         const v=parsed[cat]?.[k];if(!v)return;
         const d=document.getElementById('ds_'+cat+'_'+k+'_demand');
         const s=document.getElementById('ds_'+cat+'_'+k+'_supply');
-        if(d&&v.demand!=null){d.value=v.demand+'%';d.classList.add('ai-filled')}
-        if(s&&v.supply!=null){s.value=v.supply+'%';s.classList.add('ai-filled')}
+        if(d&&v.demand!=null){d.value=v.demand+'%';d.classList.add('ai-filled');filled++;}
+        if(s&&v.supply!=null){s.value=v.supply+'%';s.classList.add('ai-filled');filled++;}
       });
     };
     fillCat('layout',DS_LAYOUT_KEYS);
     fillCat('age',DS_AGE_KEYS);
     fillCat('rent',DS_RENT_KEYS);
     fillCat('area',DS_AREA_KEYS);
-    if(parsed.memo){const m=document.getElementById('demandSupplyMemo');if(m&&!m.value)m.value='【AI取得 '+new Date().toLocaleDateString('ja-JP')+'】\n'+parsed.memo;}
     updateDSJudge('layout',DS_LAYOUT_KEYS);
     updateDSJudge('age',DS_AGE_KEYS);
     updateDSJudge('rent',DS_RENT_KEYS);
     updateDSJudge('area',DS_AREA_KEYS);
-    if(status)status.textContent='✓ 取得完了（青色＝AI入力値）';
-    showToast('✓ '+munic+' の需給データを取得しました');
+
+    if(!silent){
+      updateDSJudge('layout',DS_LAYOUT_KEYS);
+      updateDSJudge('age',DS_AGE_KEYS);
+      updateDSJudge('rent',DS_RENT_KEYS);
+      updateDSJudge('area',DS_AREA_KEYS);
+      if(status)status.textContent=`✓ ${filled}項目を読み取りました（青色＝画像から取得）`;
+      showToast('✓ スクリーンショットから'+filled+'項目を自動入力しました');
+    }
+    return filled;
   }catch(err){
-    showToast('取得エラー：'+err.message);
-    if(status)status.textContent='⚠ 取得失敗 — 手動入力してください';
+    if(!silent){
+      showToast('読み取りエラー：'+err.message);
+      if(status)status.textContent='⚠ 読み取り失敗 — 別のスクリーンショットを試してください';
+    }
+    return 0;
   }finally{
     if(spin)spin.classList.remove('show');
   }
